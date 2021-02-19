@@ -27,6 +27,13 @@ public class Dice {
 	private Random diceRoll = new Random();
 	
 	/**
+	 * default dice constructor
+	 */
+	public Dice() {
+		
+	}
+	
+	/**
 	 * Rolls dice and returns the result
 	 * @return int between MIN_NUMBER & MAX_NUMBER
 	 */
@@ -35,6 +42,10 @@ public class Dice {
 		return MIN_NUMBER + diceRoll.nextInt(MAX_NUMBER);
 		
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Dice [MIN_NUMBER=" + MIN_NUMBER + ", MAX_NUMBER=" + MAX_NUMBER + "]";
+	}
 
 }
