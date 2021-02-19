@@ -28,7 +28,7 @@ public class StandardSquare extends Square {
 	 * 
 	 */
 	private int currentMinorDevLevel;
-	
+
 	/**
 	 * 
 	 */
@@ -73,6 +73,7 @@ public class StandardSquare extends Square {
 
 	/**
 	 * Constructor with args
+	 * 
 	 * @param boardPosition
 	 * @param squareName
 	 * @param purchaseCost
@@ -85,13 +86,15 @@ public class StandardSquare extends Square {
 	 * @param ownedBy
 	 * @param systemID
 	 */
-	public StandardSquare(int boardPosition, String squareName, int purchaseCost, int minorDevCost, int majorDevCost, int maxMajorDev, int maxMinorDev, int rentCost, boolean isOwned, Player ownedBy, int systemID) {
-		super(boardPosition, squareName);
+	public StandardSquare(int boardPosition, String squareName, String squareElement, int purchaseCost,
+			int minorDevCost, int majorDevCost, int maxMajorDev, int maxMinorDev, int rentCost, boolean isOwned,
+			Player ownedBy, int systemID) {
+		super(boardPosition, squareName, squareElement);
 		this.purchaseCost = purchaseCost;
 		this.minorDevCost = minorDevCost;
 		this.majorDevCost = majorDevCost;
-		this.currentMinorDevLevel = 0; //defaults value to 0
-		this.currentMajorDevLevel = 0; //defaults value to 0
+		this.currentMinorDevLevel = 0; // defaults value to 0
+		this.currentMajorDevLevel = 0; // defaults value to 0
 		this.maxMajorDev = maxMajorDev;
 		this.maxMinorDev = maxMinorDev;
 		this.rentCost = rentCost;
@@ -102,26 +105,29 @@ public class StandardSquare extends Square {
 
 	/**
 	 * Increases dev level of square
+	 * 
 	 * @throws Exception
 	 */
 	public void increaseDev() throws Exception {
-		
-		if(this.currentMinorDevLevel<this.maxMinorDev) {
-			
+
+		if (this.currentMinorDevLevel < this.maxMinorDev) {
+
 			this.currentMinorDevLevel++;
-			System.out.println("Minor dev increased from"+(this.currentMinorDevLevel-1)+" to "+this.currentMinorDevLevel);
-		
-		} else if(this.currentMajorDevLevel<this.maxMajorDev) {
-			
+			System.out.println(
+					"Minor dev increased from" + (this.currentMinorDevLevel - 1) + " to " + this.currentMinorDevLevel);
+
+		} else if (this.currentMajorDevLevel < this.maxMajorDev) {
+
 			this.currentMajorDevLevel++;
-			System.out.println("Major dev increased from"+(this.currentMajorDevLevel-1)+" to "+this.currentMajorDevLevel);
-		
+			System.out.println(
+					"Major dev increased from" + (this.currentMajorDevLevel - 1) + " to " + this.currentMajorDevLevel);
+
 		} else {
-			
+
 			throw new Exception("Already at max dev level");
-			
+
 		}
-		
+
 	}
 
 	/**
@@ -278,9 +284,6 @@ public class StandardSquare extends Square {
 		this.systemID = systemID;
 	}
 
-	/**
-	 * 
-	 */
 	@Override
 	public String toString() {
 		return "StandardSquare [purchaseCost=" + purchaseCost + ", minorDevCost=" + minorDevCost + ", majorDevCost="
@@ -288,7 +291,5 @@ public class StandardSquare extends Square {
 				+ currentMajorDevLevel + ", maxMinorDev=" + maxMinorDev + ", maxMajorDev=" + maxMajorDev + ", rentCost="
 				+ rentCost + ", isOwned=" + isOwned + ", ownedBy=" + ownedBy + ", systemID=" + systemID + "]";
 	}
-
-	
 
 }
