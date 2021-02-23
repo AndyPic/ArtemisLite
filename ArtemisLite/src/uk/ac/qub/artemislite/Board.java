@@ -26,24 +26,24 @@ public class Board {
 	public void buildGameBoard() {
 
 		for (SquareDetails squareDetails : SquareDetails.values()) {
-			ElementType elementType = squareDetails.getElement();
-			switch (elementType) {
+			SystemType systemType = squareDetails.getSystem();
+			switch (systemType) {
 
 			case RESOURCE:
 				ResourceSquare resourceSquare = new ResourceSquare(squareDetails.getSquarePos(),
-						squareDetails.getName(), squareDetails.getElement());
+						squareDetails.getName(), squareDetails.getSystem());
 				squares.add(resourceSquare);
 				break;
 
 			case BLANK:
 				Square blankSquare = new Square(squareDetails.getSquarePos(), squareDetails.getName(),
-						squareDetails.getElement());
+						squareDetails.getSystem());
 				squares.add(blankSquare);
 				break;
 
 			default:
 				StandardSquare standardSquare = new StandardSquare(squareDetails.getSquarePos(),
-						squareDetails.getName(), squareDetails.getElement(), squareDetails.getCost(),
+						squareDetails.getName(), squareDetails.getSystem(), squareDetails.getCost(),
 						squareDetails.getMinorCost(), squareDetails.getMajorCost(), squareDetails.getRent(), false);
 				squares.add(standardSquare);
 			}

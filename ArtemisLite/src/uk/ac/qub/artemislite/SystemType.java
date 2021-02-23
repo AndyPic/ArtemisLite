@@ -7,8 +7,8 @@ package uk.ac.qub.artemislite;
  * @author Jordan Davis
  *
  */
-public enum ElementType {
+public enum SystemType {
 
-	ELEMENT1, ELEMENT2, ELEMENT3, ELEMENT4, RESOURCE, BLANK
+	SYSTEM1, SYSTEM2, SYSTEM3, SYSTEM4, RESOURCE, BLANK
 	
 }

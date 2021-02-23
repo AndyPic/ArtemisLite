@@ -60,11 +60,6 @@ public class StandardSquare extends Square {
 	private Player ownedBy;
 
 	/**
-	 * 
-	 */
-	private int systemID; // *********What is this var for??***************
-
-	/**
 	 * Default constructor
 	 */
 	public StandardSquare() {
@@ -84,11 +79,10 @@ public class StandardSquare extends Square {
 	 * @param rentCost
 	 * @param isOwned
 	 * @param ownedBy
-	 * @param systemID
 	 */
-	public StandardSquare(int boardPosition, String squareName, ElementType squareElement, int purchaseCost,
-			int minorDevCost, int majorDevCost, int rentCost, boolean isOwned /*, int systemID*/) {
-		super(boardPosition, squareName, squareElement);
+	public StandardSquare(int boardPosition, String squareName, SystemType squareSystem, int purchaseCost,
+			int minorDevCost, int majorDevCost, int rentCost, boolean isOwned) {
+		super(boardPosition, squareName, squareSystem);
 		this.purchaseCost = purchaseCost;
 		this.minorDevCost = minorDevCost;
 		this.majorDevCost = majorDevCost;
@@ -96,7 +90,6 @@ public class StandardSquare extends Square {
 		this.currentMajorDevLevel = 0; // defaults value to 0
 		this.rentCost = rentCost;
 		this.isOwned = false;
-		//this.systemID = systemID; what is this? 
 	}
 
 	/**
@@ -238,26 +231,12 @@ public class StandardSquare extends Square {
 		this.ownedBy = ownedBy;
 	}
 
-	/**
-	 * @return the systemID
-	 */
-	public int getSystemID() {
-		return systemID;
-	}
-
-	/**
-	 * @param systemID the systemID to set
-	 */
-	public void setSystemID(int systemID) {
-		this.systemID = systemID;
-	}
-
 	@Override
 	public String toString() {
 		return "StandardSquare [purchaseCost=" + purchaseCost + ", minorDevCost=" + minorDevCost + ", majorDevCost="
 				+ majorDevCost + ", currentMinorDevLevel=" + currentMinorDevLevel + ", currentMajorDevLevel="
 				+ currentMajorDevLevel + ", maxMinorDev=" + MAX_MINOR_DEV + ", maxMajorDev=" + MAX_MAJOR_DEV + ", rentCost="
-				+ rentCost + ", isOwned=" + isOwned + ", ownedBy=" + ownedBy + ", systemID=" + systemID + "]";
+				+ rentCost + ", isOwned=" + isOwned + ", ownedBy=" + ownedBy + "]";
 	}
 
 }

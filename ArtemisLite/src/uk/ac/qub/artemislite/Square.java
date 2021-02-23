@@ -22,7 +22,7 @@ public class Square {
 	/**
 	 * 
 	 */
-	private ElementType squareElement;
+	private SystemType squareSystem;
 
 	/**
 	 * Square default constructor
@@ -36,12 +36,12 @@ public class Square {
 	 * 
 	 * @param boardPosition
 	 * @param squareName
-	 * @param squareElement 
+	 * @param squareSystem 
 	 */
-	public Square(int boardPosition, String squareName, ElementType squareElement) {
+	public Square(int boardPosition, String squareName, SystemType squareSystem) {
 		this.boardPosition = boardPosition;
 		this.squareName = squareName;
-		this.setSquareElement(squareElement);
+		this.setSquareSystem(squareSystem);
 	}
 
 	/**
@@ -73,17 +73,17 @@ public class Square {
 	}
 
 	/**
-	 * @return the squareElement
+	 * @return the squareSystem
 	 */
-	public ElementType getSquareElement() {
-		return squareElement;
+	public SystemType getSquareSystem() {
+		return squareSystem;
 	}
 
 	/**
-	 * @param squareElement the squareElement to set
+	 * @param squareSystem the squareSystem to set
 	 */
-	public void setSquareElement(ElementType squareElement) {
-		this.squareElement = squareElement;
+	public void setSquareSystem(SystemType squareSystem) {
+		this.squareSystem = squareSystem;
 	}
 
 	/**
@@ -91,8 +91,8 @@ public class Square {
 	 */
 	@Override
 	public String toString() {
-		return "Square [boardPosition=" + boardPosition + ", squareName=" + squareName + ", squareElement="
-				+ squareElement + "]";
+		return "Square [boardPosition=" + boardPosition + ", squareName=" + squareName + ", squareSystem="
+				+ squareSystem + "]";
 	}
 
 	

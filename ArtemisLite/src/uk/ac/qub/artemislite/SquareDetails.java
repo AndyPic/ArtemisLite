@@ -9,26 +9,26 @@ package uk.ac.qub.artemislite;
  */
 public enum SquareDetails {
 
-	// position, squareName, squareElement, purchaseCost, minorDevCost,
+	// position, squareName, squareSystem, purchaseCost, minorDevCost,
 	// majorDevCost, rent,
 	// rentMinor1, rentMinor2, rentMinor3, rentMajor1
 	// TODO still need to decide values and names for these sqaures
-	SQUARERESOURCE(1, "Resource Square", ElementType.RESOURCE),
-	SQUAREX(2, "SquareX", ElementType.ELEMENT1, 100, 200, 400, 10, 20, 30, 40, 80),
-	SQUAREY(3, "SquareY", ElementType.ELEMENT1, 200, 200, 400, 10, 20, 30, 40, 80),
-	SQUAREA(4, "SquareA", ElementType.ELEMENT2, 300, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREB(5, "SquareB", ElementType.ELEMENT2, 400, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREC(6, "SquareC", ElementType.ELEMENT2, 500, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREBLANK(7, "Blank Square", ElementType.BLANK),
-	SQUARE1(8, "Square1", ElementType.ELEMENT3, 600, 600, 1200, 60, 70, 80, 90, 180),
-	SQUARE2(9, "Square2", ElementType.ELEMENT3, 700, 600, 1200, 60, 70, 80, 90, 180),
-	SQUARE3(10, "Square3", ElementType.ELEMENT3, 800, 600, 1200, 60, 70, 80, 90, 180),
-	SQUAREi(11, "Squarei", ElementType.ELEMENT4, 900, 800, 1600, 90, 100, 110, 120, 240),
-	SQUAREii(12, "Squareii", ElementType.ELEMENT4, 1000, 800, 1600, 90, 100, 110, 120, 240);
+	SQUARERESOURCE(1, "Resource Square", SystemType.RESOURCE),
+	SQUAREX(2, "SquareX", SystemType.SYSTEM1, 100, 200, 400, 10, 20, 30, 40, 80),
+	SQUAREY(3, "SquareY", SystemType.SYSTEM1, 200, 200, 400, 10, 20, 30, 40, 80),
+	SQUAREA(4, "SquareA", SystemType.SYSTEM2, 300, 400, 800, 30, 40, 50, 60, 120),
+	SQUAREB(5, "SquareB", SystemType.SYSTEM2, 400, 400, 800, 30, 40, 50, 60, 120),
+	SQUAREC(6, "SquareC", SystemType.SYSTEM2, 500, 400, 800, 30, 40, 50, 60, 120),
+	SQUAREBLANK(7, "Blank Square", SystemType.BLANK),
+	SQUARE1(8, "Square1", SystemType.SYSTEM3, 600, 600, 1200, 60, 70, 80, 90, 180),
+	SQUARE2(9, "Square2", SystemType.SYSTEM3, 700, 600, 1200, 60, 70, 80, 90, 180),
+	SQUARE3(10, "Square3", SystemType.SYSTEM3, 800, 600, 1200, 60, 70, 80, 90, 180),
+	SQUAREi(11, "Squarei", SystemType.SYSTEM4, 900, 800, 1600, 90, 100, 110, 120, 240),
+	SQUAREii(12, "Squareii", SystemType.SYSTEM4, 1000, 800, 1600, 90, 100, 110, 120, 240);
 
 	private final int squarePos;
 	private final String name;
-	private final ElementType element;
+	private final SystemType system;
 	private int cost;
 	private int minorCost;
 	private int majorCost;
@@ -43,7 +43,7 @@ public enum SquareDetails {
 	 * reduced args constructor
 	 * @param squarePos
 	 * @param name
-	 * @param element
+	 * @param system
 	 * @param cost
 	 * @param minorCost
 	 * @param majorCost
@@ -53,17 +53,17 @@ public enum SquareDetails {
 	 * @param rentMinor3
 	 * @param rentMajor1
 	 */
-	private SquareDetails(int squarePos, String name, ElementType element) {
+	private SquareDetails(int squarePos, String name, SystemType system) {
 		this.squarePos = squarePos;
 		this.name = name;
-		this.element = element;
+		this.system = system;
 	}
 	
 	/**
 	 * Full args constructor
 	 * @param squarePos
 	 * @param name
-	 * @param element
+	 * @param system
 	 * @param cost
 	 * @param minorCost
 	 * @param majorCost
@@ -73,11 +73,11 @@ public enum SquareDetails {
 	 * @param rentMinor3
 	 * @param rentMajor1
 	 */
-	private SquareDetails(int squarePos, String name, ElementType element, int cost, int minorCost, int majorCost,
+	private SquareDetails(int squarePos, String name, SystemType system, int cost, int minorCost, int majorCost,
 			int rent, int rentMinor1, int rentMinor2, int rentMinor3, int rentMajor1) {
 		this.squarePos = squarePos;
 		this.name = name;
-		this.element = element;
+		this.system = system;
 		this.cost = cost;
 		this.minorCost = minorCost;
 		this.majorCost = majorCost;
@@ -103,10 +103,10 @@ public enum SquareDetails {
 	}
 
 	/**
-	 * @return the element
+	 * @return the system
 	 */
-	public ElementType getElement() {
-		return element;
+	public SystemType getSystem() {
+		return system;
 	}
 
 	/**

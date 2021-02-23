@@ -13,7 +13,16 @@ public class Player {
 	 * Player Name 
 	 */
 	private String name;
+	
+	/**
+	 * 
+	 */
 	private int balanceOfResources;
+	
+	/**
+	 * player position on board, defaults to 0
+	 */
+	private int currentPosition = 0;
 	
 	/**
 	 * Default Player constructor
@@ -59,6 +68,20 @@ public class Player {
 	 */
 	public void setBalanceOfResources(int balanceOfResources) {
 		this.balanceOfResources = balanceOfResources;
+	}
+
+	/**
+	 * @return the currentPosition
+	 */
+	public int getCurrentPosition() {
+		return currentPosition;
+	}
+
+	/**
+	 * @param currentPosition the currentPosition to set
+	 */
+	public void setCurrentPosition(int currentPosition) {
+		this.currentPosition = currentPosition;
 	}
 	
 	

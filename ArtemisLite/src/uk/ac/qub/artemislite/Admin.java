@@ -34,12 +34,19 @@ public class Admin {
 
 		// stores user input
 		int userInput;
+		
+		//create Board
+		Board board = new Board();
+		board.buildGameBoard();
+		
+		//create dice
+		Dice dice = new Dice();
 
 		do {
 
 			System.out.println();
 			System.out.println("It is " + activePlayer.getName() + " turn.");
-			System.out.println("Enter: \n1. End turn\n2. End game");
+			System.out.println("Enter: \n1. End turn\n2. Roll Dice\n3. End game");
 
 			// reads user selection
 			userInput = scanner.nextInt();
@@ -60,7 +67,21 @@ public class Admin {
 					activePlayer = p1;
 				}
 				break;
+			
 			case 2:
+				int currentPos = activePlayer.getCurrentPosition();
+				System.out.println("You are currently on square "+currentPos+" ("+board.getSquares().get(currentPos).getSquareName()+")");
+				int roll1 = dice.rollDice();
+				int roll2 = dice.rollDice();
+				System.out.println("You have rolled "+roll1 + " and "+roll2);
+				int newPos = currentPos+roll1+roll2;
+				if(newPos>11) {
+					newPos -= 12;
+				}
+				activePlayer.setCurrentPosition(newPos);
+				System.out.println("You are now on square "+newPos+" ("+board.getSquares().get(newPos).getSquareName()+")");
+				break;			
+			case 3:
 				GAME_OVER = true;
 				break;
 			default:
