@@ -27,7 +27,7 @@ public class ResourceSquare extends Square {
 	 * @param squareName
 	 * @param resourcesToAllocate
 	 */
-	public ResourceSquare(int boardPosition, String squareName, String squareElement) {
+	public ResourceSquare(int boardPosition, String squareName, ElementType squareElement) {
 		super(boardPosition, squareName, squareElement);
 	}
 

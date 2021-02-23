@@ -12,6 +12,16 @@ public class StandardSquare extends Square {
 	/**
 	 * 
 	 */
+	private final int MAX_MINOR_DEV = 3;
+	
+	/**
+	 * 
+	 */
+	private final int MAX_MAJOR_DEV = 1;
+	
+	/**
+	 * 
+	 */
 	private int purchaseCost;
 
 	/**
@@ -33,16 +43,6 @@ public class StandardSquare extends Square {
 	 * 
 	 */
 	private int currentMajorDevLevel;
-
-	/**
-	 * This needs changed to constant in enum?
-	 */
-	private int maxMinorDev;
-
-	/**
-	 * This needs changed to constant in enum? 
-	 */
-	private int maxMajorDev;
 
 	/**
 	 * 
@@ -86,21 +86,17 @@ public class StandardSquare extends Square {
 	 * @param ownedBy
 	 * @param systemID
 	 */
-	public StandardSquare(int boardPosition, String squareName, String squareElement, int purchaseCost,
-			int minorDevCost, int majorDevCost, int maxMajorDev, int maxMinorDev, int rentCost, boolean isOwned,
-			Player ownedBy, int systemID) {
+	public StandardSquare(int boardPosition, String squareName, ElementType squareElement, int purchaseCost,
+			int minorDevCost, int majorDevCost, int rentCost, boolean isOwned /*, int systemID*/) {
 		super(boardPosition, squareName, squareElement);
 		this.purchaseCost = purchaseCost;
 		this.minorDevCost = minorDevCost;
 		this.majorDevCost = majorDevCost;
 		this.currentMinorDevLevel = 0; // defaults value to 0
 		this.currentMajorDevLevel = 0; // defaults value to 0
-		this.maxMajorDev = maxMajorDev;
-		this.maxMinorDev = maxMinorDev;
 		this.rentCost = rentCost;
-		this.isOwned = isOwned;
-		this.ownedBy = ownedBy;
-		this.systemID = systemID;
+		this.isOwned = false;
+		//this.systemID = systemID; what is this? 
 	}
 
 	/**
@@ -110,13 +106,13 @@ public class StandardSquare extends Square {
 	 */
 	public void increaseDev() throws Exception {
 
-		if (this.currentMinorDevLevel < this.maxMinorDev) {
+		if (this.currentMinorDevLevel < this.MAX_MINOR_DEV) {
 
 			this.currentMinorDevLevel++;
 			System.out.println(
 					"Minor dev increased from" + (this.currentMinorDevLevel - 1) + " to " + this.currentMinorDevLevel);
 
-		} else if (this.currentMajorDevLevel < this.maxMajorDev) {
+		} else if (this.currentMajorDevLevel < this.MAX_MAJOR_DEV) {
 
 			this.currentMajorDevLevel++;
 			System.out.println(
@@ -201,34 +197,6 @@ public class StandardSquare extends Square {
 	}
 
 	/**
-	 * @return the maxMinorDev
-	 */
-	public int getMaxMinorDev() {
-		return maxMinorDev;
-	}
-
-	/**
-	 * @param maxMinorDev the maxMinorDev to set
-	 */
-	public void setMaxMinorDev(int maxMinorDev) {
-		this.maxMinorDev = maxMinorDev;
-	}
-
-	/**
-	 * @return the maxMajorDev
-	 */
-	public int getMaxMajorDev() {
-		return maxMajorDev;
-	}
-
-	/**
-	 * @param maxMajorDev the maxMajorDev to set
-	 */
-	public void setMaxMajorDev(int maxMajorDev) {
-		this.maxMajorDev = maxMajorDev;
-	}
-
-	/**
 	 * @return the rentCost
 	 */
 	public int getRentCost() {
@@ -288,7 +256,7 @@ public class StandardSquare extends Square {
 	public String toString() {
 		return "StandardSquare [purchaseCost=" + purchaseCost + ", minorDevCost=" + minorDevCost + ", majorDevCost="
 				+ majorDevCost + ", currentMinorDevLevel=" + currentMinorDevLevel + ", currentMajorDevLevel="
-				+ currentMajorDevLevel + ", maxMinorDev=" + maxMinorDev + ", maxMajorDev=" + maxMajorDev + ", rentCost="
+				+ currentMajorDevLevel + ", maxMinorDev=" + MAX_MINOR_DEV + ", maxMajorDev=" + MAX_MAJOR_DEV + ", rentCost="
 				+ rentCost + ", isOwned=" + isOwned + ", ownedBy=" + ownedBy + ", systemID=" + systemID + "]";
 	}
 

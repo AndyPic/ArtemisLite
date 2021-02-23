@@ -22,7 +22,7 @@ public class Square {
 	/**
 	 * 
 	 */
-	private String squareElement;
+	private ElementType squareElement;
 
 	/**
 	 * Square default constructor
@@ -38,7 +38,7 @@ public class Square {
 	 * @param squareName
 	 * @param squareElement 
 	 */
-	public Square(int boardPosition, String squareName, String squareElement) {
+	public Square(int boardPosition, String squareName, ElementType squareElement) {
 		this.boardPosition = boardPosition;
 		this.squareName = squareName;
 		this.setSquareElement(squareElement);
@@ -75,14 +75,14 @@ public class Square {
 	/**
 	 * @return the squareElement
 	 */
-	public String getSquareElement() {
+	public ElementType getSquareElement() {
 		return squareElement;
 	}
 
 	/**
 	 * @param squareElement the squareElement to set
 	 */
-	public void setSquareElement(String squareElement) {
+	public void setSquareElement(ElementType squareElement) {
 		this.squareElement = squareElement;
 	}
 

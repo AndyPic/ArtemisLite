@@ -9,19 +9,22 @@ package uk.ac.qub.artemislite;
  */
 public enum SquareDetails {
 
-	// squareName, squareElement, purchaseCost, minorDevCost, majorDevCost, rent,
+	// position, squareName, squareElement, purchaseCost, minorDevCost,
+	// majorDevCost, rent,
 	// rentMinor1, rentMinor2, rentMinor3, rentMajor1
-	SQUAREX("SquareX", ElementType.ELEMENT1, 100, 200, 400, 10, 20, 30, 40, 80),
-	SQUAREY("SquareY", ElementType.ELEMENT1, 200, 200, 400, 10, 20, 30, 40, 80),
-	SQUAREA("SquareA", ElementType.ELEMENT2, 300, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREB("SquareB", ElementType.ELEMENT2, 400, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREC("SquareC", ElementType.ELEMENT2, 500, 400, 800, 30, 40, 50, 60, 120),
-	SQUARE1("Square1", ElementType.ELEMENT3, 600, 600, 1200, 60, 70, 80, 90, 180),
-	SQUARE2("Square2", ElementType.ELEMENT3, 700, 600, 1200, 60, 70, 80, 90, 180),
-	SQUARE3("Square3", ElementType.ELEMENT3, 800, 600, 1200, 60, 70, 80, 90, 180),
-	SQUAREi("Squarei", ElementType.ELEMENT4, 900, 800, 1600, 90, 100, 110, 120, 240),
-	SQUAREii("Squareii", ElementType.ELEMENT4, 1000, 800, 1600, 90, 100, 110, 120, 240);
+	// TODO still need to decide values and names for these sqaures
+	SQUAREX(2, "SquareX", ElementType.ELEMENT1, 100, 200, 400, 10, 20, 30, 40, 80),
+	SQUAREY(3, "SquareY", ElementType.ELEMENT1, 200, 200, 400, 10, 20, 30, 40, 80),
+	SQUAREA(4, "SquareA", ElementType.ELEMENT2, 300, 400, 800, 30, 40, 50, 60, 120),
+	SQUAREB(5, "SquareB", ElementType.ELEMENT2, 400, 400, 800, 30, 40, 50, 60, 120),
+	SQUAREC(6, "SquareC", ElementType.ELEMENT2, 500, 400, 800, 30, 40, 50, 60, 120),
+	SQUARE1(8, "Square1", ElementType.ELEMENT3, 600, 600, 1200, 60, 70, 80, 90, 180),
+	SQUARE2(9, "Square2", ElementType.ELEMENT3, 700, 600, 1200, 60, 70, 80, 90, 180),
+	SQUARE3(10, "Square3", ElementType.ELEMENT3, 800, 600, 1200, 60, 70, 80, 90, 180),
+	SQUAREi(11, "Squarei", ElementType.ELEMENT4, 900, 800, 1600, 90, 100, 110, 120, 240),
+	SQUAREii(12, "Squareii", ElementType.ELEMENT4, 1000, 800, 1600, 90, 100, 110, 120, 240);
 
+	private final int squarePos;
 	private final String name;
 	private final ElementType element;
 	private final int cost;
@@ -34,6 +37,8 @@ public enum SquareDetails {
 	private final int rentMajor1;
 
 	/**
+	 * Enum constructor with args
+	 * 
 	 * @param name
 	 * @param element
 	 * @param cost
@@ -45,8 +50,9 @@ public enum SquareDetails {
 	 * @param rentMinor3
 	 * @param rentMajor1
 	 */
-	private SquareDetails(String name, ElementType element, int cost, int minorCost, int majorCost, int rent,
-			int rentMinor1, int rentMinor2, int rentMinor3, int rentMajor1) {
+	private SquareDetails(int squarePos, String name, ElementType element, int cost, int minorCost, int majorCost,
+			int rent, int rentMinor1, int rentMinor2, int rentMinor3, int rentMajor1) {
+		this.squarePos = squarePos;
 		this.name = name;
 		this.element = element;
 		this.cost = cost;
@@ -57,6 +63,13 @@ public enum SquareDetails {
 		this.rentMinor2 = rentMinor2;
 		this.rentMinor3 = rentMinor3;
 		this.rentMajor1 = rentMajor1;
+	}
+
+	/**
+	 * @return the squarePos
+	 */
+	public int getSquarePos() {
+		return squarePos;
 	}
 
 	/**
