@@ -35,12 +35,12 @@ public class StandardSquare extends Square {
 	private int currentMajorDevLevel;
 
 	/**
-	 * 
+	 * This needs changed to constant in enum?
 	 */
 	private int maxMinorDev;
 
 	/**
-	 * 
+	 * This needs changed to constant in enum? 
 	 */
 	private int maxMajorDev;
 
