@@ -93,33 +93,6 @@ public class StandardSquare extends Square {
 	}
 
 	/**
-	 * Increases dev level of square
-	 * 
-	 * @throws Exception
-	 */
-	public void increaseDev() throws Exception {
-
-		if (this.currentMinorDevLevel < this.MAX_MINOR_DEV) {
-
-			this.currentMinorDevLevel++;
-			System.out.println(
-					"Minor dev increased from" + (this.currentMinorDevLevel - 1) + " to " + this.currentMinorDevLevel);
-
-		} else if (this.currentMajorDevLevel < this.MAX_MAJOR_DEV) {
-
-			this.currentMajorDevLevel++;
-			System.out.println(
-					"Major dev increased from" + (this.currentMajorDevLevel - 1) + " to " + this.currentMajorDevLevel);
-
-		} else {
-
-			throw new Exception("Already at max dev level");
-
-		}
-
-	}
-
-	/**
 	 * @return the purchaseCost
 	 */
 	public int getPurchaseCost() {
@@ -238,5 +211,83 @@ public class StandardSquare extends Square {
 				+ currentMajorDevLevel + ", maxMinorDev=" + MAX_MINOR_DEV + ", maxMajorDev=" + MAX_MAJOR_DEV + ", rentCost="
 				+ rentCost + ", isOwned=" + isOwned + ", ownedBy=" + ownedBy + "]";
 	}
+	
+	/**
+	 * Increases dev level of square
+	 * 
+	 * @throws Exception
+	 */
+	public void increaseDev() throws Exception {
+
+		if (this.currentMinorDevLevel < this.MAX_MINOR_DEV) {
+
+			this.currentMinorDevLevel++;
+			System.out.println(
+					"Minor dev increased from " + (this.currentMinorDevLevel - 1) + " to " + this.currentMinorDevLevel);
+
+		} else if (this.currentMajorDevLevel < this.MAX_MAJOR_DEV) {
+
+			this.currentMajorDevLevel++;
+			System.out.println(
+					"Major dev increased from " + (this.currentMajorDevLevel - 1) + " to " + this.currentMajorDevLevel);
+
+		} else {
+
+			throw new Exception("Already at max dev level");
+
+		}
+		
+		increaseRent();
+
+	}
+	
+	/**
+	 * increases rent based on current dev level
+	 * @throws NullPointerException
+	 */
+	public void increaseRent() throws NullPointerException {
+		
+		int totalDevLevel = this.currentMinorDevLevel+this.currentMajorDevLevel;
+		
+		//finds the details from the ENUM
+		SquareDetails currentSquareDetails = null;
+		for(SquareDetails squareDetails: SquareDetails.values()) {
+			if(getSquareName().equals(squareDetails.getName())) {
+				currentSquareDetails = squareDetails;
+				break;
+			}
+		}
+		
+		//Confirms that the ENUM was found 
+		if(currentSquareDetails ==null) {
+			throw new NullPointerException("ENUM details not found");
+		}
+		
+		//increases rent cost
+		switch(totalDevLevel) {
+		case 1:
+			this.setRentCost(currentSquareDetails.getRentMinor1());
+			break;
+		case 2:
+			this.setRentCost(currentSquareDetails.getRentMinor2());
+			break;
+		case 3:
+			this.setRentCost(currentSquareDetails.getRentMinor3());
+			break;
+		case 4:
+			this.setRentCost(currentSquareDetails.getRentMajor1());
+			break;
+		}
+		
+	}
 
 }
+
+
+
+
+
+
+
+
+

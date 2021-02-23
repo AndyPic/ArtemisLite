@@ -18,8 +18,9 @@ public class Admin {
 
 	/**
 	 * @param args
+	 * @throws Exception
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		Scanner scanner = new Scanner(System.in);
 
@@ -34,12 +35,12 @@ public class Admin {
 
 		// stores user input
 		int userInput;
-		
-		//create Board
+
+		// create Board
 		Board board = new Board();
 		board.buildGameBoard();
-		
-		//create dice
+
+		// create dice
 		Dice dice = new Dice();
 
 		do {
@@ -67,27 +68,43 @@ public class Admin {
 					activePlayer = p1;
 				}
 				break;
-			
+
 			case 2:
+				// added only to check function of Board. needs implemented properly
 				int currentPos = activePlayer.getCurrentPosition();
-				System.out.println("You are currently on square "+currentPos+" ("+board.getSquares().get(currentPos).getSquareName()+")");
+				Square currentSquare = board.getSquares().get(currentPos);
+
+				System.out.println("You are currently on " + currentSquare.getSquareName());
+
 				int roll1 = dice.rollDice();
 				int roll2 = dice.rollDice();
-				System.out.println("You have rolled "+roll1 + " and "+roll2);
-				int newPos = currentPos+roll1+roll2;
-				if(newPos>11) {
+
+				System.out.println("You have rolled " + roll1 + " and " + roll2);
+				int newPos = currentPos + roll1 + roll2;
+				if (newPos > 11) {
 					newPos -= 12;
 				}
 				activePlayer.setCurrentPosition(newPos);
-				System.out.println("You are now on square "+newPos+" ("+board.getSquares().get(newPos).getSquareName()+")");
-				break;			
+
+				Square newSquare = board.getSquares().get(newPos);
+
+				System.out.println("You are now on " + newSquare.getSquareName());
+				if (newSquare instanceof StandardSquare) {
+					StandardSquare standardSquare = (StandardSquare) newSquare;
+					System.out.println("The cost of rent is " + standardSquare.getRentCost());
+					System.out.println("Increasing development level....");
+					standardSquare.increaseDev();
+					System.out.println("The cost of rent after increase is " + standardSquare.getRentCost());
+				}
+				break;
+
 			case 3:
 				GAME_OVER = true;
 				break;
 			default:
 				System.out.println("Invalid option - try again");
 			}
-			
+
 		} while (!GAME_OVER);
 
 		System.out.println("Game Over");

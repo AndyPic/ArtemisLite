@@ -47,9 +47,9 @@ public class Board {
 						squareDetails.getMinorCost(), squareDetails.getMajorCost(), squareDetails.getRent(), false);
 				squares.add(standardSquare);
 			}
-			
+
 		}
-		
+
 	}
 
 }

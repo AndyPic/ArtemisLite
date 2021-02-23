@@ -18,7 +18,7 @@ public class Square {
 	 * square name var
 	 */
 	private String squareName;
-	
+
 	/**
 	 * 
 	 */
@@ -36,7 +36,7 @@ public class Square {
 	 * 
 	 * @param boardPosition
 	 * @param squareName
-	 * @param squareSystem 
+	 * @param squareSystem
 	 */
 	public Square(int boardPosition, String squareName, SystemType squareSystem) {
 		this.boardPosition = boardPosition;
@@ -94,7 +94,5 @@ public class Square {
 		return "Square [boardPosition=" + boardPosition + ", squareName=" + squareName + ", squareSystem="
 				+ squareSystem + "]";
 	}
-
-	
 
 }

@@ -38,9 +38,9 @@ public enum SquareDetails {
 	private int rentMinor3;
 	private int rentMajor1;
 
-	
 	/**
 	 * reduced args constructor
+	 * 
 	 * @param squarePos
 	 * @param name
 	 * @param system
@@ -58,9 +58,10 @@ public enum SquareDetails {
 		this.name = name;
 		this.system = system;
 	}
-	
+
 	/**
 	 * Full args constructor
+	 * 
 	 * @param squarePos
 	 * @param name
 	 * @param system
