@@ -7,7 +7,11 @@ public class Board {
 	/**
 	 * 
 	 */
-	private ArrayList<Square> squares;
+	private ArrayList<Square> squares = new ArrayList<Square>();
+
+	public Board() {
+
+	}
 
 	/**
 	 * @return the squares
@@ -17,20 +21,13 @@ public class Board {
 	}
 
 	/**
-	 * @param squares the squares to set
-	 */
-	public void setSquares(ArrayList<Square> squares) {
-		this.squares = squares;
-	}
-
-	/**
 	 * Builds the board based on ENUM values
 	 */
 	public void buildGameBoard() {
 
 		for (SquareDetails squareDetails : SquareDetails.values()) {
-
-			switch (squareDetails.getElement()) {
+			ElementType elementType = squareDetails.getElement();
+			switch (elementType) {
 
 			case RESOURCE:
 				ResourceSquare resourceSquare = new ResourceSquare(squareDetails.getSquarePos(),
@@ -50,9 +47,9 @@ public class Board {
 						squareDetails.getMinorCost(), squareDetails.getMajorCost(), squareDetails.getRent(), false);
 				squares.add(standardSquare);
 			}
-
+			
 		}
-
+		
 	}
 
 }

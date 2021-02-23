@@ -13,11 +13,13 @@ public enum SquareDetails {
 	// majorDevCost, rent,
 	// rentMinor1, rentMinor2, rentMinor3, rentMajor1
 	// TODO still need to decide values and names for these sqaures
+	SQUARERESOURCE(1, "Resource Square", ElementType.RESOURCE),
 	SQUAREX(2, "SquareX", ElementType.ELEMENT1, 100, 200, 400, 10, 20, 30, 40, 80),
 	SQUAREY(3, "SquareY", ElementType.ELEMENT1, 200, 200, 400, 10, 20, 30, 40, 80),
 	SQUAREA(4, "SquareA", ElementType.ELEMENT2, 300, 400, 800, 30, 40, 50, 60, 120),
 	SQUAREB(5, "SquareB", ElementType.ELEMENT2, 400, 400, 800, 30, 40, 50, 60, 120),
 	SQUAREC(6, "SquareC", ElementType.ELEMENT2, 500, 400, 800, 30, 40, 50, 60, 120),
+	SQUAREBLANK(7, "Blank Square", ElementType.BLANK),
 	SQUARE1(8, "Square1", ElementType.ELEMENT3, 600, 600, 1200, 60, 70, 80, 90, 180),
 	SQUARE2(9, "Square2", ElementType.ELEMENT3, 700, 600, 1200, 60, 70, 80, 90, 180),
 	SQUARE3(10, "Square3", ElementType.ELEMENT3, 800, 600, 1200, 60, 70, 80, 90, 180),
@@ -27,18 +29,39 @@ public enum SquareDetails {
 	private final int squarePos;
 	private final String name;
 	private final ElementType element;
-	private final int cost;
-	private final int minorCost;
-	private final int majorCost;
-	private final int rent;
-	private final int rentMinor1;
-	private final int rentMinor2;
-	private final int rentMinor3;
-	private final int rentMajor1;
+	private int cost;
+	private int minorCost;
+	private int majorCost;
+	private int rent;
+	private int rentMinor1;
+	private int rentMinor2;
+	private int rentMinor3;
+	private int rentMajor1;
 
+	
 	/**
-	 * Enum constructor with args
-	 * 
+	 * reduced args constructor
+	 * @param squarePos
+	 * @param name
+	 * @param element
+	 * @param cost
+	 * @param minorCost
+	 * @param majorCost
+	 * @param rent
+	 * @param rentMinor1
+	 * @param rentMinor2
+	 * @param rentMinor3
+	 * @param rentMajor1
+	 */
+	private SquareDetails(int squarePos, String name, ElementType element) {
+		this.squarePos = squarePos;
+		this.name = name;
+		this.element = element;
+	}
+	
+	/**
+	 * Full args constructor
+	 * @param squarePos
 	 * @param name
 	 * @param element
 	 * @param cost
