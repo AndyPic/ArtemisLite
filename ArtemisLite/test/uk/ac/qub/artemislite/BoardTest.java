@@ -8,27 +8,34 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class BoardTest {
-	
-	//Test Data
+
+	// Test Data
 	Board board;
+	int expectedCostSquarei;
 
 	@BeforeEach
 	void setUp() throws Exception {
-		board = new Board();
+
+		expectedCostSquarei = SquareDetails.SQUAREi.getCost();
+
 	}
-	
+
 	@Test
-	void testBuildGameBoard() {
-		
-		board.buildGameBoard();
-		
+	void testConstructor() {
+
+		board = new Board();
+
 		ArrayList<Square> squares = board.getSquares();
 
-		for(Square square: squares) {
-			System.out.println(square.toString());
+		for (Square square : squares) {
+			System.out.println(square);
 			System.out.println();
 		}
-		
+
+		StandardSquare s = (StandardSquare) board.getSquares().get(10);
+
+		assertEquals(expectedCostSquarei, s.getPurchaseCost());
+
 	}
 
 }

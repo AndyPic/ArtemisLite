@@ -5,24 +5,19 @@ package uk.ac.qub.artemislite;
 
 /**
  * @author Jordan Davis
- *
+ * @author David Finlay
+ * @author Joseph Mawhinney
+ * @author Andrew Pickard
  */
 public class Square {
 
-	/**
-	 * board order var
-	 */
+	// Instance Vars
+
 	private int boardPosition;
-
-	/**
-	 * square name var
-	 */
 	private String squareName;
-
-	/**
-	 * 
-	 */
 	private SystemType squareSystem;
+
+	// Constructors
 
 	/**
 	 * Square default constructor
@@ -41,7 +36,17 @@ public class Square {
 	public Square(int boardPosition, String squareName, SystemType squareSystem) {
 		this.boardPosition = boardPosition;
 		this.squareName = squareName;
-		this.setSquareSystem(squareSystem);
+		this.squareSystem = squareSystem;
+	}
+
+	// Methods
+
+	/**
+	 * 
+	 */
+	@Override
+	public String toString() {
+		return String.format("[%02d][%s][%s]:\n", boardPosition, squareName, squareSystem.getName());
 	}
 
 	/**
@@ -84,15 +89,6 @@ public class Square {
 	 */
 	public void setSquareSystem(SystemType squareSystem) {
 		this.squareSystem = squareSystem;
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public String toString() {
-		return "Square [boardPosition=" + boardPosition + ", squareName=" + squareName + ", squareSystem="
-				+ squareSystem + "]";
 	}
 
 }

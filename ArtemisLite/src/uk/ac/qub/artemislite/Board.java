@@ -2,29 +2,24 @@ package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
 
+/**
+ * @author Jordan Davis
+ * @author David Finlay
+ * @author Joseph Mawhinney
+ * @author Andrew Pickard
+ */
 public class Board {
 
-	/**
-	 * 
-	 */
+	// Instance Vars
+
 	private ArrayList<Square> squares = new ArrayList<Square>();
 
+	// Constructors
+
+	/**
+	 * Default constructor, builds the game board
+	 */
 	public Board() {
-
-	}
-
-	/**
-	 * @return the squares
-	 */
-	public ArrayList<Square> getSquares() {
-		return squares;
-	}
-
-	/**
-	 * Builds the board based on ENUM values
-	 */
-	public void buildGameBoard() {
-
 		for (SquareDetails squareDetails : SquareDetails.values()) {
 			SystemType systemType = squareDetails.getSystem();
 			switch (systemType) {
@@ -49,7 +44,15 @@ public class Board {
 			}
 
 		}
+	}
 
+	// Methods
+
+	/**
+	 * @return the squares
+	 */
+	public ArrayList<Square> getSquares() {
+		return squares;
 	}
 
 }

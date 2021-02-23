@@ -5,7 +5,9 @@ package uk.ac.qub.artemislite;
 
 /**
  * @author Jordan Davis
- *
+ * @author David Finlay
+ * @author Joseph Mawhinney
+ * @author Andrew Pickard
  */
 public enum SquareDetails {
 

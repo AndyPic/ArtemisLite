@@ -3,11 +3,14 @@
  */
 package uk.ac.qub.artemislite;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
  * @author Jordan Davis
- *
+ * @author David Finlay
+ * @author Joseph Mawhinney
+ * @author Andrew Pickard
  */
 public class Admin {
 
@@ -38,22 +41,29 @@ public class Admin {
 
 		// create Board
 		Board board = new Board();
-		board.buildGameBoard();
 
 		// create dice
 		Dice dice = new Dice();
 
 		do {
 
-			System.out.println();
-			System.out.println("It is " + activePlayer.getName() + " turn.");
+			System.out.println("It is " + activePlayer.getName() + "'s turn.");
 			System.out.println("Enter: \n1. End turn\n2. Roll Dice\n3. End game");
 
-			// reads user selection
-			userInput = scanner.nextInt();
+			/**
+			 * Reads user selection, if user input != int, then catches exception sets input
+			 * to default and continues to switch
+			 */
+			try {
+				userInput = scanner.nextInt();
+				scanner.nextLine();
+			} catch (InputMismatchException e) {
+				userInput = 0;
+				scanner.nextLine();
+			}
 
-			// clears scanner
-			scanner.nextLine();
+			// Clear console
+			clearConsole(10);
 
 			// check user input
 			switch (userInput) {
@@ -105,10 +115,26 @@ public class Admin {
 				System.out.println("Invalid option - try again");
 			}
 
+			// Clear console
+			clearConsole(2);
+
 		} while (!GAME_OVER);
 
 		System.out.println("Game Over");
 		scanner.close();
+
+	}// END MAIN
+	
+	/**
+	 * 'Clears the console' by printing {@link numberOfLines} blank lines in console.
+	 * @param numberOfLines
+	 */
+	public static void clearConsole(int numberOfLines) {
+
+		for (int loop = 0; loop < numberOfLines; loop++) {
+			System.out.println(); 
+		}
+
 	}
 
 }

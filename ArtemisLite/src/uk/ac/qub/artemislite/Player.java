@@ -5,34 +5,32 @@ package uk.ac.qub.artemislite;
 
 /**
  * @author Jordan Davis
- *
+ * @author David Finlay
+ * @author Joseph Mawhinney
+ * @author Andrew Pickard
  */
 public class Player {
 
-	/**
-	 * Player Name 
-	 */
+	// Instance Vars
+
 	private String name;
-	
-	/**
-	 * 
-	 */
-	private int balanceOfResources;
-	
-	/**
-	 * player position on board, defaults to 0
-	 */
-	private int currentPosition = 0;
-	
+	private int balanceOfResources = 200; // Set starting resources
+	private int currentPosition = 0; // Set starting position
+
+	// Constructors
+
 	/**
 	 * Default Player constructor
 	 */
 	public Player() {
-		
+
 	}
-	
+
+	// Methods
+
 	/**
 	 * Player constructor with args
+	 * 
 	 * @param name
 	 * @param isCurrentPlayer
 	 */
@@ -83,6 +81,5 @@ public class Player {
 	public void setCurrentPosition(int currentPosition) {
 		this.currentPosition = currentPosition;
 	}
-	
-	
+
 }

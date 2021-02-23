@@ -5,59 +5,25 @@ package uk.ac.qub.artemislite;
 
 /**
  * @author Jordan Davis
- *
+ * @author David Finlay
+ * @author Joseph Mawhinney
+ * @author Andrew Pickard
  */
 public class StandardSquare extends Square {
 
-	/**
-	 * 
-	 */
+	// Constants
+
+	private final int MIN_DEV_LEVEL = 0;
 	private final int MAX_MINOR_DEV = 3;
-	
-	/**
-	 * 
-	 */
 	private final int MAX_MAJOR_DEV = 1;
-	
-	/**
-	 * 
-	 */
-	private int purchaseCost;
 
-	/**
-	 * 
-	 */
-	private int minorDevCost;
+	// Instance Vars
 
-	/**
-	 * 
-	 */
-	private int majorDevCost;
-
-	/**
-	 * 
-	 */
-	private int currentMinorDevLevel;
-
-	/**
-	 * 
-	 */
-	private int currentMajorDevLevel;
-
-	/**
-	 * 
-	 */
-	private int rentCost;
-
-	/**
-	 * 
-	 */
+	private int purchaseCost, minorDevCost, majorDevCost, currentMinorDevLevel, currentMajorDevLevel, rentCost;
 	private boolean isOwned;
-
-	/**
-	 * 
-	 */
 	private Player ownedBy;
+
+	// Constructors
 
 	/**
 	 * Default constructor
@@ -86,10 +52,98 @@ public class StandardSquare extends Square {
 		this.purchaseCost = purchaseCost;
 		this.minorDevCost = minorDevCost;
 		this.majorDevCost = majorDevCost;
-		this.currentMinorDevLevel = 0; // defaults value to 0
-		this.currentMajorDevLevel = 0; // defaults value to 0
+		this.currentMinorDevLevel = MIN_DEV_LEVEL;
+		this.currentMajorDevLevel = MIN_DEV_LEVEL;
 		this.rentCost = rentCost;
 		this.isOwned = false;
+	}
+
+	// Methods
+
+	/**
+	 * Formatted toString to return dynamic info based on current game state
+	 */
+	@Override
+	public String toString() {
+		if (!isOwned)
+			return super.toString() + String.format("%15s\t%d\nMinor dev cost:\t%d\nMajor dev cost:\t%d\n%15s\t%d",
+					"Cost to buy:", purchaseCost, minorDevCost, majorDevCost, "Rent cost:", rentCost);
+
+		return super.toString()
+				+ String.format("%15s\t%s\nMinor dev levl:\t%d\nMinor dev cost:\t%d\nMajor dev levl:\t%d\nMajor dev cost:\t%d\n%15s\t%d",
+						"Owned by:", ownedBy.getName(), currentMinorDevLevel, minorDevCost, currentMajorDevLevel,
+						majorDevCost, "Rent cost:", rentCost);
+
+	}
+
+	/**
+	 * Increases dev level of square
+	 * 
+	 * @throws Exception
+	 */
+	public void increaseDev() throws Exception {
+
+		if (this.currentMinorDevLevel < this.MAX_MINOR_DEV) {
+
+			this.currentMinorDevLevel++;
+			System.out.println(
+					"Minor dev increased from " + (this.currentMinorDevLevel - 1) + " to " + this.currentMinorDevLevel);
+
+		} else if (this.currentMajorDevLevel < this.MAX_MAJOR_DEV) {
+
+			this.currentMajorDevLevel++;
+			System.out.println(
+					"Major dev increased from " + (this.currentMajorDevLevel - 1) + " to " + this.currentMajorDevLevel);
+
+		} else {
+
+			throw new Exception("Already at max dev level");
+
+		}
+
+		increaseRent();
+
+	}
+
+	/**
+	 * increases rent based on current dev level
+	 * 
+	 * @throws NullPointerException
+	 */
+	public void increaseRent() throws NullPointerException {
+
+		int totalDevLevel = this.currentMinorDevLevel + this.currentMajorDevLevel;
+
+		// finds the details from the ENUM
+		SquareDetails currentSquareDetails = null;
+		for (SquareDetails squareDetails : SquareDetails.values()) {
+			if (getSquareName().equals(squareDetails.getName())) {
+				currentSquareDetails = squareDetails;
+				break;
+			}
+		}
+
+		// Confirms that the ENUM was found
+		if (currentSquareDetails == null) {
+			throw new NullPointerException("ENUM details not found");
+		}
+
+		// increases rent cost
+		switch (totalDevLevel) {
+		case 1:
+			this.setRentCost(currentSquareDetails.getRentMinor1());
+			break;
+		case 2:
+			this.setRentCost(currentSquareDetails.getRentMinor2());
+			break;
+		case 3:
+			this.setRentCost(currentSquareDetails.getRentMinor3());
+			break;
+		case 4:
+			this.setRentCost(currentSquareDetails.getRentMajor1());
+			break;
+		}
+
 	}
 
 	/**
@@ -204,90 +258,4 @@ public class StandardSquare extends Square {
 		this.ownedBy = ownedBy;
 	}
 
-	@Override
-	public String toString() {
-		return "StandardSquare [purchaseCost=" + purchaseCost + ", minorDevCost=" + minorDevCost + ", majorDevCost="
-				+ majorDevCost + ", currentMinorDevLevel=" + currentMinorDevLevel + ", currentMajorDevLevel="
-				+ currentMajorDevLevel + ", maxMinorDev=" + MAX_MINOR_DEV + ", maxMajorDev=" + MAX_MAJOR_DEV + ", rentCost="
-				+ rentCost + ", isOwned=" + isOwned + ", ownedBy=" + ownedBy + "]";
-	}
-	
-	/**
-	 * Increases dev level of square
-	 * 
-	 * @throws Exception
-	 */
-	public void increaseDev() throws Exception {
-
-		if (this.currentMinorDevLevel < this.MAX_MINOR_DEV) {
-
-			this.currentMinorDevLevel++;
-			System.out.println(
-					"Minor dev increased from " + (this.currentMinorDevLevel - 1) + " to " + this.currentMinorDevLevel);
-
-		} else if (this.currentMajorDevLevel < this.MAX_MAJOR_DEV) {
-
-			this.currentMajorDevLevel++;
-			System.out.println(
-					"Major dev increased from " + (this.currentMajorDevLevel - 1) + " to " + this.currentMajorDevLevel);
-
-		} else {
-
-			throw new Exception("Already at max dev level");
-
-		}
-		
-		increaseRent();
-
-	}
-	
-	/**
-	 * increases rent based on current dev level
-	 * @throws NullPointerException
-	 */
-	public void increaseRent() throws NullPointerException {
-		
-		int totalDevLevel = this.currentMinorDevLevel+this.currentMajorDevLevel;
-		
-		//finds the details from the ENUM
-		SquareDetails currentSquareDetails = null;
-		for(SquareDetails squareDetails: SquareDetails.values()) {
-			if(getSquareName().equals(squareDetails.getName())) {
-				currentSquareDetails = squareDetails;
-				break;
-			}
-		}
-		
-		//Confirms that the ENUM was found 
-		if(currentSquareDetails ==null) {
-			throw new NullPointerException("ENUM details not found");
-		}
-		
-		//increases rent cost
-		switch(totalDevLevel) {
-		case 1:
-			this.setRentCost(currentSquareDetails.getRentMinor1());
-			break;
-		case 2:
-			this.setRentCost(currentSquareDetails.getRentMinor2());
-			break;
-		case 3:
-			this.setRentCost(currentSquareDetails.getRentMinor3());
-			break;
-		case 4:
-			this.setRentCost(currentSquareDetails.getRentMajor1());
-			break;
-		}
-		
-	}
-
 }
-
-
-
-
-
-
-
-
-
