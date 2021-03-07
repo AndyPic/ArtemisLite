@@ -3,6 +3,7 @@
  */
 package uk.ac.qub.artemislite;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -25,28 +26,23 @@ public class Admin {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		Scanner scanner = new Scanner(System.in);
-
-		// create players
-		Player p1 = new Player("Jordan");
-		Player p2 = new Player("David");
-		Player p3 = new Player("Andrew");
-		Player p4 = new Player("Joseph");
+		TurnLauncher turnLauncher = new TurnLauncher();
+		
+		//Runs game start Menu
+		GameLauncher.startMenu();
+		GameLauncher.startGame(turnLauncher);
 
 		// sets first player
-		Player activePlayer = p1;
-
-		// stores user input
-		int userInput;
+		Player activePlayer = turnLauncher.players.get(0);
 
 		// create Board
 		Board board = new Board();
 
 		// create dice
 		Dice dice = new Dice();
-
-		do {
-
+		
+		while (!GAME_OVER) {
+			
 			System.out.println("It is " + activePlayer.getName() + "'s turn.");
 			System.out.println("Enter: \n1. End turn\n2. Roll Dice\n3. End game");
 
@@ -54,28 +50,25 @@ public class Admin {
 			 * Reads user selection, if user input != int, then catches exception sets input
 			 * to default and continues to switch
 			 */
-			try {
-				userInput = scanner.nextInt();
-				scanner.nextLine();
-			} catch (InputMismatchException e) {
-				userInput = 0;
-				scanner.nextLine();
-			}
+//			try {
+//				userInput = scanner.nextInt();
+//				scanner.nextLine();
+//			} catch (InputMismatchException e) {
+//				userInput = 0;
+//				scanner.nextLine();
+//			}
 
 			// Clear console
 			clearConsole(10);
 
 			// check user input
-			switch (userInput) {
+			switch (UserInput.getUserInputInt()) {
 			case 1:
-				if (activePlayer.equals(p1)) {
-					activePlayer = p2;
-				} else if (activePlayer.equals(p2)) {
-					activePlayer = p3;
-				} else if (activePlayer.equals(p3)) {
-					activePlayer = p4;
-				} else {
-					activePlayer = p1;
+				int activePlayerIndex = turnLauncher.players.indexOf(activePlayer);
+				if (activePlayerIndex!=turnLauncher.players.size()-1) {
+					activePlayer = turnLauncher.players.get(activePlayerIndex+1);
+				}  else {
+					activePlayer = turnLauncher.players.get(0);
 				}
 				break;
 
@@ -118,21 +111,22 @@ public class Admin {
 			// Clear console
 			clearConsole(2);
 
-		} while (!GAME_OVER);
+		}
 
 		System.out.println("Game Over");
-		scanner.close();
 
 	}// END MAIN
-	
+
 	/**
-	 * 'Clears the console' by printing {@link numberOfLines} blank lines in console.
+	 * 'Clears the console' by printing {@link numberOfLines} blank lines in
+	 * console.
+	 * 
 	 * @param numberOfLines
 	 */
 	public static void clearConsole(int numberOfLines) {
 
 		for (int loop = 0; loop < numberOfLines; loop++) {
-			System.out.println(); 
+			System.out.println();
 		}
 
 	}
