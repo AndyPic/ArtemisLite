@@ -28,14 +28,14 @@ public class GameLauncher {
 			System.out.println("\nPlease select a menu option by entering a number: (e.g. 1)" + "\n1.Start Game"
 					+ "\n2.Show Game Rules" + "\n3.Quit Game");
 
-			// TODO: Should we change this so all menus accept a String as valid also?
+			// TODO: Should we change this so all menus accept a String as valid also? JD
 			// (e.g.'Start game')
 			switch (UserInput.getUserInputInt()) {
 			case 1:
 				validOption = true;
 				break;
 			case 2:
-				// TODO: Game rules method needed
+				// TODO: Game rules method needed JD
 				System.out.println("game rules shown");
 				break;
 			case 3:
@@ -67,7 +67,7 @@ public class GameLauncher {
 			System.out.println("Current Registered Players:");
 			turnLauncher.displayPlayers();
 			
-			//TODO: this list need to be made dynamic so that you cant add more players when at max etc.
+			//TODO: this list need to be made dynamic so that you cant add more players when at max etc. JD
 			System.out.println("1. Add Player" + "\n2. Modify Player" + "\n3. Begin Game");
 
 
@@ -80,7 +80,7 @@ public class GameLauncher {
 				}
 				break;
 			case 2:
-				// TODO: Modify Player Method needed
+				// TODO: Modify Player Method needed JD
 				System.out.println("Modified player");
 				break;
 			case 3:
@@ -96,7 +96,8 @@ public class GameLauncher {
 
 		} while (!start);
 
-		//TODO: roll dice to find starting player code needed
+		//finds the order that players will take thier turn
+		turnLauncher.findPlayerOrder();
 		
 		System.out.println("Intro message.......");
 

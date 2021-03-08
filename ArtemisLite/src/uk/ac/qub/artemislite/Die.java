@@ -11,20 +11,20 @@ import java.util.Random;
  * @author Joseph Mawhinney
  * @author Andrew Pickard
  */
-public class Dice {
+public class Die {
 
 	// Instance Vars
 
 	private final int MIN_NUMBER = 1;
 	private final int MAX_NUMBER = 6;
-	private Random diceRoll = new Random();
+	private Random dieRoll = new Random();
 
 	// Constructors
 
 	/**
-	 * default dice constructor
+	 * default die constructor
 	 */
-	public Dice() {
+	public Die() {
 
 	}
 
@@ -32,17 +32,17 @@ public class Dice {
 
 	@Override
 	public String toString() {
-		return "Dice [MIN_NUMBER=" + MIN_NUMBER + ", MAX_NUMBER=" + MAX_NUMBER + "]";
+		return "Die [MIN_NUMBER=" + MIN_NUMBER + ", MAX_NUMBER=" + MAX_NUMBER + "]";
 	}
 
 	/**
-	 * Rolls dice and returns the result
+	 * Rolls die and returns the result
 	 * 
 	 * @return int between MIN_NUMBER & MAX_NUMBER
 	 */
-	public int rollDice() {
+	public int rollDie() {
 
-		return MIN_NUMBER + diceRoll.nextInt(MAX_NUMBER);
+		return MIN_NUMBER + dieRoll.nextInt(MAX_NUMBER);
 
 	}
 

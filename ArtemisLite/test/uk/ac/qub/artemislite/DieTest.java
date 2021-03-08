@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
  * @author Jordan Davis
  *
  */
-class DiceTest {
+class DieTest {
 
 	// Test Data
 	int numOfTests;
-	Dice dice;
+	Die die;
 	int[] rolledNums;
 
 	/**
@@ -25,7 +25,7 @@ class DiceTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		numOfTests = 100;
-		dice = new Dice();
+		die = new Die();
 		rolledNums = new int[6];
 	}
 
@@ -33,11 +33,11 @@ class DiceTest {
 	 * Test method for dice roll
 	 */
 	@Test
-	void testValidDiceRoll() {
+	void testValidDieRoll() {
 
 		for (int loop = 0; loop < numOfTests; loop++) {
 
-			int roll = dice.rollDice();
+			int roll = die.rollDie();
 			
 			if (roll > 6 || roll < 0) {
 				System.out.println(roll);

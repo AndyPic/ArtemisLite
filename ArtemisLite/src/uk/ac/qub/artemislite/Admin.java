@@ -3,10 +3,6 @@
  */
 package uk.ac.qub.artemislite;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 /**
  * @author Jordan Davis
  * @author David Finlay
@@ -38,9 +34,6 @@ public class Admin {
 		// create Board
 		Board board = new Board();
 
-		// create dice
-		Dice dice = new Dice();
-		
 		while (!GAME_OVER) {
 			
 			System.out.println("It is " + activePlayer.getName() + "'s turn.");
@@ -58,6 +51,7 @@ public class Admin {
 //				scanner.nextLine();
 //			}
 
+				
 			// Clear console
 			clearConsole(10);
 
@@ -79,11 +73,10 @@ public class Admin {
 
 				System.out.println("You are currently on " + currentSquare.getSquareName());
 
-				int roll1 = dice.rollDice();
-				int roll2 = dice.rollDice();
+				int roll = turnLauncher.rollDice();
 
-				System.out.println("You have rolled " + roll1 + " and " + roll2);
-				int newPos = currentPos + roll1 + roll2;
+				System.out.println("You have rolled " + roll);
+				int newPos = currentPos + roll;
 				if (newPos > 11) {
 					newPos -= 12;
 				}
