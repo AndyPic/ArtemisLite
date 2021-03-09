@@ -14,7 +14,7 @@ public class TurnLauncher {
 	// TODO: This should prob be private to decrease coupling JD
 	protected ArrayList<Player> players;
 
-	private Die[] dice;
+	private Die die;
 
 	private final int NUM_OF_DICE = 2;
 
@@ -23,7 +23,7 @@ public class TurnLauncher {
 	 */
 	public TurnLauncher() {
 		this.players = new ArrayList<Player>();
-		setDice(NUM_OF_DICE);
+		this.die = new Die();
 	}
 
 	/**
@@ -31,25 +31,6 @@ public class TurnLauncher {
 	 */
 	public ArrayList<Player> getPlayers() {
 		return players;
-	}
-
-	/**
-	 * @return the dice
-	 */
-	public Die[] getDice() {
-		return dice;
-	}
-
-	/**
-	 * Creates the dice array
-	 */
-	public void setDice(int num) {
-
-		this.dice = new Die[num];
-
-		for (int loop = 0; loop < this.dice.length; loop++) {
-			this.dice[loop] = new Die();
-		}
 	}
 
 	/**
@@ -83,11 +64,15 @@ public class TurnLauncher {
 	 */
 	public void findPlayerOrder() {
 
-		int roll, highestRoll;
+		int highestRoll, playerRoll;
 		Player firstToPlay;
+		String roll;
+		boolean matchingRoll;
 
 		highestRoll = 0;
+		playerRoll = 0;
 		firstToPlay = this.players.get(0);
+		matchingRoll = false;
 
 		System.out.println("Its time to find out who goes first...\nPress enter to roll the dice!");
 		UserInput.getUserInputString();
@@ -95,16 +80,32 @@ public class TurnLauncher {
 		// TODO: needs updated so that it will roll again if 2 players end up with the
 		// same max number. Currently just gives it to the first player that rolls max
 		// JD
-		for (Player player : this.players) {
-			roll = rollDice();
-			System.out.println(player.getName() + " rolled a " + roll);
 
-			if (roll > highestRoll) {
-				highestRoll = roll;
-				firstToPlay = player;
+		do {
+			
+			for (Player player : this.players) {
+				roll = rollDice();
+				playerRoll = getRollValue(roll);
+
+				System.out.println(player.getName() + roll);
+
+				if (playerRoll > highestRoll) {
+					highestRoll = playerRoll;
+					firstToPlay = player;
+					matchingRoll = false;
+				} else if(playerRoll == highestRoll) {
+					matchingRoll = true;
+					
+				}
+
+			}
+			
+			if(matchingRoll = true) {
+				System.out.println("The roll was a draw, lets try again. Please press enter to roll");
+				UserInput.getUserInputString();
 			}
 
-		}
+		} while (matchingRoll);
 
 		System.out.println(firstToPlay.getName() + " rolled the highest and is 1st to play");
 
@@ -121,24 +122,46 @@ public class TurnLauncher {
 	/**
 	 * Method rolls the game dice and returns the result
 	 * 
-	 * @return int, total roll value
+	 * @return int array containing dice rolls, last index is roll total
 	 */
-	public int rollDice() {
-		// TODO: method made folling class diagram but we should review. Why are we
-		// creating a dice array? the only place that die.rollDie() method is used is in
-		// this method. Could just create the 1 die and call it multiple times based on
-		// NUM_OF_DICE. Maybe this method should be in the Die class to increase
-		// cohesion? JD
-		// TODO: need to split this so that each roll + the total are returned. Need to
-		// review best method to do this that would allow the number of dice to change
-		// and not break the method that calls it JD
-		int result = 0;
+	public String rollDice() {
 
-		for (Die die : this.dice) {
-			result += die.rollDie();
+		String result;
+		int totalRoll, currentRoll;
+
+		result = "rolled a ";
+		totalRoll = 0;
+
+		for (int loop = 1; loop <= NUM_OF_DICE; loop++) {
+			currentRoll = this.die.rollDie();
+			totalRoll += currentRoll;
+
+			if (loop == NUM_OF_DICE) {
+				result += currentRoll + " " + "for a total of : " + totalRoll;
+			} else {
+				result += currentRoll + " and ";
+			}
+
 		}
 
 		return result;
+	}
+
+	/**
+	 * Converts string from dice roll into an int value
+	 * 
+	 * @param previous dice roll string
+	 * @return int value of total roll
+	 */
+	public int getRollValue(String roll) {
+
+		// removes all non-digit chars and whitespace
+		roll = roll.replaceAll("[^\\d]+", " ").trim();
+		System.out.println(roll);
+		String[] rollArr = roll.split(" ");
+
+		return Integer.parseInt(rollArr[rollArr.length - 1]);
+
 	}
 
 }

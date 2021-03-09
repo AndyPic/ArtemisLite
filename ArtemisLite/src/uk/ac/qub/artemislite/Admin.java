@@ -39,19 +39,6 @@ public class Admin {
 			System.out.println("It is " + activePlayer.getName() + "'s turn.");
 			System.out.println("Enter: \n1. End turn\n2. Roll Dice\n3. End game");
 
-			/**
-			 * Reads user selection, if user input != int, then catches exception sets input
-			 * to default and continues to switch
-			 */
-//			try {
-//				userInput = scanner.nextInt();
-//				scanner.nextLine();
-//			} catch (InputMismatchException e) {
-//				userInput = 0;
-//				scanner.nextLine();
-//			}
-
-				
 			// Clear console
 			clearConsole(10);
 
@@ -73,10 +60,11 @@ public class Admin {
 
 				System.out.println("You are currently on " + currentSquare.getSquareName());
 
-				int roll = turnLauncher.rollDice();
-
-				System.out.println("You have rolled " + roll);
-				int newPos = currentPos + roll;
+				String roll = turnLauncher.rollDice();
+				
+				System.out.println("You "+roll);
+				
+				int newPos = currentPos + turnLauncher.getRollValue(roll);
 				if (newPos > 11) {
 					newPos -= 12;
 				}

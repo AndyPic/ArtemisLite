@@ -80,7 +80,7 @@ public class GameLauncher {
 				}
 				break;
 			case 2:
-				// TODO: Modify Player Method needed JD
+				// TODO: Modify Player Method needs created JD
 				System.out.println("Modified player");
 				break;
 			case 3:

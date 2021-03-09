@@ -1,7 +1,7 @@
 package uk.ac.qub.artemislite;
 
-
-import java.util.HashMap;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,19 +10,16 @@ class TurnLauncherTest {
 
 	// Test Data
 	TurnLauncher turnLauncher;
-	HashMap<Integer, Integer> diceMap;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		turnLauncher = new TurnLauncher();
 
-		diceMap = new HashMap<Integer, Integer>();
-
 	}
 
 	@Test
 	void testFindPlayerOrder() {
-		
+
 		turnLauncher.addPlayer();
 		turnLauncher.addPlayer();
 		turnLauncher.addPlayer();
@@ -30,29 +27,55 @@ class TurnLauncherTest {
 		System.out.println("Original player order:");
 		turnLauncher.displayPlayers();
 		turnLauncher.findPlayerOrder();
-		
+
 		System.out.println("Rearanged player order:");
 		turnLauncher.displayPlayers();
 
 	}
 
-
 	@Test
 	void testRollDice() {
 
-		int count, roll;
+		int total = 0;
+		String roll;
 
-		for (int loop = 0; loop <= 1000; loop++) {
+		for (int outer = 0; outer <= 1; outer++) {
 			roll = turnLauncher.rollDice();
-	        count = diceMap.getOrDefault(roll, 0);
-	        diceMap.put(roll, count + 1);
+
+			roll = roll.replaceAll("[^\\d]+", " ").trim();
+
+			String[] rollArr = roll.split(" ");
+
+			for (int inner = 0; outer < rollArr.length; outer++) {
+
+				if (inner == roll.length() - 1) {
+
+					if (total != Integer.parseInt(rollArr[inner])) {
+						assertTrue(false);
+					}
+
+				} else {
+					total = Integer.parseInt(rollArr[inner]);
+				}
+			}
+
+			System.out.println(roll);
 		}
 		
-		System.out.println("Rolls:");
-		for(int key: diceMap.keySet()) {
-			System.out.println(key+" = "+diceMap.get(key));
-		}
-
+	}
+	
+	
+	@Test 
+	void testGetRollValue() {
+		
+		int expected = 7;
+		
+		String testRoll = "You have rolled a 1 and 6 for a total of : 7";
+		
+		int result = turnLauncher.getRollValue(testRoll);
+		
+		assertEquals(expected, result);
+		
 	}
 
 }
