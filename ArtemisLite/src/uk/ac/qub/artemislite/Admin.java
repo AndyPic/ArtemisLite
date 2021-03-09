@@ -36,11 +36,11 @@ public class Admin {
 
 		while (!GAME_OVER) {
 			
+			// Clear console
+			GUI.clearConsole(10);
+			
 			System.out.println("It is " + activePlayer.getName() + "'s turn.");
 			System.out.println("Enter: \n1. End turn\n2. Roll Dice\n3. End game");
-
-			// Clear console
-			clearConsole(10);
 
 			// check user input
 			switch (UserInput.getUserInputInt()) {
@@ -90,26 +90,12 @@ public class Admin {
 			}
 
 			// Clear console
-			clearConsole(2);
+			GUI.clearConsole(2);
 
 		}
 
 		System.out.println("Game Over");
 
 	}// END MAIN
-
-	/**
-	 * 'Clears the console' by printing {@link numberOfLines} blank lines in
-	 * console.
-	 * 
-	 * @param numberOfLines
-	 */
-	public static void clearConsole(int numberOfLines) {
-
-		for (int loop = 0; loop < numberOfLines; loop++) {
-			System.out.println();
-		}
-
-	}
 
 }
