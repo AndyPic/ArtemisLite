@@ -1,0 +1,76 @@
+package uk.ac.qub.artemislite;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+/**
+ * 
+ * @author David Finlay Student Number: 40312100
+ *
+ */
+
+class ModifyPlayerResourcesTest {
+
+	// setup test variables
+	Player player1, player2, player3, player4;
+	int initialBalance, resourceValue1, resourceValue2;
+	ArrayList<Player> players = new ArrayList<Player>();
+	
+	@BeforeEach
+	void setUp() throws Exception {
+		initialBalance = 100;
+		resourceValue1 = 150;
+		resourceValue2 = -70;
+		
+		
+		player1 = new Player();
+		player2 = new Player();
+		player3 = new Player();
+		player4 = new Player();
+		
+		player1.setBalanceOfResources(initialBalance);
+		player2.setBalanceOfResources(initialBalance);
+		player3.setBalanceOfResources(initialBalance);
+		player4.setBalanceOfResources(initialBalance);
+		
+		players.add(player1);
+		players.add(player2);
+		players.add(player3);
+		players.add(player4);
+			
+	}
+
+	@Test
+	void testModifyResourcesSinglePlayer() {
+		
+		// test with positive value ie adding resources
+		ModifyPlayerResources.modifyResourcesSinglePlayer(player1, resourceValue1);
+		assertEquals(initialBalance + resourceValue1, player1.getBalanceOfResources());
+		
+		// testing with negative value ie. subtracting resources
+		ModifyPlayerResources.modifyResourcesSinglePlayer(player2, resourceValue2);
+		assertEquals(initialBalance + resourceValue2, player2.getBalanceOfResources());
+	}
+
+	@Test
+	void testModifyResourcesAllPlayers() {
+		
+		// testing with positive resource value
+		ModifyPlayerResources.modifyResourcesAllPlayers(players, resourceValue1);
+		assertEquals(initialBalance + resourceValue1, player1.getBalanceOfResources());
+		assertEquals(initialBalance + resourceValue1, player2.getBalanceOfResources());
+		assertEquals(initialBalance + resourceValue1, player3.getBalanceOfResources());
+		assertEquals(initialBalance + resourceValue1, player4.getBalanceOfResources());
+		
+		ModifyPlayerResources.modifyResourcesAllPlayers(players, resourceValue2);
+		assertEquals(initialBalance + resourceValue1 + resourceValue2, player1.getBalanceOfResources());
+		assertEquals(initialBalance + resourceValue1 + resourceValue2, player2.getBalanceOfResources());
+		assertEquals(initialBalance + resourceValue1 + resourceValue2, player3.getBalanceOfResources());
+		assertEquals(initialBalance + resourceValue1 + resourceValue2, player4.getBalanceOfResources());
+	}
+
+}

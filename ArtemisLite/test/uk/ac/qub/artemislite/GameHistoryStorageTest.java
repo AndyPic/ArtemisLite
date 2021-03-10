@@ -9,6 +9,11 @@ import org.junit.After;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * 
+ * @author David Finlay Student Number: 40312100
+ *
+ */
 class GameHistoryStorageTest {
 
 	// setup test variables
