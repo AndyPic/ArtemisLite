@@ -103,7 +103,7 @@ public class GameLauncher {
 
 		} while (!start);
 
-		//finds the order that players will take thier turn
+		//finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
 		
 		GUI.displayIntroMessage();

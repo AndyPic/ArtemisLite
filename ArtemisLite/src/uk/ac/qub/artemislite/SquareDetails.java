@@ -14,7 +14,7 @@ public enum SquareDetails {
 	// position, squareName, squareSystem, purchaseCost, minorDevCost,
 	// majorDevCost, rent,
 	// rentMinor1, rentMinor2, rentMinor3, rentMajor1
-	// TODO still need to decide values and names for these sqaures
+	// TODO still need to decide values and names for these squares
 	SQUARERESOURCE(1, "Resource Square", SystemType.RESOURCE),
 	SQUAREX(2, "SquareX", SystemType.SYSTEM1, 100, 200, 400, 10, 20, 30, 40, 80),
 	SQUAREY(3, "SquareY", SystemType.SYSTEM1, 200, 200, 400, 10, 20, 30, 40, 80),
@@ -167,5 +167,7 @@ public enum SquareDetails {
 	public int getRentMajor1() {
 		return rentMajor1;
 	}
+	
+	
 
 }
