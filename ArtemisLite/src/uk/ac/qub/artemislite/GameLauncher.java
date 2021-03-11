@@ -47,7 +47,7 @@ public class GameLauncher {
 			}
 
 		} while (!validOption);
-
+		GUI.clearConsole(4);
 	}
 
 	/**
@@ -64,14 +64,16 @@ public class GameLauncher {
 
 		do {
 			ArrayList<Player> players = turnLauncher.getPlayers();
+			
+			if(turnLauncher.players.size()>0) {
+				System.out.println("\nCurrent Registered Players:");
+				turnLauncher.displayPlayers();
+			}
+			
+			//TODO: this list need to be made dynamic so that you cant add more players when at max etc. JD
+			System.out.println("\nSelect an option:\n1. Add New Player" + "\n2. Modify Existing Player" + "\n3. Begin Game");
 
-			System.out.println("Current Registered Players:");
-			turnLauncher.displayPlayers();
-
-			// TODO: this list need to be made dynamic so that you cant add more players
-			// when at max etc. JD
-			System.out.println("1. Add Player" + "\n2. Modify Player" + "\n3. Begin Game");
-
+			
 			switch (UserInput.getUserInputInt()) {
 			case 1:
 				if (players.size() < MAX_PLAYERS) {
@@ -81,8 +83,13 @@ public class GameLauncher {
 				}
 				break;
 			case 2:
-				// TODO: Modify Player Method needs created JD
-				System.out.println("Modified player");
+				
+				if(players.size()>=1) {
+					turnLauncher.modifyPlayer();
+				} else {
+					System.out.println("There is no players to modify!");
+				}
+				
 				break;
 			case 3:
 				if (players.size() >= MIN_PLAYERS) {
@@ -97,10 +104,10 @@ public class GameLauncher {
 
 		} while (!start);
 
-		// finds the order that players will take thier turn
+		//finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
-
-		System.out.println("Intro message.......");
+		
+		GUI.displayIntroMessage();
 
 	}
 

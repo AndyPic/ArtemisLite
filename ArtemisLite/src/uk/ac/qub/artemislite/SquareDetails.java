@@ -168,5 +168,7 @@ public enum SquareDetails {
 	public int getRentMajor1() {
 		return rentMajor1;
 	}
+	
+	
 
 }

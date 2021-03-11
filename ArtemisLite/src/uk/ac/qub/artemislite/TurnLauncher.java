@@ -44,6 +44,8 @@ public class TurnLauncher {
 		player.setName(UserInput.getUserInputString());
 
 		players.add(player);
+		
+		GUI.clearConsole(4);
 
 	}
 
@@ -52,10 +54,9 @@ public class TurnLauncher {
 	 */
 	public void displayPlayers() {
 
-		for (Player player : players) {
-			System.out.println(player.getName());
+		for(int loop =1; loop<=this.players.size(); loop++) {
+			System.out.println(loop+". "+players.get(loop-1).getName());
 		}
-		System.out.println();
 
 	}
 
@@ -74,12 +75,10 @@ public class TurnLauncher {
 		firstToPlay = this.players.get(0);
 		matchingRoll = false;
 
+		GUI.clearConsole(4);
 		System.out.println("Its time to find out who goes first...\nPress enter to roll the dice!");
 		UserInput.getUserInputString();
-
-		// TODO: needs updated so that it will roll again if 2 players end up with the
-		// same max number. Currently just gives it to the first player that rolls max
-		// JD
+		GUI.clearConsole(4);
 
 		do {
 			
@@ -101,14 +100,15 @@ public class TurnLauncher {
 			}
 			
 			if(matchingRoll == true) {
-				System.out.println("The roll was a draw, lets try again. Please press enter to roll");
+				System.out.println("\nThe roll was a draw, lets try again. Please press enter to roll");
 				UserInput.getUserInputString();
 			}
 
 		} while (matchingRoll);
 
-		System.out.println(firstToPlay.getName() + " rolled the highest and is 1st to play");
-
+		System.out.println("\n"+firstToPlay.getName()+" is first to play with the highest roll of " +highestRoll+"\nPress enter to continue");
+		UserInput.getUserInputString();
+		
 		// rearanges the player array so that the correct player is first
 		while (firstToPlay != this.players.get(0)) {
 
@@ -129,7 +129,7 @@ public class TurnLauncher {
 		String result;
 		int totalRoll, currentRoll;
 
-		result = "rolled a ";
+		result = " rolled a ";
 		totalRoll = 0;
 
 		for (int loop = 1; loop <= NUM_OF_DICE; loop++) {
@@ -157,11 +157,87 @@ public class TurnLauncher {
 
 		// removes all non-digit chars and whitespace
 		roll = roll.replaceAll("[^\\d]+", " ").trim();
-		System.out.println(roll);
+		
 		String[] rollArr = roll.split(" ");
 
 		return Integer.parseInt(rollArr[rollArr.length - 1]);
 
 	}
+	
+	
+	public void modifyPlayer() {
+		
+		int userInput;
+		boolean valid = false;
+		
+		do {
+			System.out.println("Select a player to modify:");
+			displayPlayers();
+			userInput = UserInput.getUserInputInt()-1;
+
+			if(userInput>=0 && userInput<this.players.size()) {
+				valid = true;
+			}
+			
+			if(!valid) {
+				System.out.println("Your selection was invalid, please try again");
+			}
+			
+		} while (!valid);
+		
+		Player player = this.players.get(userInput);
+
+		System.out.println("What would you like to do with "+player.getName()+"?\n1. Modify Name\n2. Delete Player\n3. Go back");
+		
+		do {
+			
+			switch(UserInput.getUserInputInt()) {
+			case 1:
+				System.out.println("Please enter the new name");
+				player.setName(UserInput.getUserInputString());
+				break;
+			case 2:
+				this.players.remove(userInput);
+				System.out.println("Player has been deleted");
+				break;
+			case 3:
+				break;			
+			default:
+				System.out.println("Invalid Menu Option, please try again");
+				valid = false;
+			}
+			System.out.println("loop end");
+		} while(!valid);
+		System.out.println("end");
+	}
+	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

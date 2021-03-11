@@ -145,6 +145,26 @@ public class StandardSquare extends Square {
 		}
 
 	}
+	/**
+	 * displays current details to screen
+	 */
+	public void displayDetails() {
+	System.out.println("Cost:" +this.purchaseCost);
+	System.out.println("Current Rent:" +this.rentCost);
+	if (this.currentMajorDevLevel!=0) {
+		// outputs fully developed if major dev is greater than 0. May change if we decide to have more than one major development
+		System.out.println("Fully Developed");
+	} else {
+		System.out.println("Current Development level:" +this.currentMinorDevLevel);
+		System.out.println("Development Cost:" +this.minorDevCost);
+	}
+	if (isOwned==true) {
+		System.out.println("Square is currently owned by: "+this.ownedBy);
+	} else {
+		System.out.println("Square is unowned");
+	}
+	
+	}
 
 	/**
 	 * @return the purchaseCost
@@ -257,5 +277,7 @@ public class StandardSquare extends Square {
 	public void setOwnedBy(Player ownedBy) {
 		this.ownedBy = ownedBy;
 	}
+	
+	
 
 }

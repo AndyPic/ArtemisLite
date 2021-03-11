@@ -39,12 +39,12 @@ public class Admin {
 		Board board = new Board();
 
 		while (!GAME_OVER) {
-
+			
 			// Clear console
-			clearConsole(2);
-
-			System.out.println("It is " + activePlayerName + "'s turn.");
-			System.out.println("Enter: \n1. End turn\n2. Roll Dice\n3. End game");
+			GUI.clearConsole(10);
+			
+			System.out.println("It is " + activePlayer.getName() + "'s turn.");
+			System.out.println("Enter: \n1. End turn\n2. Start turn\n3. End game");
 
 			// check user input
 			switch (UserInput.getUserInputInt()) {
@@ -237,7 +237,7 @@ public class Admin {
 			board.getSquares().toString();
 
 			// Clear console
-			clearConsole(2);
+			GUI.clearConsole(2);
 
 		}
 
