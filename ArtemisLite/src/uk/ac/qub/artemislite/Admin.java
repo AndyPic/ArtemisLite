@@ -3,9 +3,6 @@
  */
 package uk.ac.qub.artemislite;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
  * @author Jordan Davis
  * @author David Finlay
@@ -26,7 +23,7 @@ public class Admin {
 	public static void main(String[] args) throws Exception {
 
 		TurnLauncher turnLauncher = new TurnLauncher();
-		
+
 		// create Board
 		Board board = new Board();
 
@@ -57,8 +54,6 @@ public class Admin {
 					activePlayer = turnLauncher.players.get(activePlayerIndex + 1);
 				} else {
 					activePlayer = turnLauncher.players.get(0);
-					activePlayerIndex = 0;
-					activePlayerName = turnLauncher.players.get(activePlayerIndex).getName();
 					turnLauncher.roundEnd();
 				}
 				break;
@@ -84,9 +79,9 @@ public class Admin {
 						// AP - Temporary hasMoved solution
 						if (!hasMoved) {
 							turnLauncher.moveMethod(activePlayer, board, turnLauncher);
-							
+
 							currentPosition = board.getSquares().get(activePlayer.getCurrentPosition());
-							
+
 							hasMoved = true;
 						} else {
 							System.out.println("You've already moved this turn.");
@@ -122,6 +117,7 @@ public class Admin {
 						break;
 					case 5:
 						GAME_OVER = true;
+						endTurn = true;
 						break;
 					default:
 						System.out.println("Invalid option - try again");
@@ -137,27 +133,14 @@ public class Admin {
 			default:
 				System.out.println("Invalid option - try again");
 			}
-			
-			
 
 			// Clear console
 			GUI.clearConsole(2);
 
 		}
-<<<<<<< ArtemisLite/src/uk/ac/qub/artemislite/Admin.java
-		
-		System.out.println("Game Over");
-		System.out.println("*Shows after game report*");
-		Thread.sleep(1000);
-		System.out.println("WOW! Such interesting!");
-		Thread.sleep(1000);
-		System.out.println("OMG! So many details!");
-
-=======
 
 		turnLauncher.gameOverSequence(board);
-		
->>>>>>> ArtemisLite/src/uk/ac/qub/artemislite/Admin.java
+
 		// Close scanner
 		UserInput.closeScanner();
 
