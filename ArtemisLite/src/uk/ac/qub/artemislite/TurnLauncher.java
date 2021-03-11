@@ -86,7 +86,7 @@ public class TurnLauncher {
 				roll = rollDice();
 				playerRoll = getRollValue(roll);
 
-				System.out.println(player.getName() + roll);
+				System.out.println(player.getName() + " " + roll);
 
 				if (playerRoll > highestRoll) {
 					highestRoll = playerRoll;

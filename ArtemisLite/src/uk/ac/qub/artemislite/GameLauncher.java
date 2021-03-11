@@ -52,6 +52,7 @@ public class GameLauncher {
 
 	/**
 	 * Menu for game settings (players & turn order)
+	 * 
 	 * @param turnLauncher
 	 */
 	public static void startGame(TurnLauncher turnLauncher) {
@@ -91,7 +92,7 @@ public class GameLauncher {
 				
 				break;
 			case 3:
-				if(players.size() >= MIN_PLAYERS) {
+				if (players.size() >= MIN_PLAYERS) {
 					start = true;
 				} else {
 					System.out.println("You need to register more players");
