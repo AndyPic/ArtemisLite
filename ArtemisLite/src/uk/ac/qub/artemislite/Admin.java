@@ -43,7 +43,7 @@ public class Admin {
 			// Clear console
 			GUI.clearConsole(10);
 			
-			System.out.println("It is " + activePlayer.getName() + "'s turn.");
+			System.out.println("It is " + activePlayerName + "'s turn.");
 			System.out.println("Enter: \n1. End turn\n2. Start turn\n3. End game");
 
 			// check user input
