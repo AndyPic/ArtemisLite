@@ -36,5 +36,22 @@ public class GUI {
 		
 	}
 	
+	/**
+	 * Displays the game loss message
+	 */
+	public static void displayGameLossMessage(int turnNumber) {
+		//TODO: add actual ending message
+		System.out.println("\nProject Artemis has failed, the year is "+turnNumber+".................");
+		
+	}
+	
+	/**
+	 * Displayes the game won message
+	 */
+	public static void displayGameWonMessage(int turnNumber) {
+		//TODO: add actual ending message
+		System.out.println("\nProject Artemis is a success, the year is "+turnNumber+".................");
+		
+	}
 	
 }

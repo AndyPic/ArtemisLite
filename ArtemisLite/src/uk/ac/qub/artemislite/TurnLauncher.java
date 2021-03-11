@@ -4,6 +4,7 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author Jordan Davis
@@ -18,12 +19,15 @@ public class TurnLauncher {
 
 	private final int NUM_OF_DICE = 2;
 
+	private int roundNumber;
+
 	/**
 	 * default constructor
 	 */
 	public TurnLauncher() {
 		this.players = new ArrayList<Player>();
 		this.die = new Die();
+		this.roundNumber = 2000;
 	}
 
 	/**
@@ -165,6 +169,9 @@ public class TurnLauncher {
 
 	}
 
+	/**
+	 * Modify or delete a player
+	 */
 	public void modifyPlayer() {
 
 		int userInput;
@@ -518,5 +525,90 @@ public class TurnLauncher {
 
 		}
 	} // END
+
+	/**
+	 * Calculates the total worth of a Player
+	 * 
+	 * @param player
+	 */
+	public int calculatePlayerWorth(Player player, Board board) {
+
+		int playerValue;
+		StandardSquare stdSquare;
+
+		playerValue = player.getBalanceOfResources();
+
+		for (Square square : board.getSquares()) {
+
+			if (square instanceof StandardSquare) {
+
+				stdSquare = (StandardSquare) square;
+
+				if (stdSquare.getOwnedBy() != null && stdSquare.getOwnedBy().equals(player)) {
+
+					playerValue += stdSquare.getPurchaseCost();
+					playerValue += (stdSquare.getCurrentMinorDevLevel() * stdSquare.getMinorDevCost());
+					playerValue += (stdSquare.getCurrentMajorDevLevel() * stdSquare.getMajorDevCost());
+
+				}
+
+			}
+
+		}
+
+		return playerValue;
+
+	}
+
+	/**
+	 * Finds the ending scores of all players
+	 */
+	public void endingPlayerScore(Board board) {
+
+		System.out.println("The scores are as follows:");
+		
+		// checks if player is not bankrupt then calculates score
+		for (Player player : this.players) {
+			if (player.getBalanceOfResources() > 0) {
+				player.setBalanceOfResources(calculatePlayerWorth(player, board));
+			}
+		}
+		
+		//Orders the players in decending order
+		Collections.sort(this.players, Collections.reverseOrder(new ResourcesComparator()));
+
+		//displays all player scores
+		for (Player player : this.players) {
+			if (player.getBalanceOfResources() > 0) {
+				System.out.println(player.getName() + " : " + player.getBalanceOfResources());
+			} else
+				System.out.println(player.getName() + " : Bankrupt");
+		}
+	}
+
+	/**
+	 * increases the year(roundNumber) by 1
+	 */
+	public void roundEnd() {
+		this.roundNumber +=1;
+	}
+
+	/**
+	 * Runs correct gameover sequence depending on win or loss 
+	 * @param board
+	 */
+	public void gameOverSequence(Board board) {
+
+		if (board.allSystemComplete()) {
+			GUI.displayGameWonMessage(this.roundNumber);
+		} else {
+			GUI.displayGameLossMessage(this.roundNumber);
+		}
+		
+		
+
+		endingPlayerScore(board);
+
+	}
 
 }

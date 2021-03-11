@@ -26,6 +26,9 @@ public class Admin {
 	public static void main(String[] args) throws Exception {
 
 		TurnLauncher turnLauncher = new TurnLauncher();
+		
+		// create Board
+		Board board = new Board();
 
 		// Runs game start Menu
 		GameLauncher.startMenu();
@@ -33,9 +36,6 @@ public class Admin {
 
 		// sets first player
 		Player activePlayer = turnLauncher.players.get(0);
-
-		// create Board
-		Board board = new Board();
 
 		while (!GAME_OVER) {
 
@@ -57,6 +57,9 @@ public class Admin {
 					activePlayer = turnLauncher.players.get(activePlayerIndex + 1);
 				} else {
 					activePlayer = turnLauncher.players.get(0);
+					activePlayerIndex = 0;
+					activePlayerName = turnLauncher.players.get(activePlayerIndex).getName();
+					turnLauncher.roundEnd();
 				}
 				break;
 
@@ -134,11 +137,14 @@ public class Admin {
 			default:
 				System.out.println("Invalid option - try again");
 			}
+			
+			
 
 			// Clear console
 			GUI.clearConsole(2);
 
 		}
+<<<<<<< ArtemisLite/src/uk/ac/qub/artemislite/Admin.java
 		
 		System.out.println("Game Over");
 		System.out.println("*Shows after game report*");
@@ -147,6 +153,11 @@ public class Admin {
 		Thread.sleep(1000);
 		System.out.println("OMG! So many details!");
 
+=======
+
+		turnLauncher.gameOverSequence(board);
+		
+>>>>>>> ArtemisLite/src/uk/ac/qub/artemislite/Admin.java
 		// Close scanner
 		UserInput.closeScanner();
 

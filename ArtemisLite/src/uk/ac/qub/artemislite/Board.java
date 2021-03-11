@@ -55,4 +55,30 @@ public class Board {
 		return squares;
 	}
 
+	public boolean allSystemComplete() {
+
+		boolean complete;
+		StandardSquare stdSquare;
+
+		complete = true;
+
+		for (Square square : this.squares) {
+
+			if (square instanceof StandardSquare) {
+
+				stdSquare = (StandardSquare) square;
+
+				if (stdSquare.getCurrentMajorDevLevel() != stdSquare.getMAX_MAJOR_DEV()) {
+
+					complete = false;
+					break;
+
+				}
+			}
+		}
+
+		return complete;
+
+	}
+
 }
