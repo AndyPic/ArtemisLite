@@ -57,6 +57,7 @@ public class Admin {
 				} else {
 					activePlayerIndex = 0;
 					activePlayerName = turnLauncher.players.get(activePlayerIndex).getName();
+					turnLauncher.roundEnd();
 				}
 				break;
 
@@ -242,10 +243,8 @@ public class Admin {
 			GUI.clearConsole(2);
 
 		}
-		
-		System.out.println("Game Over");
 
-		turnLauncher.endingPlayerScore(board);
+		turnLauncher.gameOverSequence(board);
 		
 		// Close scanner
 		UserInput.closeScanner();

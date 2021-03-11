@@ -4,6 +4,7 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author Jordan Davis
@@ -18,7 +19,7 @@ public class TurnLauncher {
 
 	private final int NUM_OF_DICE = 2;
 
-	private int turnNumber;
+	private int roundNumber;
 
 	/**
 	 * default constructor
@@ -26,7 +27,7 @@ public class TurnLauncher {
 	public TurnLauncher() {
 		this.players = new ArrayList<Player>();
 		this.die = new Die();
-		this.turnNumber = 1;
+		this.roundNumber = 2000;
 	}
 
 	/**
@@ -257,24 +258,49 @@ public class TurnLauncher {
 	 */
 	public void endingPlayerScore(Board board) {
 
-		// TODO: players should be sorted in decending order.
 		System.out.println("The scores are as follows:");
+		
+		// checks if player is not bankrupt then calculates score
 		for (Player player : this.players) {
-
-			// checks if player forfeited the game and assigns score
-			if (player.getBalanceOfResources() == -1) {
-
-				// Player who forfeited will score 0
-				System.out.println(player.getName() + " : " + 0);
-
-			} else {
-
+			if (player.getBalanceOfResources() > 0) {
 				player.setBalanceOfResources(calculatePlayerWorth(player, board));
-				System.out.println(player.getName() + " : " + player.getBalanceOfResources());
-
 			}
-
 		}
+		
+		//Orders the players in decending order
+		Collections.sort(this.players, Collections.reverseOrder(new ResourcesComparator()));
+
+		//displays all player scores
+		for (Player player : this.players) {
+			if (player.getBalanceOfResources() > 0) {
+				System.out.println(player.getName() + " : " + player.getBalanceOfResources());
+			} else
+				System.out.println(player.getName() + " : Bankrupt");
+		}
+	}
+
+	/**
+	 * increases the year(roundNumber) by 1
+	 */
+	public void roundEnd() {
+		this.roundNumber +=1;
+	}
+
+	/**
+	 * Runs correct gameover sequence depending on win or loss 
+	 * @param board
+	 */
+	public void gameOverSequence(Board board) {
+
+		if (board.allSystemComplete()) {
+			GUI.displayGameWonMessage(this.roundNumber);
+		} else {
+			GUI.displayGameLossMessage(this.roundNumber);
+		}
+		
+		
+
+		endingPlayerScore(board);
 
 	}
 

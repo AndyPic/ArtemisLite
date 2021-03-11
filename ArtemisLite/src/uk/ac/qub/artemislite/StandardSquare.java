@@ -277,6 +277,27 @@ public class StandardSquare extends Square {
 	public void setOwnedBy(Player ownedBy) {
 		this.ownedBy = ownedBy;
 	}
+
+	/**
+	 * @return the mIN_DEV_LEVEL
+	 */
+	public int getMIN_DEV_LEVEL() {
+		return MIN_DEV_LEVEL;
+	}
+
+	/**
+	 * @return the mAX_MINOR_DEV
+	 */
+	public int getMAX_MINOR_DEV() {
+		return MAX_MINOR_DEV;
+	}
+
+	/**
+	 * @return the mAX_MAJOR_DEV
+	 */
+	public int getMAX_MAJOR_DEV() {
+		return MAX_MAJOR_DEV;
+	}
 	
 	
 
