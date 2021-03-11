@@ -18,12 +18,15 @@ public class TurnLauncher {
 
 	private final int NUM_OF_DICE = 2;
 
+	private int turnNumber;
+
 	/**
 	 * default constructor
 	 */
 	public TurnLauncher() {
 		this.players = new ArrayList<Player>();
 		this.die = new Die();
+		this.turnNumber = 1;
 	}
 
 	/**
@@ -44,7 +47,7 @@ public class TurnLauncher {
 		player.setName(UserInput.getUserInputString());
 
 		players.add(player);
-		
+
 		GUI.clearConsole(4);
 
 	}
@@ -54,8 +57,8 @@ public class TurnLauncher {
 	 */
 	public void displayPlayers() {
 
-		for(int loop =1; loop<=this.players.size(); loop++) {
-			System.out.println(loop+". "+players.get(loop-1).getName());
+		for (int loop = 1; loop <= this.players.size(); loop++) {
+			System.out.println(loop + ". " + players.get(loop - 1).getName());
 		}
 
 	}
@@ -81,7 +84,7 @@ public class TurnLauncher {
 		GUI.clearConsole(4);
 
 		do {
-			
+
 			for (Player player : this.players) {
 				roll = rollDice();
 				playerRoll = getRollValue(roll);
@@ -92,23 +95,24 @@ public class TurnLauncher {
 					highestRoll = playerRoll;
 					firstToPlay = player;
 					matchingRoll = false;
-				} else if(playerRoll == highestRoll) {
+				} else if (playerRoll == highestRoll) {
 					matchingRoll = true;
-					
+
 				}
 
 			}
-			
-			if(matchingRoll == true) {
+
+			if (matchingRoll == true) {
 				System.out.println("\nThe roll was a draw, lets try again. Please press enter to roll");
 				UserInput.getUserInputString();
 			}
 
 		} while (matchingRoll);
 
-		System.out.println("\n"+firstToPlay.getName()+" is first to play with the highest roll of " +highestRoll+"\nPress enter to continue");
+		System.out.println("\n" + firstToPlay.getName() + " is first to play with the highest roll of " + highestRoll
+				+ "\nPress enter to continue");
 		UserInput.getUserInputString();
-		
+
 		// rearanges the player array so that the correct player is first
 		while (firstToPlay != this.players.get(0)) {
 
@@ -157,41 +161,44 @@ public class TurnLauncher {
 
 		// removes all non-digit chars and whitespace
 		roll = roll.replaceAll("[^\\d]+", " ").trim();
-		
+
 		String[] rollArr = roll.split(" ");
 
 		return Integer.parseInt(rollArr[rollArr.length - 1]);
 
 	}
-	
-	
+
+	/**
+	 * Modify or delete a player
+	 */
 	public void modifyPlayer() {
-		
+
 		int userInput;
 		boolean valid = false;
-		
+
 		do {
 			System.out.println("Select a player to modify:");
 			displayPlayers();
-			userInput = UserInput.getUserInputInt()-1;
+			userInput = UserInput.getUserInputInt() - 1;
 
-			if(userInput>=0 && userInput<this.players.size()) {
+			if (userInput >= 0 && userInput < this.players.size()) {
 				valid = true;
 			}
-			
-			if(!valid) {
+
+			if (!valid) {
 				System.out.println("Your selection was invalid, please try again");
 			}
-			
+
 		} while (!valid);
-		
+
 		Player player = this.players.get(userInput);
 
-		System.out.println("What would you like to do with "+player.getName()+"?\n1. Modify Name\n2. Delete Player\n3. Go back");
-		
+		System.out.println("What would you like to do with " + player.getName()
+				+ "?\n1. Modify Name\n2. Delete Player\n3. Go back");
+
 		do {
-			
-			switch(UserInput.getUserInputInt()) {
+
+			switch (UserInput.getUserInputInt()) {
 			case 1:
 				System.out.println("Please enter the new name");
 				player.setName(UserInput.getUserInputString());
@@ -201,43 +208,74 @@ public class TurnLauncher {
 				System.out.println("Player has been deleted");
 				break;
 			case 3:
-				break;			
+				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 				valid = false;
 			}
 			System.out.println("loop end");
-		} while(!valid);
+		} while (!valid);
 		System.out.println("end");
 	}
-	
+
+	/**
+	 * Calculates the total worth of a Player
+	 * 
+	 * @param player
+	 */
+	public int calculatePlayerWorth(Player player, Board board) {
+
+		int playerValue;
+		StandardSquare stdSquare;
+
+		playerValue = player.getBalanceOfResources();
+
+		for (Square square : board.getSquares()) {
+
+			if (square instanceof StandardSquare) {
+
+				stdSquare = (StandardSquare) square;
+
+				if (stdSquare.getOwnedBy() != null && stdSquare.getOwnedBy().equals(player)) {
+
+					playerValue += stdSquare.getPurchaseCost();
+					playerValue += (stdSquare.getCurrentMinorDevLevel() * stdSquare.getMinorDevCost());
+					playerValue += (stdSquare.getCurrentMajorDevLevel() * stdSquare.getMajorDevCost());
+
+				}
+
+			}
+
+		}
+
+		return playerValue;
+
+	}
+
+	/**
+	 * Finds the ending scores of all players
+	 */
+	public void endingPlayerScore(Board board) {
+
+		// TODO: players should be sorted in decending order.
+		System.out.println("The scores are as follows:");
+		for (Player player : this.players) {
+
+			// checks if player forfeited the game and assigns score
+			if (player.getBalanceOfResources() == -1) {
+
+				// Player who forfeited will score 0
+				System.out.println(player.getName() + " : " + 0);
+
+			} else {
+
+				player.setBalanceOfResources(calculatePlayerWorth(player, board));
+				System.out.println(player.getName() + " : " + player.getBalanceOfResources());
+
+			}
+
+		}
+
+	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

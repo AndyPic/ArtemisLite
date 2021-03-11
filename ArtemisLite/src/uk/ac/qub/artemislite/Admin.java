@@ -26,6 +26,9 @@ public class Admin {
 	public static void main(String[] args) throws Exception {
 
 		TurnLauncher turnLauncher = new TurnLauncher();
+		
+		// create Board
+		Board board = new Board();
 
 		// Runs game start Menu
 		GameLauncher.startMenu();
@@ -34,9 +37,6 @@ public class Admin {
 		// sets first player
 		int activePlayerIndex = 0;
 		String activePlayerName = turnLauncher.players.get(activePlayerIndex).getName();
-
-		// create Board
-		Board board = new Board();
 
 		while (!GAME_OVER) {
 			
@@ -233,6 +233,8 @@ public class Admin {
 			default:
 				System.out.println("Invalid option - try again");
 			}
+			
+			
 
 			board.getSquares().toString();
 
@@ -240,9 +242,11 @@ public class Admin {
 			GUI.clearConsole(2);
 
 		}
-
+		
 		System.out.println("Game Over");
 
+		turnLauncher.endingPlayerScore(board);
+		
 		// Close scanner
 		UserInput.closeScanner();
 
