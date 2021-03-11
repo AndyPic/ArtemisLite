@@ -52,6 +52,7 @@ public class GameLauncher {
 
 	/**
 	 * Menu for game settings (players & turn order)
+	 * 
 	 * @param turnLauncher
 	 */
 	public static void startGame(TurnLauncher turnLauncher) {
@@ -63,13 +64,13 @@ public class GameLauncher {
 
 		do {
 			ArrayList<Player> players = turnLauncher.getPlayers();
-			
+
 			System.out.println("Current Registered Players:");
 			turnLauncher.displayPlayers();
-			
-			//TODO: this list need to be made dynamic so that you cant add more players when at max etc. JD
-			System.out.println("1. Add Player" + "\n2. Modify Player" + "\n3. Begin Game");
 
+			// TODO: this list need to be made dynamic so that you cant add more players
+			// when at max etc. JD
+			System.out.println("1. Add Player" + "\n2. Modify Player" + "\n3. Begin Game");
 
 			switch (UserInput.getUserInputInt()) {
 			case 1:
@@ -84,7 +85,7 @@ public class GameLauncher {
 				System.out.println("Modified player");
 				break;
 			case 3:
-				if(players.size() >= MIN_PLAYERS) {
+				if (players.size() >= MIN_PLAYERS) {
 					start = true;
 				} else {
 					System.out.println("You need to register more players");
@@ -96,9 +97,9 @@ public class GameLauncher {
 
 		} while (!start);
 
-		//finds the order that players will take thier turn
+		// finds the order that players will take thier turn
 		turnLauncher.findPlayerOrder();
-		
+
 		System.out.println("Intro message.......");
 
 	}

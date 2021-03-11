@@ -87,7 +87,7 @@ public class TurnLauncher {
 				roll = rollDice();
 				playerRoll = getRollValue(roll);
 
-				System.out.println(player.getName() + roll);
+				System.out.println(player.getName() + " " + roll);
 
 				if (playerRoll > highestRoll) {
 					highestRoll = playerRoll;
@@ -100,7 +100,7 @@ public class TurnLauncher {
 
 			}
 			
-			if(matchingRoll = true) {
+			if(matchingRoll == true) {
 				System.out.println("The roll was a draw, lets try again. Please press enter to roll");
 				UserInput.getUserInputString();
 			}

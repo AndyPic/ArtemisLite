@@ -15,6 +15,7 @@ public class UserInput {
 
 	/**
 	 * Return int value for user input
+	 * 
 	 * @return int
 	 */
 	public static int getUserInputInt() {
@@ -38,12 +39,20 @@ public class UserInput {
 
 	/**
 	 * Return String value for user input
+	 * 
 	 * @return String
 	 */
 	public static String getUserInputString() {
-		
+
 		return scanner.nextLine();
 
+	}
+
+	/**
+	 * Method to close the scanner
+	 */
+	public static void closeScanner() {
+		scanner.close();
 	}
 
 }
