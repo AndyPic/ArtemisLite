@@ -135,6 +135,7 @@ public class Admin {
 							activePlayer = turnLauncher.players.get(activePlayerIndex + 1);
 						} else {
 							activePlayer = turnLauncher.players.get(0);
+							turnLauncher.roundEnd();
 						}
 
 						endTurn = true;
@@ -142,6 +143,7 @@ public class Admin {
 					case 5:
 						GAME_OVER = true;
 						endTurn = true;
+						activePlayer.setBalanceOfResources(-1);
 						break;
 					default:
 						System.out.println("Invalid option - try again");
@@ -153,6 +155,7 @@ public class Admin {
 			// End the game
 			case 3:
 				GAME_OVER = true;
+				activePlayer.setBalanceOfResources(-1);
 				break;
 			default:
 				System.out.println("Invalid option - try again");
