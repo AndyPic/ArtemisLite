@@ -18,7 +18,9 @@ public class TurnLauncher {
 	private Die die;
 
 	private final int NUM_OF_DICE = 2;
-	private final int RESOURCE_VALUE_LONG_GAME = 400;
+	
+	// halve the default resources for a longer game
+	private final int RESOURCE_VALUE_LONG_GAME = 100;
 
 	private int roundNumber;
 
