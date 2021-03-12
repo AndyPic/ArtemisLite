@@ -64,16 +64,17 @@ public class GameLauncher {
 
 		do {
 			ArrayList<Player> players = turnLauncher.getPlayers();
-			
-			if(turnLauncher.players.size()>0) {
+
+			if (turnLauncher.players.size() > 0) {
 				System.out.println("\nCurrent Registered Players:");
 				turnLauncher.displayPlayers();
 			}
-			
-			//TODO: this list need to be made dynamic so that you cant add more players when at max etc. JD
-			System.out.println("\nSelect an option:\n1. Add New Player" + "\n2. Modify Existing Player" + "\n3. Begin Game");
 
-			
+			// TODO: this list need to be made dynamic so that you cant add more players
+			// when at max etc. JD
+			System.out.println(
+					"\nSelect an option:\n1. Add New Player" + "\n2. Modify Existing Player" + "\n3. Begin Game");
+
 			switch (UserInput.getUserInputInt()) {
 			case 1:
 				if (players.size() < MAX_PLAYERS) {
@@ -83,13 +84,13 @@ public class GameLauncher {
 				}
 				break;
 			case 2:
-				
-				if(players.size()>=1) {
+
+				if (players.size() >= 1) {
 					turnLauncher.modifyPlayer();
 				} else {
 					System.out.println("There is no players to modify!");
 				}
-				
+
 				break;
 			case 3:
 				if (players.size() >= MIN_PLAYERS) {
@@ -104,9 +105,26 @@ public class GameLauncher {
 
 		} while (!start);
 
-		//finds the order that players will take their turn
-		turnLauncher.findPlayerOrder();
 		
+		// Allow option to play a long game with greater initial resources
+		// or a short game with default resources
+		GUI.clearConsole(4);
+		System.out.println("\nSelect an option:\n1. Short Game" + "\n2. Long Game");
+		switch (UserInput.getUserInputInt()) {
+		case 1:
+			break;
+		case 2:
+			turnLauncher.setupLongGame();
+			break;
+		default:
+			System.out.println("Invalid Menu Option, please try again");
+		}
+		
+		
+
+		// finds the order that players will take their turn
+		turnLauncher.findPlayerOrder();
+
 		GUI.displayIntroMessage();
 
 	}

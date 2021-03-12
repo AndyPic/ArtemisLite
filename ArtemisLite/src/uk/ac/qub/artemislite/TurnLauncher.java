@@ -18,6 +18,7 @@ public class TurnLauncher {
 	private Die die;
 
 	private final int NUM_OF_DICE = 2;
+	private final int RESOURCE_VALUE_LONG_GAME = 400;
 
 	private int roundNumber;
 
@@ -218,6 +219,17 @@ public class TurnLauncher {
 		} while (!valid);
 		System.out.println("end");
 	}
+	
+	
+	/**
+	 * Increases the initial value of resources for all players for a longer game
+	 */
+	public void setupLongGame() {
+		ModifyPlayerResources.modifyResourcesAllPlayers(players, this.RESOURCE_VALUE_LONG_GAME);
+	}
+	
+	
+	
 
 	/**
 	 * 
