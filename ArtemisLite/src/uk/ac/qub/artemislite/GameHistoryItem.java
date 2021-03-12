@@ -33,6 +33,11 @@ public class GameHistoryItem {
 	 * the value of the above gameHistoryAction transaction
 	 */
 	private int resourceValue;
+	
+	/**
+	 * total dice roll
+	 */
+	private int diceRollTotal;
 
 	/**
 	 * default constructor
@@ -56,22 +61,31 @@ public class GameHistoryItem {
 	 * @param resourceValue
 	 */
 	public GameHistoryItem(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction,
-			int resourceValue) {
+			int resourceValue, int diceRollTotal ) {
 		this();
 		this.playerName = playerName;
 		this.boardLandingPosition = boardLandingPosition;
 		this.gameHistoryAction = gameHistoryAction;
 		this.resourceValue = resourceValue;
+		this.diceRollTotal = diceRollTotal;
 	}
 
 	public void displayAll() {
 		String historyOutput;
 		
-		historyOutput = "On move: " + this.gameCounter + " Player: " + this.playerName + " landed on element: "
-				+ this.boardLandingPosition + ", choosing to: " + this.gameHistoryAction.label + " costing: "
+		historyOutput = "On move: " + this.gameCounter + " Player: " + this.playerName + " rolled " + this.diceRollTotal 
+				+ " and landed on element: " + this.boardLandingPosition + ", choosing to: " + this.gameHistoryAction.label + " costing: "
 				+ this.resourceValue + " resources\n";
 		
 		System.out.print(historyOutput);
+	}
+
+	public int getDiceRollTotal() {
+		return diceRollTotal;
+	}
+
+	public void setDiceRollTotal(int diceRollTotal) {
+		this.diceRollTotal = diceRollTotal;
 	}
 
 }
