@@ -64,7 +64,7 @@ public class TurnLauncher {
 		Player player = new Player();
 
 		promptName(player);
-		
+
 		players.add(player);
 
 		GUI.clearConsole(4);
@@ -87,50 +87,12 @@ public class TurnLauncher {
 	 */
 	public void findPlayerOrder() {
 
-		int highestRoll, playerRoll;
 		Player firstToPlay;
-		String roll;
-		boolean matchingRoll;
-
-		highestRoll = 0;
-		playerRoll = 0;
-		firstToPlay = this.players.get(0);
-		matchingRoll = false;
+		System.out.println("Its time to find out who goes first...\n");
+		
+		firstToPlay = allPlayersRoll(players);
 
 		GUI.clearConsole(4);
-		System.out.println("Its time to find out who goes first...\nPress enter to roll the dice!");
-		UserInput.getUserInputString();
-		GUI.clearConsole(4);
-
-		do {
-
-			for (Player player : this.players) {
-				roll = rollDice();
-				playerRoll = getRollValue(roll);
-
-				System.out.println(player.getName() + " " + roll);
-
-				if (playerRoll > highestRoll) {
-					highestRoll = playerRoll;
-					firstToPlay = player;
-					matchingRoll = false;
-				} else if (playerRoll == highestRoll) {
-					matchingRoll = true;
-
-				}
-
-			}
-
-			if (matchingRoll == true) {
-				System.out.println("\nThe roll was a draw, lets try again. Please press enter to roll");
-				UserInput.getUserInputString();
-			}
-
-		} while (matchingRoll);
-
-		System.out.println("\n" + firstToPlay.getName() + " is first to play with the highest roll of " + highestRoll
-				+ "\nPress enter to continue");
-		UserInput.getUserInputString();
 
 		// rearanges the player array so that the correct player is first
 		while (firstToPlay != this.players.get(0)) {
@@ -180,7 +142,11 @@ public class TurnLauncher {
 	 */
 	public int getRollValue(String roll) {
 
-		// removes all non-digit chars and whitespace
+		/*
+		 * removes all non-digit chars and whitespace Regex explanation: [^ ] = match
+		 * any character not in the brackets \d = any digit + = match adjacent
+		 * characters
+		 */
 		roll = roll.replaceAll("[^\\d]+", " ").trim();
 
 		String[] rollArr = roll.split(" ");
@@ -190,11 +156,9 @@ public class TurnLauncher {
 	}
 
 	/**
-	 *
+	 * Prompts user for name and validates against existing players
 	 * 
-	 * 
-	 * @param
-	 * @return
+	 * @param player name to add
 	 */
 	public void promptName(Player player) {
 		String name;
@@ -207,14 +171,14 @@ public class TurnLauncher {
 			name = UserInput.getUserInputString();
 			// TODO: is there any other name validation needed?
 			if (players != null) {
-				
+
 				if (name.equals("")) {
 					valid = false;
 					System.out.println("That name is invalid, please enter a different name");
 				}
-				
+
 				for (Player user : players) {
-					if(!user.equals(player)) {
+					if (!user.equals(player)) {
 						if (user.getName().equalsIgnoreCase(name.trim())) {
 							valid = false;
 							System.out.println("That name has already been used by a player, please select another");
@@ -292,25 +256,19 @@ public class TurnLauncher {
 	 * @param standardSquare  - The square being auctioned
 	 * @param players         - ArrayList of all players
 	 */
-	public void auctionSquare(String reasonToAuction, Player activePlayer, StandardSquare standardSquare,
-			ArrayList<Player> players) {
+	public void auctionSquare(String reasonToAuction, StandardSquare standardSquare) {
 
 		int userInt = 0;
-		int highRoll = -1;
-		int newRoll = 0;
 		// Default to the active player
 		Player highRollPlayer = null;
-		boolean matching = true;
 		String squareName = standardSquare.getSquareName();
 		String activePlayerName = activePlayer.getName();
+		int purchaseCost = standardSquare.getPurchaseCost();
 
 		System.out.printf("%s is being auctioned because %s %s\n", squareName, activePlayerName, reasonToAuction);
 
 		// Arraylist of players that want the square
 		ArrayList<Player> playersWant = new ArrayList<Player>();
-
-		// Arraylist of players that want the square
-		ArrayList<Player> playersToRemove = new ArrayList<Player>();
 
 		for (int loop = 0; loop < players.size(); loop++) {
 
@@ -318,11 +276,11 @@ public class TurnLauncher {
 				// Do nothing if player is active player
 
 				// Check if player has enough resources to buy property
-			} else if (players.get(loop).getBalanceOfResources() >= standardSquare.getPurchaseCost()) {
+			} else if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
 				// Ask player what they want to do
 				System.out.printf("%s: you currently have %d RESOURCES, would you like to buy %s for %d\n",
 						players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
-						standardSquare.getSquareName(), standardSquare.getPurchaseCost());
+						squareName, purchaseCost);
 
 				// Get user response
 				userInt = GUI.yesNoMenu();
@@ -333,14 +291,14 @@ public class TurnLauncher {
 					playersWant.add(players.get(loop));
 
 					System.out.printf("%s DOES want to buy %s\n", players.get(loop).getName(),
-							standardSquare.getSquareName());
+							squareName);
 				} else {
 					System.out.printf("%s DOES NOT want to buy %s\n", players.get(loop).getName(),
-							standardSquare.getSquareName());
+							squareName);
 				}
 			} else {
 				System.out.printf("%s doesn't have enough RECOURCES to buy %s\n", players.get(loop).getName(),
-						standardSquare.getSquareName());
+						squareName);
 			}
 		}
 
@@ -348,66 +306,13 @@ public class TurnLauncher {
 		if (!playersWant.isEmpty()) {
 			// Check if more than 1 player wanted the property
 			if (playersWant.size() > 1) {
-				System.out.printf("%d players want to buy %s\n\n", playersWant.size(), standardSquare.getSquareName());
+				System.out.printf("%d players want to buy %s\n\n", playersWant.size(), squareName);
 
 				System.out.printf("The players who want to buy will now roll to see who wins %s.\n",
-						standardSquare.getSquareName());
-				// Loop through all players who want to buy
-				do {
-
-					// Reset highest roll value
-					highRoll = -1;
-
-					// Remove all players who didn't roll high enough
-					playersWant.removeAll(playersToRemove);
-					// Clear the list
-					playersToRemove.clear();
-
-					for (int loop = 0; loop < playersWant.size(); loop++) {
-
-						// TODO probably implement 'findPlayerOrder' here somehow?
-
-						System.out.printf("%s press enter to roll the dice", playersWant.get(loop).getName());
-
-						UserInput.getUserInputString();
-
-						// TEMPORARY CODE FOR ROLL
-						Die di = new Die();
-
-						newRoll = (di.rollDie() + di.rollDie());
-
-						System.out.printf("%s rolled a total of %d", playersWant.get(loop).getName(), newRoll);
-
-						if (newRoll > highRoll) {
-
-							// Different message for 1st roller
-							if (highRollPlayer == null) {
-								System.out.printf(".\n");
-							} else {
-								System.out.printf(" which is now the top roll!\n");
-								// remove the previous high roll player
-								playersToRemove.add(highRollPlayer);
-							}
-
-							highRoll = newRoll;
-							highRollPlayer = playersWant.get(loop);
-							matching = false;
-
-						} else if (newRoll == highRoll) {
-							matching = true;
-							// TODO No message for a 3-way draw
-							System.out.printf(" which is a draw with %s.\n", highRollPlayer.getName());
-
-						} else {
-							System.out.printf(" which was not quite high enough.\n");
-
-							// Add players who roll low to remove list
-							playersToRemove.add(playersWant.get(loop));
-
-						}
-
-					}
-				} while (matching);
+						squareName);
+				
+				highRollPlayer = allPlayersRoll(playersWant);
+				
 			} else {
 				// If only 1 players wants it, then they are index 0
 				highRollPlayer = playersWant.get(0);
@@ -415,7 +320,7 @@ public class TurnLauncher {
 
 		} else {
 			// No one wanted it
-			System.out.printf("Nobody wanted to buy %s.\n", standardSquare.getSquareName());
+			System.out.printf("Nobody wanted to buy %s.\n", squareName);
 		}
 
 		// If someone wanted the square, do some maths
@@ -426,7 +331,7 @@ public class TurnLauncher {
 			// Update player currency
 			players.get(players.indexOf(highRollPlayer))
 					.setBalanceOfResources(players.get(players.indexOf(highRollPlayer)).getBalanceOfResources()
-							- standardSquare.getPurchaseCost());
+							- purchaseCost);
 
 			// Update square ownership
 			standardSquare.setOwned(true);
@@ -434,7 +339,7 @@ public class TurnLauncher {
 
 			// Tell players what happened
 			System.out.printf("%s now owns %s, and has %d RESOURCES.\n",
-					players.get(players.indexOf(highRollPlayer)).getName(), standardSquare.getSquareName(),
+					players.get(players.indexOf(highRollPlayer)).getName(), squareName,
 					players.get(players.indexOf(highRollPlayer)).getBalanceOfResources());
 		}
 
@@ -564,15 +469,60 @@ public class TurnLauncher {
 							standardSquare.getSquareName(), activePlayer.getBalanceOfResources());
 				} else if (userInt == 2) {
 					// Auction the square, doesn't want to buy
-					auctionSquare("doesn't want to buy it.", activePlayer, standardSquare, players);
+					auctionSquare("doesn't want to buy it.", standardSquare);
 				}
 			} else {
 				// Auction the square, not enough resources to buy
-				auctionSquare("doesn't have enough RESOURCES to buy it.", activePlayer, standardSquare, players);
+				auctionSquare("doesn't have enough RESOURCES to buy it.", standardSquare);
 			}
 
 		}
 	} // END
+	
+	
+	public Player allPlayersRoll(ArrayList<Player> playersToRoll) {
+		String roll;
+		int highestRoll, playerRoll;
+		Player highestRollPlayer;
+		boolean matchingRoll;
+		
+		highestRoll = 0;
+		playerRoll = 0;
+		highestRollPlayer = playersToRoll.get(0);
+		matchingRoll = false;
+		//TODO: do you want this so each player has to press to roll dice? or just 1 press rolls for all players
+		System.out.println("Press enter to roll the dice!");
+		do {
+			UserInput.getUserInputString();
+			for (Player player : playersToRoll) {
+				roll = rollDice();
+				playerRoll = getRollValue(roll);
+
+				System.out.println(player.getName() + " " + roll);
+
+				if (playerRoll > highestRoll) {
+					highestRoll = playerRoll;
+					highestRollPlayer = player;
+					matchingRoll = false;
+				} else if (playerRoll == highestRoll) {
+					matchingRoll = true;
+				}
+
+			}
+
+			if (matchingRoll == true) {
+				System.out.println("\nThe roll was a draw, lets try again. Please press enter to roll");
+			}
+
+		} while (matchingRoll);
+		
+		System.out.println("\n" + highestRollPlayer.getName() + " got the highest roll of " + highestRoll
+				+ "\nPress enter to continue");
+		UserInput.getUserInputString();
+		
+		return highestRollPlayer;
+		
+	}
 
 	/**
 	 * Calculates the total worth of a Player
