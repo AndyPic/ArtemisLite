@@ -14,13 +14,13 @@ public class TurnLauncher {
 
 	// TODO: This should prob be private to decrease coupling JD
 	protected ArrayList<Player> players;
-	
+
 	private Player activePlayer;
 
 	private Die die;
 
 	private final int NUM_OF_DICE = 2;
-	
+
 	// halve the default resources from 200 to 100 for a longer game
 	private final int RESOURCE_VALUE_LONG_GAME = -100;
 
@@ -41,7 +41,6 @@ public class TurnLauncher {
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
-	
 
 	/**
 	 * @return the activePlayer
@@ -64,10 +63,8 @@ public class TurnLauncher {
 
 		Player player = new Player();
 
-		System.out.println("Please enter your name");
-		//TODO: this allows for blank string as name and also duplicate names
-		player.setName(UserInput.getUserInputString());
-
+		promptName(player);
+		
 		players.add(player);
 
 		GUI.clearConsole(4);
@@ -142,7 +139,7 @@ public class TurnLauncher {
 			this.players.remove(0);
 
 		}
-		
+
 		activePlayer = firstToPlay;
 
 	}
@@ -193,6 +190,47 @@ public class TurnLauncher {
 	}
 
 	/**
+	 *
+	 * 
+	 * 
+	 * @param
+	 * @return
+	 */
+	public void promptName(Player player) {
+		String name;
+		boolean valid;
+
+		System.out.println("Please enter your name");
+
+		do {
+			valid = true;
+			name = UserInput.getUserInputString();
+			// TODO: is there any other name validation needed?
+			if (players != null) {
+				
+				if (name.equals("")) {
+					valid = false;
+					System.out.println("That name is invalid, please enter a different name");
+				}
+				
+				for (Player user : players) {
+					if(!user.equals(player)) {
+						if (user.getName().equalsIgnoreCase(name.trim())) {
+							valid = false;
+							System.out.println("That name has already been used by a player, please select another");
+						}
+					}
+				}
+
+			}
+
+		} while (!valid);
+
+		player.setName(name);
+
+	}
+
+	/**
 	 * Modify or delete a player
 	 */
 	public void modifyPlayer() {
@@ -217,15 +255,13 @@ public class TurnLauncher {
 
 		Player player = this.players.get(userInput);
 
-		System.out.println("What would you like to do with " + player.getName()
-				+ "?\n1. Modify Name\n2. Delete Player\n3. Go back");
-
 		do {
+			System.out.println("What would you like to do with " + player.getName()
+					+ "?\n1. Modify Name\n2. Delete Player\n3. Go back");
 
 			switch (UserInput.getUserInputInt()) {
 			case 1:
-				System.out.println("Please enter the new name");
-				player.setName(UserInput.getUserInputString());
+				promptName(player);
 				break;
 			case 2:
 				this.players.remove(userInput);
@@ -237,21 +273,15 @@ public class TurnLauncher {
 				System.out.println("Invalid Menu Option, please try again");
 				valid = false;
 			}
-			System.out.println("loop end");
 		} while (!valid);
-		System.out.println("end");
 	}
-	
-	
+
 	/**
 	 * Increases the initial value of resources for all players for a longer game
 	 */
 	public void setupLongGame() {
 		ModifyPlayerResources.modifyResourcesAllPlayers(players, this.RESOURCE_VALUE_LONG_GAME);
 	}
-	
-	
-	
 
 	/**
 	 * 
@@ -290,14 +320,13 @@ public class TurnLauncher {
 				// Check if player has enough resources to buy property
 			} else if (players.get(loop).getBalanceOfResources() >= standardSquare.getPurchaseCost()) {
 				// Ask player what they want to do
-				System.out.printf(
-						"%s: you currently have %d RESOURCES, would you like to buy %s for %d\n",
+				System.out.printf("%s: you currently have %d RESOURCES, would you like to buy %s for %d\n",
 						players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
 						standardSquare.getSquareName(), standardSquare.getPurchaseCost());
-				
+
 				// Get user response
 				userInt = GUI.yesNoMenu();
-				
+
 				// Add player responses to arraylist
 				if (userInt == 1) {
 
@@ -421,7 +450,7 @@ public class TurnLauncher {
 
 		String activePlayerName = activePlayer.getName();
 		int currentPos = activePlayer.getCurrentPosition();
-		
+
 		System.out.println("You are currently on\n" + board.getSquares().get(currentPos).toString());
 
 		System.out.println("Ready to roll the dice? press Enter!");
@@ -431,15 +460,13 @@ public class TurnLauncher {
 		System.out.println("You" + roll);
 
 		int newPos = activePlayer.getCurrentPosition() + getRollValue(roll);
-		System.out.println(currentPos+"  "+newPos+"  "+getRollValue(roll));
+		System.out.println(currentPos + "  " + newPos + "  " + getRollValue(roll));
 		if (newPos > 11) {
 			newPos -= 12;
 			// TODO Resources for passing GO - needs doing properly!
 			System.out.println("You passed GO +200 resources woooop!");
 			activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() + 200);
 		}
-		
-
 
 		// Update player position
 		activePlayer.setCurrentPosition(newPos);
@@ -460,7 +487,7 @@ public class TurnLauncher {
 			if (standardSquare.getOwnedBy() != null) {
 
 				// If the current player owns this square
-				//TODO: nullPointerException of noone buys property
+				// TODO: nullPointerException of noone buys property
 				if (standardSquare.getOwnedBy() == activePlayer) {
 
 					System.out.printf("%s, you already own this square.\n", activePlayerName);
@@ -537,13 +564,11 @@ public class TurnLauncher {
 							standardSquare.getSquareName(), activePlayer.getBalanceOfResources());
 				} else if (userInt == 2) {
 					// Auction the square, doesn't want to buy
-					auctionSquare("doesn't want to buy it.", activePlayer, standardSquare,
-							players);
+					auctionSquare("doesn't want to buy it.", activePlayer, standardSquare, players);
 				}
 			} else {
 				// Auction the square, not enough resources to buy
-				auctionSquare("doesn't have enough RESOURCES to buy it.", activePlayer, standardSquare,
-						players);
+				auctionSquare("doesn't have enough RESOURCES to buy it.", activePlayer, standardSquare, players);
 			}
 
 		}
@@ -589,18 +614,18 @@ public class TurnLauncher {
 	public void endingPlayerScore(Board board) {
 
 		System.out.println("The scores are as follows:");
-		
+
 		// checks if player is not bankrupt then calculates score
 		for (Player player : this.players) {
 			if (player.getBalanceOfResources() > 0) {
 				player.setBalanceOfResources(calculatePlayerWorth(player, board));
 			}
 		}
-		
-		//Orders the players in decending order
+
+		// Orders the players in decending order
 		Collections.sort(this.players, Collections.reverseOrder(new ResourcesComparator()));
 
-		//displays all player scores
+		// displays all player scores
 		for (Player player : this.players) {
 			if (player.getBalanceOfResources() > 0) {
 				System.out.println(player.getName() + " : " + player.getBalanceOfResources());
@@ -613,11 +638,12 @@ public class TurnLauncher {
 	 * increases the year(roundNumber) by 1
 	 */
 	public void roundEnd() {
-		this.roundNumber +=1;
+		this.roundNumber += 1;
 	}
 
 	/**
-	 * Runs correct gameover sequence depending on win or loss 
+	 * Runs correct gameover sequence depending on win or loss
+	 * 
 	 * @param board
 	 */
 	public void gameOverSequence(Board board) {
@@ -627,7 +653,7 @@ public class TurnLauncher {
 		} else {
 			GUI.displayGameLossMessage(this.roundNumber);
 		}
-		
+
 		endingPlayerScore(board);
 
 	}

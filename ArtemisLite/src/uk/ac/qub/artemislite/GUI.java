@@ -17,7 +17,10 @@ public class GUI implements Runnable {
 	 */
 	@Override
 	public void run() {
-
+		// TODO: this allows a user to enter menu options for the next menu before the
+		// into has finished. this means a user can accidently end/start the game before
+		// seeing the menu.
+		
 		// Keep track of what messages have been printed
 		int progress = 0;
 
@@ -132,6 +135,7 @@ public class GUI implements Runnable {
 			case '2':
 			case 'n':
 				userInt = 2;
+				valid = true;
 				break;
 			default:
 				System.out.println("Invalid input - please try again");
