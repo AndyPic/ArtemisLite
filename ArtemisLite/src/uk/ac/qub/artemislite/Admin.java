@@ -26,7 +26,7 @@ public class Admin {
 
 		// create Board
 		Board board = new Board();
-		
+
 		// Intro message
 		GUI introMessage = new GUI();
 		BufferedInterrupter buffInter = new BufferedInterrupter(); // League pun intended
@@ -47,118 +47,85 @@ public class Admin {
 		}
 		// Stops the input thread after intro message finished
 		inputThread.interrupt();
-		
+
 		GUI.clearConsole(1);
-		
 
 		// Runs game start Menu
 		GameLauncher.startMenu();
 		GameLauncher.startGame(turnLauncher);
 
-		// sets first player
-		Player activePlayer = turnLauncher.players.get(0);
 
 		while (!GAME_OVER) {
-
+			
 			// Clear console
 			GUI.clearConsole(10);
 
-			System.out.println("It is " + activePlayer.getName() + "'s turn.");
-			System.out.println("Enter: \n1. End turn\n2. Start turn\n3. End game");
+			System.out.println("It is " + turnLauncher.getActivePlayer().getName() + "'s turn.");
 
-			int activePlayerIndex = turnLauncher.players.indexOf(activePlayer);
+			
+			int activePlayerIndex = turnLauncher.players.indexOf(turnLauncher.getActivePlayer());
+			Square currentPosition = board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition());
+			Boolean endTurn = false;
+	
+			
+			turnLauncher.moveMethod(board);
 
-			// check user input
-			switch (UserInput.getUserInputInt()) {
+			currentPosition = board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition());
+			
 
-			// to next player
-			case 1:
+			while (!endTurn) {
 
-				if (activePlayerIndex != turnLauncher.players.size() - 1) {
-					activePlayer = turnLauncher.players.get(activePlayerIndex + 1);
-				} else {
-					activePlayer = turnLauncher.players.get(0);
-					turnLauncher.roundEnd();
-				}
-				break;
+				/*
+				 * AP - Changed this a little as buy / auction are in the
+				 * "turnLauncher.moveMethod" together. Also threw it in a while loop so it'll
+				 * keep going until they end their turn / game
+				 * TODO: update blank
+				 */
+				System.out.println(
+						"Enter: \n1. blank \n2. Get square details \n3. Increase Development level \n4. End turn \n5. End game");
+				switch (UserInput.getUserInputInt()) {
 
-			case 2:
+				case 1:
 
-				Square currentPosition = board.getSquares().get(activePlayer.getCurrentPosition());
-				Boolean endTurn = false;
-				Boolean hasMoved = false;
+					break;
+				case 2:
 
-				while (!endTurn) {
-					
-					/*
-					 * AP - Changed this a little as buy / auction are in the
-					 * "turnLauncher.moveMethod" together. Also threw it in a while loop so it'll
-					 * keep going until they end their turn / game
-					 */
-					System.out.println(
-							"Enter: \n1. Move \n2. Get square details \n3. Increase Development level \n4. End turn \n5. End game");
-					switch (UserInput.getUserInputInt()) {
-
-					case 1:
-						// AP - Temporary hasMoved solution
-						if (!hasMoved) {
-							turnLauncher.moveMethod(activePlayer, board, turnLauncher);
-
-							currentPosition = board.getSquares().get(activePlayer.getCurrentPosition());
-
-							hasMoved = true;
-						} else {
-							System.out.println("You've already moved this turn.");
-						}
-						break;
-					case 2:
-
-						if (currentPosition instanceof StandardSquare) {
-							StandardSquare ssq = (StandardSquare) currentPosition;
-							System.out.println(ssq.toString());
-						} else if (currentPosition instanceof ResourceSquare) {
-							ResourceSquare rsq = (ResourceSquare) currentPosition;
-							System.out.println(rsq.toString());
-						} else {
-							System.out.println(currentPosition.toString());
-						}
-
-						break;
-					case 3:
-						// Increase development level
-						System.out.println("Not yet implemented");
-						break;
-					case 4:
-
-						// AP - just c+p code from above, probably needs a method made
-						if (activePlayerIndex != turnLauncher.players.size() - 1) {
-							activePlayer = turnLauncher.players.get(activePlayerIndex + 1);
-						} else {
-							activePlayer = turnLauncher.players.get(0);
-							turnLauncher.roundEnd();
-						}
-
-						endTurn = true;
-						break;
-					case 5:
-						GAME_OVER = true;
-						endTurn = true;
-						activePlayer.setBalanceOfResources(-1);
-						break;
-					default:
-						System.out.println("Invalid option - try again");
-
+					if (currentPosition instanceof StandardSquare) {
+						StandardSquare ssq = (StandardSquare) currentPosition;
+						System.out.println(ssq.toString());
+					} else if (currentPosition instanceof ResourceSquare) {
+						ResourceSquare rsq = (ResourceSquare) currentPosition;
+						System.out.println(rsq.toString());
+					} else {
+						System.out.println(currentPosition.toString());
 					}
-				}
-				break;
 
-			// End the game
-			case 3:
-				GAME_OVER = true;
-				activePlayer.setBalanceOfResources(-1);
-				break;
-			default:
-				System.out.println("Invalid option - try again");
+					break;
+				case 3:
+					// Increase development level
+					System.out.println("Not yet implemented");
+					break;
+				case 4:
+
+					// AP - just c+p code from above, probably needs a method made
+					if (activePlayerIndex != turnLauncher.players.size() - 1) {
+						turnLauncher.setActivePlayer(turnLauncher.players.get(activePlayerIndex + 1));
+					} else {
+						turnLauncher.setActivePlayer(turnLauncher.players.get(0));
+						turnLauncher.roundEnd();
+					}
+
+					endTurn = true;
+					break;
+				case 5:
+					GAME_OVER = true;
+					endTurn = true;
+					turnLauncher.getActivePlayer().setBalanceOfResources(-1);
+					break;
+				default:
+					System.out.println("Invalid option - try again");
+
+				}
 			}
 
 			// Clear console

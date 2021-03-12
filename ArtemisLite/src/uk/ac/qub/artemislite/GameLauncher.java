@@ -119,8 +119,6 @@ public class GameLauncher {
 		default:
 			System.out.println("Invalid Menu Option, please try again");
 		}
-		
-		
 
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();

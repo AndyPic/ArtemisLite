@@ -14,6 +14,8 @@ public class TurnLauncher {
 
 	// TODO: This should prob be private to decrease coupling JD
 	protected ArrayList<Player> players;
+	
+	private Player activePlayer;
 
 	private Die die;
 
@@ -39,6 +41,21 @@ public class TurnLauncher {
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
+	
+
+	/**
+	 * @return the activePlayer
+	 */
+	public Player getActivePlayer() {
+		return activePlayer;
+	}
+
+	/**
+	 * @param activePlayer the activePlayer to set
+	 */
+	public void setActivePlayer(Player activePlayer) {
+		this.activePlayer = activePlayer;
+	}
 
 	/**
 	 * Adds a new player
@@ -48,6 +65,7 @@ public class TurnLauncher {
 		Player player = new Player();
 
 		System.out.println("Please enter your name");
+		//TODO: this allows for blank string as name and also duplicate names
 		player.setName(UserInput.getUserInputString());
 
 		players.add(player);
@@ -124,6 +142,8 @@ public class TurnLauncher {
 			this.players.remove(0);
 
 		}
+		
+		activePlayer = firstToPlay;
 
 	}
 
@@ -271,17 +291,13 @@ public class TurnLauncher {
 			} else if (players.get(loop).getBalanceOfResources() >= standardSquare.getPurchaseCost()) {
 				// Ask player what they want to do
 				System.out.printf(
-						"%s: you currently have %d RESOURCES, would you like to buy %s for %d\n1. Yes\n2. No\n",
+						"%s: you currently have %d RESOURCES, would you like to buy %s for %d\n",
 						players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
 						standardSquare.getSquareName(), standardSquare.getPurchaseCost());
+				
 				// Get user response
-				userInt = UserInput.getUserInputInt();
-				// Check it's a 1 or a 2 TODO maybe have a method for yes/no response?
-				while (userInt != 1 && userInt != 2) {
-					// TODO could probably standardise the invalid response messages
-					System.out.println("Invalid input - please try again");
-					userInt = UserInput.getUserInputInt();
-				}
+				userInt = GUI.yesNoMenu();
+				
 				// Add player responses to arraylist
 				if (userInt == 1) {
 
@@ -400,26 +416,30 @@ public class TurnLauncher {
 	 * 
 	 * @param activePlayer
 	 * @param board
-	 * @param turnLauncher
 	 */
-	public void moveMethod(Player activePlayer, Board board, TurnLauncher turnLauncher) {
+	public void moveMethod(Board board) {
 
 		String activePlayerName = activePlayer.getName();
 		int currentPos = activePlayer.getCurrentPosition();
-
+		
 		System.out.println("You are currently on\n" + board.getSquares().get(currentPos).toString());
 
-		String roll = turnLauncher.rollDice();
+		System.out.println("Ready to roll the dice? press Enter!");
+		UserInput.getUserInputString();
+		GUI.clearConsole(8);
+		String roll = rollDice();
 		System.out.println("You" + roll);
 
-		int newPos = activePlayer.getCurrentPosition() + turnLauncher.getRollValue(roll);
-
+		int newPos = activePlayer.getCurrentPosition() + getRollValue(roll);
+		System.out.println(currentPos+"  "+newPos+"  "+getRollValue(roll));
 		if (newPos > 11) {
 			newPos -= 12;
 			// TODO Resources for passing GO - needs doing properly!
 			System.out.println("You passed GO +200 resources woooop!");
 			activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() + 200);
 		}
+		
+
 
 		// Update player position
 		activePlayer.setCurrentPosition(newPos);
@@ -440,6 +460,7 @@ public class TurnLauncher {
 			if (standardSquare.getOwnedBy() != null) {
 
 				// If the current player owns this square
+				//TODO: nullPointerException of noone buys property
 				if (standardSquare.getOwnedBy() == activePlayer) {
 
 					System.out.printf("%s, you already own this square.\n", activePlayerName);
@@ -453,23 +474,17 @@ public class TurnLauncher {
 					if (activePlayer.getBalanceOfResources() <= rentCost) {
 						// TODO Better message here, implement game end?
 						System.out.printf(
-								"%s does not have enough RESOURCES to pay. %s What would you like to do?\n1. Charge %d RESOURCES anyway.\n2. Let %s stay for free.\n",
+								"%s does not have enough RESOURCES to pay, they will go bankrupt and the game will end. %s What would you like to proceed anyway?\n",
 								activePlayerName, squareOwnerName.toUpperCase(), rentCost, activePlayerName);
 
 					} else {
 						System.out.printf(
-								"\nThis square is currently owned by %s.\n%s what would you like to do?\nYou currently have %d resources, and %s has %d.\n1. Charge %d RESOURCES.\n2. Let %s stay for free.\n",
+								"\nThis square is currently owned by %s.\nYou currently have %d resources, and %s has %d.\nWould you like to charge them rent?\n",
 								squareOwnerName, squareOwnerName.toUpperCase(), squareOwner.getBalanceOfResources(),
 								activePlayerName, activePlayer.getBalanceOfResources(), rentCost, activePlayerName);
 					}
 					// Get user response
-					userInt = UserInput.getUserInputInt();
-
-					// Check it's a 1 or a 2 TODO maybe have a method for yes/no response?
-					while (userInt != 1 && userInt != 2) {
-						System.out.println("Invalid input - please try again");
-						userInt = UserInput.getUserInputInt();
-					}
+					userInt = GUI.yesNoMenu();
 
 					switch (userInt) {
 
@@ -502,17 +517,11 @@ public class TurnLauncher {
 				// Offer player the square
 				System.out.printf(
 						// TODO rename resources to whatever we decide to call it
-						"You currently have %d RESOURCES, would you like to buy it?\n1. Yes\n2. No\n",
+						"You currently have %d RESOURCES, would you like to buy it?\n",
 						activePlayer.getBalanceOfResources());
 
 				// Get user response
-				userInt = UserInput.getUserInputInt();
-				// Check it's a 1 or a 2 TODO maybe have a method for yes/no response?
-				while (userInt != 1 && userInt != 2) {
-					// TODO could probably standardise the invalid response messages
-					System.out.println("Invalid input - please try again");
-					userInt = UserInput.getUserInputInt();
-				}
+				userInt = GUI.yesNoMenu();
 
 				if (userInt == 1) {
 					// Charge player for square
@@ -528,13 +537,13 @@ public class TurnLauncher {
 							standardSquare.getSquareName(), activePlayer.getBalanceOfResources());
 				} else if (userInt == 2) {
 					// Auction the square, doesn't want to buy
-					turnLauncher.auctionSquare("doesn't want to buy it.", activePlayer, standardSquare,
-							turnLauncher.players);
+					auctionSquare("doesn't want to buy it.", activePlayer, standardSquare,
+							players);
 				}
 			} else {
 				// Auction the square, not enough resources to buy
-				turnLauncher.auctionSquare("doesn't have enough RESOURCES to buy it.", activePlayer, standardSquare,
-						turnLauncher.players);
+				auctionSquare("doesn't have enough RESOURCES to buy it.", activePlayer, standardSquare,
+						players);
 			}
 
 		}
@@ -619,8 +628,6 @@ public class TurnLauncher {
 			GUI.displayGameLossMessage(this.roundNumber);
 		}
 		
-		
-
 		endingPlayerScore(board);
 
 	}

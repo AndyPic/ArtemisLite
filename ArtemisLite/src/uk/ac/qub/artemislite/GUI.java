@@ -105,4 +105,42 @@ public class GUI implements Runnable {
 
 	}
 
+	/**
+	 * displays yes/no menu and asks for user input. Accepts "1" or "yes" from user
+	 * 
+	 * @return returns 1 for yes, 2 nore no.
+	 */
+	public static int yesNoMenu() {
+		String userInput;
+		int userInt;
+		boolean valid;
+
+		valid = false;
+		userInt = 0;
+
+		System.out.println("1. Yes\n2. No");
+
+		do {
+			userInput = UserInput.getUserInputString().trim().toLowerCase();
+
+			switch (userInput.charAt(0)) {
+			case '1':
+			case 'y':
+				userInt = 1;
+				valid = true;
+				break;
+			case '2':
+			case 'n':
+				userInt = 2;
+				break;
+			default:
+				System.out.println("Invalid input - please try again");
+			}
+
+		} while (!valid);
+
+		return userInt;
+
+	}
+
 }
