@@ -26,6 +26,30 @@ public class Admin {
 
 		// create Board
 		Board board = new Board();
+		
+		// Intro message
+		GUI introMessage = new GUI();
+		BufferedInterrupter buffInter = new BufferedInterrupter(); // League pun intended
+		Thread introThread = new Thread(introMessage);
+		Thread inputThread = new Thread(buffInter);
+
+		System.out.println("== Hit enter to skip intro ==");
+
+		introThread.start();
+
+		inputThread.start();
+
+		// interrupt newThread if still running on input
+		while (introThread.isAlive()) {
+			if (!inputThread.isAlive()) {
+				introThread.interrupt();
+			}
+		}
+		// Stops the input thread after intro message finished
+		inputThread.interrupt();
+		
+		GUI.clearConsole(1);
+		
 
 		// Runs game start Menu
 		GameLauncher.startMenu();
