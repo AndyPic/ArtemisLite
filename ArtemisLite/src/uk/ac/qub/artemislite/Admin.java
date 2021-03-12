@@ -65,7 +65,7 @@ public class Admin {
 				Boolean hasMoved = false;
 
 				while (!endTurn) {
-					// not sure if this is the best way of doing this
+					
 					/*
 					 * AP - Changed this a little as buy / auction are in the
 					 * "turnLauncher.moveMethod" together. Also threw it in a while loop so it'll
