@@ -69,6 +69,7 @@ public class Admin {
 	
 			
 			turnLauncher.moveMethod(board);
+			turnLauncher.checkElement(board);
 
 			currentPosition = board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition());
 			

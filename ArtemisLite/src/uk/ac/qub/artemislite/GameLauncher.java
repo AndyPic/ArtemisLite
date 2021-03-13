@@ -39,6 +39,7 @@ public class GameLauncher {
 				System.out.println("game rules shown");
 				break;
 			case 3:
+				//TODO: Not working, game does not end until after players have been entered? needs fixed JD
 				Admin.GAME_OVER = true;
 				validOption = true;
 				break;

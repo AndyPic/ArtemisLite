@@ -89,7 +89,7 @@ public class TurnLauncher {
 
 		Player firstToPlay;
 		System.out.println("Its time to find out who goes first...\n");
-		
+
 		firstToPlay = allPlayersRoll(players);
 
 		GUI.clearConsole(4);
@@ -169,7 +169,7 @@ public class TurnLauncher {
 		do {
 			valid = true;
 			name = UserInput.getUserInputString();
-			// TODO: is there any other name validation needed?
+			// TODO: is there any other name validation needed? JD
 			if (players != null) {
 
 				if (name.equals("")) {
@@ -181,7 +181,8 @@ public class TurnLauncher {
 					if (!user.equals(player)) {
 						if (user.getName().equalsIgnoreCase(name.trim())) {
 							valid = false;
-							System.out.println("That name has already been used by a player, please select another");
+							System.out.println(
+									"That name has already been used by a player, please enter something different");
 						}
 					}
 				}
@@ -258,114 +259,110 @@ public class TurnLauncher {
 	 */
 	public void auctionSquare(String reasonToAuction, StandardSquare standardSquare) {
 
-		int userInt = 0;
+		int purchaseCost;
+		String squareName, activePlayerName;
 		// Default to the active player
-		Player highRollPlayer = null;
-		String squareName = standardSquare.getSquareName();
-		String activePlayerName = activePlayer.getName();
-		int purchaseCost = standardSquare.getPurchaseCost();
+		Player highRollPlayer;
+		// Arraylist of players that want the square
+		ArrayList<Player> playersWant;
+
+		highRollPlayer = null;
+		purchaseCost = standardSquare.getPurchaseCost();
+		squareName = standardSquare.getSquareName();
+		activePlayerName = activePlayer.getName();
+		playersWant = new ArrayList<Player>();
 
 		System.out.printf("%s is being auctioned because %s %s\n", squareName, activePlayerName, reasonToAuction);
 
-		// Arraylist of players that want the square
-		ArrayList<Player> playersWant = new ArrayList<Player>();
-
 		for (int loop = 0; loop < players.size(); loop++) {
-
-			if (players.get(loop) == activePlayer) {
-				// Do nothing if player is active player
-
+			// Do nothing if player is active player
+			if (players.get(loop) != activePlayer) {
 				// Check if player has enough resources to buy property
-			} else if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
-				// Ask player what they want to do
-				System.out.printf("%s: you currently have %d RESOURCES, would you like to buy %s for %d\n",
-						players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
-						squareName, purchaseCost);
+				if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
+					// Ask player what they want to do
+					System.out.printf("%s: you currently have %d RESOURCES, would you like to buy %s for %d\n",
+							players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
+							squareName, purchaseCost);
 
-				// Get user response
-				userInt = GUI.yesNoMenu();
+					// Add player responses to arraylist
+					switch (GUI.yesNoMenu()) {
+					case 1:
+						playersWant.add(players.get(loop));
+						System.out.printf("%s DOES want to buy %s\n", players.get(loop).getName(), squareName);
+						break;
+					case 2:
+						System.out.printf("%s DOES NOT want to buy %s\n", players.get(loop).getName(), squareName);
+						break;
+					}
 
-				// Add player responses to arraylist
-				if (userInt == 1) {
-
-					playersWant.add(players.get(loop));
-
-					System.out.printf("%s DOES want to buy %s\n", players.get(loop).getName(),
-							squareName);
 				} else {
-					System.out.printf("%s DOES NOT want to buy %s\n", players.get(loop).getName(),
+					System.out.printf("%s doesn't have enough RECOURCES to buy %s\n", players.get(loop).getName(),
 							squareName);
 				}
-			} else {
-				System.out.printf("%s doesn't have enough RECOURCES to buy %s\n", players.get(loop).getName(),
-						squareName);
 			}
 		}
 
 		// Check that at least 1 player wanted to buy the property
-		if (!playersWant.isEmpty()) {
-			// Check if more than 1 player wanted the property
-			if (playersWant.size() > 1) {
-				System.out.printf("%d players want to buy %s\n\n", playersWant.size(), squareName);
+		if (playersWant.isEmpty()) {
+			// No one wanted it
+			System.out.printf("Nobody purchased %s.\n", squareName);
 
-				System.out.printf("The players who want to buy will now roll to see who wins %s.\n",
-						squareName);
-				
-				highRollPlayer = allPlayersRoll(playersWant);
-				
-			} else {
-				// If only 1 players wants it, then they are index 0
-				highRollPlayer = playersWant.get(0);
-			}
+		} else if (playersWant.size() == 1) {
+			// If only 1 players wants it, then they are index 0
+			highRollPlayer = playersWant.get(0);
 
 		} else {
-			// No one wanted it
-			System.out.printf("Nobody wanted to buy %s.\n", squareName);
+			// else roll dice to see who wins the property
+			System.out.printf("%d players want to buy %s\n\n", playersWant.size(), squareName);
+
+			System.out.printf("The players who want to buy will now roll to see who wins %s.\n", squareName);
+
+			highRollPlayer = allPlayersRoll(playersWant);
+
 		}
 
 		// If someone wanted the square, do some maths
-		if (highRollPlayer != activePlayer) {
+		if (highRollPlayer != null) {
 			// Announce winner of auction
 			System.out.printf("The winner of the auction is: %s\n", highRollPlayer.getName());
 
 			// Update player currency
-			players.get(players.indexOf(highRollPlayer))
-					.setBalanceOfResources(players.get(players.indexOf(highRollPlayer)).getBalanceOfResources()
-							- purchaseCost);
+			highRollPlayer.setBalanceOfResources(highRollPlayer.getBalanceOfResources() - purchaseCost);
 
 			// Update square ownership
 			standardSquare.setOwned(true);
-			standardSquare.setOwnedBy(players.get(players.indexOf(highRollPlayer)));
+			standardSquare.setOwnedBy(highRollPlayer);
 
 			// Tell players what happened
-			System.out.printf("%s now owns %s, and has %d RESOURCES.\n",
-					players.get(players.indexOf(highRollPlayer)).getName(), squareName,
-					players.get(players.indexOf(highRollPlayer)).getBalanceOfResources());
+			System.out.printf("%s now owns %s, and has %d RESOURCES.\n", highRollPlayer.getName(), squareName,
+					highRollPlayer.getBalanceOfResources());
 		}
 
 	}// END
 
 	/**
-	 * TODO needs refactoring, probably quite a bit, but should work as-is!
+	 * Moves players on the gmae board based on dice roll
 	 * 
-	 * @param activePlayer
 	 * @param board
 	 */
 	public void moveMethod(Board board) {
 
-		String activePlayerName = activePlayer.getName();
-		int currentPos = activePlayer.getCurrentPosition();
+		String roll;
+		int currentPos, newPos;
+		Square newSquare;
+
+		currentPos = activePlayer.getCurrentPosition();
 
 		System.out.println("You are currently on\n" + board.getSquares().get(currentPos).toString());
-
 		System.out.println("Ready to roll the dice? press Enter!");
 		UserInput.getUserInputString();
 		GUI.clearConsole(8);
-		String roll = rollDice();
+
+		roll = rollDice();
 		System.out.println("You" + roll);
 
-		int newPos = activePlayer.getCurrentPosition() + getRollValue(roll);
-		System.out.println(currentPos + "  " + newPos + "  " + getRollValue(roll));
+		newPos = activePlayer.getCurrentPosition() + getRollValue(roll);
+
 		if (newPos > 11) {
 			newPos -= 12;
 			// TODO Resources for passing GO - needs doing properly!
@@ -376,122 +373,146 @@ public class TurnLauncher {
 		// Update player position
 		activePlayer.setCurrentPosition(newPos);
 
-		Square newSquare = board.getSquares().get(newPos);
+		newSquare = board.getSquares().get(newPos);
 
 		System.out.println("You are now on\n" + newSquare.toString());
+
+	} // END
+
+	/**
+	 * checks the element for any responsabilities when landed on
+	 */
+	public void checkElement(Board board) {
+		int pos;
+		Square newSquare;
+
+		pos = activePlayer.getCurrentPosition();
+		newSquare = board.getSquares().get(pos);
 
 		// Check if square is standard
 		if (newSquare instanceof StandardSquare) {
 
 			StandardSquare standardSquare = (StandardSquare) newSquare;
 
-			int userInt = 0;
-			int rentCost = standardSquare.getRentCost();
-
 			// Check if the square is owned by someone already
 			if (standardSquare.getOwnedBy() != null) {
-
-				// If the current player owns this square
-				// TODO: nullPointerException of noone buys property
-				if (standardSquare.getOwnedBy() == activePlayer) {
-
-					System.out.printf("%s, you already own this square.\n", activePlayerName);
-
-					// If someone else owns the square
-				} else {
-
-					Player squareOwner = standardSquare.getOwnedBy();
-					String squareOwnerName = squareOwner.getName();
-
-					if (activePlayer.getBalanceOfResources() <= rentCost) {
-						// TODO Better message here, implement game end?
-						System.out.printf(
-								"%s does not have enough RESOURCES to pay, they will go bankrupt and the game will end. %s What would you like to proceed anyway?\n",
-								activePlayerName, squareOwnerName.toUpperCase(), rentCost, activePlayerName);
-
-					} else {
-						System.out.printf(
-								"\nThis square is currently owned by %s.\nYou currently have %d resources, and %s has %d.\nWould you like to charge them rent?\n",
-								squareOwnerName, squareOwnerName.toUpperCase(), squareOwner.getBalanceOfResources(),
-								activePlayerName, activePlayer.getBalanceOfResources(), rentCost, activePlayerName);
-					}
-					// Get user response
-					userInt = GUI.yesNoMenu();
-
-					switch (userInt) {
-
-					case 1:
-						// Take rent off active player
-						activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() - rentCost);
-
-						// Give rent to square owner
-						squareOwner.setBalanceOfResources(squareOwner.getBalanceOfResources() + rentCost);
-
-						// Tell players what happened
-						System.out.printf("%s charged %s rent of [%d].\n%s now has [%d].\n%s now has [%d].\n",
-								squareOwnerName, activePlayerName, rentCost, squareOwnerName,
-								squareOwner.getBalanceOfResources(), activePlayerName,
-								activePlayer.getBalanceOfResources());
-						break;
-					case 2:
-						// Tell players what happened
-						System.out.printf("%s chose to not charge %s rent.\n", squareOwnerName, activePlayerName);
-						break;
-					default:
-						System.out.println("Welp... that's not supposed to happen");
-					}
-					// TODO better message here?
-					System.out.println(activePlayerName + " has control again.");
-				}
-
-				// Check if player can afford to buy the square
+				chargeRent(standardSquare);
 			} else if (activePlayer.getBalanceOfResources() >= standardSquare.getPurchaseCost()) {
-				// Offer player the square
-				System.out.printf(
-						// TODO rename resources to whatever we decide to call it
-						"You currently have %d RESOURCES, would you like to buy it?\n",
-						activePlayer.getBalanceOfResources());
-
-				// Get user response
-				userInt = GUI.yesNoMenu();
-
-				if (userInt == 1) {
-					// Charge player for square
-					activePlayer.setBalanceOfResources(
-							activePlayer.getBalanceOfResources() - standardSquare.getPurchaseCost());
-
-					// Update square owner
-					standardSquare.setOwned(true);
-					standardSquare.setOwnedBy(activePlayer);
-
-					// TODO resources name
-					System.out.printf("%s now owns %s, and has %d RESOURCES.\n", activePlayerName,
-							standardSquare.getSquareName(), activePlayer.getBalanceOfResources());
-				} else if (userInt == 2) {
-					// Auction the square, doesn't want to buy
-					auctionSquare("doesn't want to buy it.", standardSquare);
-				}
+				offerElement(standardSquare);
 			} else {
-				// Auction the square, not enough resources to buy
 				auctionSquare("doesn't have enough RESOURCES to buy it.", standardSquare);
 			}
 
 		}
-	} // END
-	
-	
+	}
+
+	/**
+	 * Give player the option to charge rent from the active player
+	 * 
+	 * @param standardSquare
+	 */
+	public void chargeRent(StandardSquare standardSquare) {
+		String activePlayerName, squareOwnerName;
+		int rentCost;
+		Player squareOwner;
+
+		activePlayerName = activePlayer.getName();
+		rentCost = standardSquare.getRentCost();
+		squareOwner = standardSquare.getOwnedBy();
+		squareOwnerName = squareOwner.getName();
+
+		if (squareOwner == activePlayer) {
+			System.out.printf("%s, you already own this square.\n", activePlayerName);
+			return;
+		}
+
+		if (activePlayer.getBalanceOfResources() <= rentCost) {
+			// TODO Better message here, implement game end?
+			System.out.printf(
+					"%s does not have enough RESOURCES to pay, they will go bankrupt and the game will end. %s What would you like to proceed anyway?\n",
+					activePlayerName, squareOwnerName.toUpperCase(), rentCost, activePlayerName);
+
+		} else {
+			System.out.printf(
+					"\nThis square is currently owned by %s.\nYou currently have %d resources, and %s has %d.\nWould you like to charge them rent?\n",
+					squareOwnerName, squareOwnerName.toUpperCase(), squareOwner.getBalanceOfResources(),
+					activePlayerName, activePlayer.getBalanceOfResources(), rentCost, activePlayerName);
+		}
+
+		switch (GUI.yesNoMenu()) {
+		case 1:
+			// Take rent off active player
+			activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() - rentCost);
+			// Give rent to square owner
+			squareOwner.setBalanceOfResources(squareOwner.getBalanceOfResources() + rentCost);
+			System.out.printf("%s charged %s rent of [%d].\n%s now has [%d].\n%s now has [%d].\n", squareOwnerName,
+					activePlayerName, rentCost, squareOwnerName, squareOwner.getBalanceOfResources(), activePlayerName,
+					activePlayer.getBalanceOfResources());
+			break;
+		case 2:
+			System.out.printf("%s chose to not charge %s rent.\n", squareOwnerName, activePlayerName);
+			break;
+		default:
+			System.out.println("Welp... that's not supposed to happen");
+		}
+		// TODO better message here?
+		System.out.println(activePlayerName + " has control again.");
+
+	}
+
+	/**
+	 * Offers element to active player to purchase
+	 * 
+	 * @param StandardSquare to be offered
+	 */
+	public void offerElement(StandardSquare standardSquare) {
+		// Offer player the square
+		System.out.printf(
+				// TODO rename resources to whatever we decide to call it
+				"You currently have %d RESOURCES, would you like to buy it?\n", activePlayer.getBalanceOfResources());
+
+		switch (GUI.yesNoMenu()) {
+		case 1:
+			// Charge player for square
+			activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() - standardSquare.getPurchaseCost());
+			// Update square owner
+			standardSquare.setOwned(true);
+			standardSquare.setOwnedBy(activePlayer);
+			// TODO resources name
+			System.out.printf("%s now owns %s, and has %d RESOURCES.\n", activePlayer.getName(),
+					standardSquare.getSquareName(), activePlayer.getBalanceOfResources());
+			break;
+		case 2:
+			// Auction the square, doesn't want to buy
+			auctionSquare("doesn't want to buy it.", standardSquare);
+			break;
+		}
+
+	}
+
+	/**
+	 * Rolls dice for each player in an array and returns the highest scoring player
+	 * 
+	 * @param arrayList of players to roll
+	 * @return Player with highest dice roll
+	 */
 	public Player allPlayersRoll(ArrayList<Player> playersToRoll) {
 		String roll;
 		int highestRoll, playerRoll;
 		Player highestRollPlayer;
 		boolean matchingRoll;
-		
+
 		highestRoll = 0;
 		playerRoll = 0;
 		highestRollPlayer = playersToRoll.get(0);
 		matchingRoll = false;
-		//TODO: do you want this so each player has to press to roll dice? or just 1 press rolls for all players
+		// TODO: do you want this so each player has to press to roll dice? or just 1
+		// press rolls for all players JD
 		System.out.println("Press enter to roll the dice!");
+
+		// TODO: can someone check the logic on this and the Dice to see if it all seems
+		// fine? Players seem to be rolling matching numbers much more than i would
+		// expect JD
 		do {
 			UserInput.getUserInputString();
 			for (Player player : playersToRoll) {
@@ -515,13 +536,14 @@ public class TurnLauncher {
 			}
 
 		} while (matchingRoll);
-		
+
 		System.out.println("\n" + highestRollPlayer.getName() + " got the highest roll of " + highestRoll
 				+ "\nPress enter to continue");
 		UserInput.getUserInputString();
-		
+
+		GUI.clearConsole(8);
 		return highestRollPlayer;
-		
+
 	}
 
 	/**
