@@ -105,22 +105,29 @@ public class GameLauncher {
 
 		} while (!start);
 
-		
 		// Allow option to play a long game with greater initial resources
 		// or a short game with default resources
 		GUI.clearConsole(4);
-		System.out.println("\nSelect an option:\n1. Short Game" + "\n2. Long Game");
-		switch (UserInput.getUserInputInt()) {
-		case 1:
-			break;
-		case 2:
-			turnLauncher.setupLongGame();
-			break;
-		default:
-			System.out.println("Invalid Menu Option, please try again");
-		}
 		
-		
+		int gameLengthInput;
+		do {
+			System.out.println("\nSelect an option:\n1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
+			gameLengthInput = UserInput.getUserInputInt();
+			switch (gameLengthInput) {
+			case 1:
+				break;
+			case 2:
+				turnLauncher.setupLongGame();
+				break;
+			case 3:
+				// TODO update info with new balance changes
+				System.out.println("Some details about the different modes...");
+
+				break;
+			default:
+				System.out.println("Invalid Menu Option, please try again");
+			}
+		} while (gameLengthInput != 1 && gameLengthInput != 2);
 
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
