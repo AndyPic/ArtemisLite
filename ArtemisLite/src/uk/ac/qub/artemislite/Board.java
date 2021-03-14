@@ -39,7 +39,7 @@ public class Board {
 			default:
 				StandardSquare standardSquare = new StandardSquare(squareDetails.getSquarePos(),
 						squareDetails.getName(), squareDetails.getSystem(), squareDetails.getCost(),
-						squareDetails.getMinorCost(), squareDetails.getMajorCost(), squareDetails.getRent(), false);
+						squareDetails.getMinorCost(), squareDetails.getMajorCost(), squareDetails.getRent());
 				squares.add(standardSquare);
 			}
 

@@ -3,6 +3,8 @@
  */
 package uk.ac.qub.artemislite;
 
+import java.util.Calendar;
+
 /**
  * @author Jordan Davis
  * @author David Finlay
@@ -20,18 +22,19 @@ public class GUI implements Runnable {
 		// TODO: this allows a user to enter menu options for the next menu before the
 		// into has finished. this means a user can accidently end/start the game before
 		// seeing the menu.
-		
+
 		// Keep track of what messages have been printed
 		int progress = 0;
 
 		// Array of intro message sequence (can be as long as needed)
-		String[] startingMessage = new String[6];
-		startingMessage[0] = "A long time ago...";
-		startingMessage[1] = "In a galaxy far, far away...";
-		startingMessage[2] = "Bla";
-		startingMessage[3] = "Blaa";
-		startingMessage[4] = "Blaaa";
-		startingMessage[5] = "END";
+		String[] startingMessage = new String[7];
+		startingMessage[0] = "January, 2022.";
+		startingMessage[1] = "You and your colleagues are tasked with delivering The Artemis Project to success.";
+		startingMessage[2] = "The Artemis Project aims to land the first woman, and next man on the moon by 2024.";
+		startingMessage[3] = "In order to accomplish this lofty goal, you must work with your colleagues to ensure 'All Systems are Go!' by launch-day.";
+		startingMessage[4] = "Can your team acquire and fully develop all of the systems needed for a successful Lift-off?";
+		startingMessage[5] = "...or will you just be in it for personal gain?";
+		startingMessage[6] = "You decide!";
 
 		// Quick sleep so cancel message prints first
 		try {
@@ -93,18 +96,18 @@ public class GUI implements Runnable {
 	/**
 	 * Displays the game loss message
 	 */
-	public static void displayGameLossMessage(int turnNumber) {
+	public static void displayGameLossMessage(Calendar calendar) {
 		// TODO: add actual ending message
-		System.out.println("\nProject Artemis has failed, the year is " + turnNumber + ".................");
+		System.out.println("\nProject Artemis has failed, the date is: " + calendar.getTime());
 
 	}
 
 	/**
 	 * Displayes the game won message
 	 */
-	public static void displayGameWonMessage(int turnNumber) {
+	public static void displayGameWonMessage(Calendar calendar) {
 		// TODO: add actual ending message
-		System.out.println("\nProject Artemis is a success, the year is " + turnNumber + ".................");
+		System.out.println("\nProject Artemis is a success, the date is: " + calendar.getTime());
 
 	}
 
@@ -125,6 +128,10 @@ public class GUI implements Runnable {
 
 		do {
 			userInput = UserInput.getUserInputString().trim().toLowerCase();
+
+			// Inelegant fix to trying to perform charAt on an empty String
+			// TODO Better fix if anyone can? - AP
+			userInput += "x";
 
 			switch (userInput.charAt(0)) {
 			case '1':

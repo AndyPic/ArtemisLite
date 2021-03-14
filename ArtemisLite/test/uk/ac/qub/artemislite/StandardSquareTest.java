@@ -52,7 +52,7 @@ class StandardSquareTest {
 	
 	@Test
 	void testConstructorValid() {
-		StandardSquare ssq2 = new StandardSquare(boardPositionValid, nameValid, squareSystemValid, purchaseCostValid, minorDevCostValid, majorDevCostValid, rentCostValid, true);
+		StandardSquare ssq2 = new StandardSquare(boardPositionValid, nameValid, squareSystemValid, purchaseCostValid, minorDevCostValid, majorDevCostValid, rentCostValid);
 		
 		assertEquals(boardPositionValid, ssq2.getBoardPosition());
 		assertEquals(nameValid, ssq2.getSquareName());

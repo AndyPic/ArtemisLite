@@ -14,7 +14,7 @@ public class Player {
 	// Instance Vars
 
 	private String name;
-	private int balanceOfResources = 200; // Set starting resources
+	private int balanceOfResources = 201; // Set starting resources
 	private int currentPosition = 0; // Set starting position
 
 	// Constructors
@@ -26,8 +26,6 @@ public class Player {
 
 	}
 
-	// Methods
-
 	/**
 	 * Player constructor with args
 	 * 
@@ -36,6 +34,28 @@ public class Player {
 	 */
 	public Player(String name) {
 		this.name = name;
+	}
+
+	// Methods
+
+	/**
+	 * Method to check if the player owns any squares
+	 * 
+	 * @param board
+	 * @param player
+	 * @return
+	 */
+	public static boolean isOwner(Board board, Player player) {
+
+		for (int loop = 0; loop < board.getSquares().size(); loop++) {
+			if (board.getSquares().get(loop) instanceof StandardSquare) {
+				StandardSquare stSq = (StandardSquare) board.getSquares().get(loop);
+				if (stSq.getOwnedBy() == player) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
