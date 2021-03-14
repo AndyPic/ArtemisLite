@@ -15,7 +15,6 @@ public enum SquareDetails {
 	// majorDevCost, rent,
 	// rentMinor1, rentMinor2, rentMinor3, rentMajor1
 	// TODO still need to decide values and names for these sqaures
-	// AP - lowered all the costs to 100 for testing purposes
 	SQUARERESOURCE(1, "Resource Square", SystemType.RESOURCE),
 	SQUAREX(2, "SquareX", SystemType.SYSTEM1, 100, 200, 400, 10, 20, 30, 40, 80),
 	SQUAREY(3, "SquareY", SystemType.SYSTEM1, 100, 200, 400, 10, 20, 30, 40, 80),

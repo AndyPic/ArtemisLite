@@ -20,7 +20,6 @@ public class StandardSquare extends Square {
 	// Instance Vars
 
 	private int purchaseCost, minorDevCost, majorDevCost, currentMinorDevLevel, currentMajorDevLevel, rentCost;
-	private boolean isOwned;
 	private Player ownedBy;
 
 	// Constructors
@@ -43,11 +42,9 @@ public class StandardSquare extends Square {
 	 * @param maxMajorDev
 	 * @param maxMinorDev
 	 * @param rentCost
-	 * @param isOwned
-	 * @param ownedBy
 	 */
 	public StandardSquare(int boardPosition, String squareName, SystemType squareSystem, int purchaseCost,
-			int minorDevCost, int majorDevCost, int rentCost, boolean isOwned) {
+			int minorDevCost, int majorDevCost, int rentCost) {
 		super(boardPosition, squareName, squareSystem);
 		this.purchaseCost = purchaseCost;
 		this.minorDevCost = minorDevCost;
@@ -55,7 +52,6 @@ public class StandardSquare extends Square {
 		this.currentMinorDevLevel = MIN_DEV_LEVEL;
 		this.currentMajorDevLevel = MIN_DEV_LEVEL;
 		this.rentCost = rentCost;
-		this.isOwned = false;
 	}
 
 	// Methods
@@ -65,7 +61,7 @@ public class StandardSquare extends Square {
 	 */
 	@Override
 	public String toString() {
-		if (!isOwned)
+		if (ownedBy == null)
 			return super.toString() + String.format("%15s\t%d\nMinor dev cost:\t%d\nMajor dev cost:\t%d\n%15s\t%d",
 					"Cost to buy:", purchaseCost, minorDevCost, majorDevCost, "Rent cost:", rentCost);
 
@@ -158,7 +154,7 @@ public class StandardSquare extends Square {
 		System.out.println("Current Development level:" +this.currentMinorDevLevel);
 		System.out.println("Development Cost:" +this.minorDevCost);
 	}
-	if (isOwned==true) {
+	if (ownedBy != null) {
 		System.out.println("Square is currently owned by: "+this.ownedBy);
 	} else {
 		System.out.println("Square is unowned");
@@ -250,19 +246,6 @@ public class StandardSquare extends Square {
 		this.rentCost = rentCost;
 	}
 
-	/**
-	 * @return the isOwned
-	 */
-	public boolean isOwned() {
-		return isOwned;
-	}
-
-	/**
-	 * @param isOwned the isOwned to set
-	 */
-	public void setOwned(boolean isOwned) {
-		this.isOwned = isOwned;
-	}
 
 	/**
 	 * @return the ownedBy

@@ -4,11 +4,15 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * @author Jordan Davis
- *
+ * @author David Finlay
+ * @author Joseph Mawhinney
+ * @author Andrew Pickard
  */
 public class TurnLauncher {
 
@@ -24,7 +28,16 @@ public class TurnLauncher {
 	// halve the default resources from 200 to 100 for a longer game
 	private final int RESOURCE_VALUE_LONG_GAME = -100;
 
-	private int roundNumber;
+	// Starting date
+	private Calendar calendar = Calendar.getInstance();
+	private int year = 2022;
+	private int month = 0; // January
+	// Set day (date) & time at random
+	private Random rand = new Random();
+	private int date = rand.nextInt(27) + 1; // 1 - 28
+	private int hour = rand.nextInt(12) + 8; // 8 - 20
+	private int min = rand.nextInt(59) + 1; // 1 - 60
+	private int sec = rand.nextInt(59) + 1; // 1 - 60
 
 	/**
 	 * default constructor
@@ -32,7 +45,7 @@ public class TurnLauncher {
 	public TurnLauncher() {
 		this.players = new ArrayList<Player>();
 		this.die = new Die();
-		this.roundNumber = 2000;
+		this.calendar.set(year, month, date, hour, min, sec);
 	}
 
 	/**
@@ -94,7 +107,7 @@ public class TurnLauncher {
 
 		GUI.clearConsole(4);
 
-		// rearanges the player array so that the correct player is first
+		// Rearranges the player array so that the correct player is first
 		while (firstToPlay != this.players.get(0)) {
 
 			this.players.add(this.players.get(0));
@@ -200,25 +213,29 @@ public class TurnLauncher {
 	 */
 	public void modifyPlayer() {
 
-		int userInput;
+		int userInput = 0;
 		boolean valid = false;
+		Player player = null;
 
-		do {
-			System.out.println("Select a player to modify:");
-			displayPlayers();
-			userInput = UserInput.getUserInputInt() - 1;
+		if (this.players.size() > 1) {
+			do {
+				System.out.println("Select a player to modify:");
+				displayPlayers();
+				userInput = UserInput.getUserInputInt() - 1;
 
-			if (userInput >= 0 && userInput < this.players.size()) {
-				valid = true;
-			}
+				if (userInput >= 0 && userInput < this.players.size()) {
+					valid = true;
+				}
 
-			if (!valid) {
-				System.out.println("Your selection was invalid, please try again");
-			}
+				if (!valid) {
+					System.out.println("Your selection was invalid, please try again");
+				}
 
-		} while (!valid);
+			} while (!valid);
+		}
 
-		Player player = this.players.get(userInput);
+		player = this.players.get(userInput);
+		valid = true;
 
 		do {
 			System.out.println("What would you like to do with " + player.getName()
@@ -226,6 +243,7 @@ public class TurnLauncher {
 
 			switch (UserInput.getUserInputInt()) {
 			case 1:
+				// TODO can't pick current name (eg switch from andy to andy)?
 				promptName(player);
 				break;
 			case 2:
@@ -253,9 +271,7 @@ public class TurnLauncher {
 	 * Method to auction a square to all players, except the player auctioning it
 	 * 
 	 * @param reasonToAuction - eg. "not enough resources"
-	 * @param activePlayer    - The player who's turn it is
 	 * @param standardSquare  - The square being auctioned
-	 * @param players         - ArrayList of all players
 	 */
 	public void auctionSquare(String reasonToAuction, StandardSquare standardSquare) {
 
@@ -330,7 +346,6 @@ public class TurnLauncher {
 			highRollPlayer.setBalanceOfResources(highRollPlayer.getBalanceOfResources() - purchaseCost);
 
 			// Update square ownership
-			standardSquare.setOwned(true);
 			standardSquare.setOwnedBy(highRollPlayer);
 
 			// Tell players what happened
@@ -341,7 +356,7 @@ public class TurnLauncher {
 	}// END
 
 	/**
-	 * Moves players on the gmae board based on dice roll
+	 * Moves players on the game board based on dice roll
 	 * 
 	 * @param board
 	 */
@@ -400,7 +415,17 @@ public class TurnLauncher {
 			} else if (activePlayer.getBalanceOfResources() >= standardSquare.getPurchaseCost()) {
 				offerElement(standardSquare);
 			} else {
-				auctionSquare("doesn't have enough RESOURCES to buy it.", standardSquare);
+				// Only start auction if there is a player that can afford it
+				for (int loop = 0; loop < players.size(); loop++) {
+					if (players.get(loop).getBalanceOfResources() >= standardSquare.getPurchaseCost()) {
+						auctionSquare("doesn't have enough RESOURCES to buy it.", standardSquare);
+						break;
+					} else if (loop == (players.size() - 1)) {
+						System.out.printf("%s and no other player have enough RESOURCES to buy %s.\n",
+								activePlayer.getName(), standardSquare.getSquareName());
+					}
+				}
+
 			}
 
 		}
@@ -429,14 +454,14 @@ public class TurnLauncher {
 		if (activePlayer.getBalanceOfResources() <= rentCost) {
 			// TODO Better message here, implement game end?
 			System.out.printf(
-					"%s does not have enough RESOURCES to pay, they will go bankrupt and the game will end. %s What would you like to proceed anyway?\n",
-					activePlayerName, squareOwnerName.toUpperCase(), rentCost, activePlayerName);
+					"%s does not have enough RESOURCES to pay, they will go bankrupt and the game will end. %s Would you like to charge rent anyway?\n",
+					activePlayerName, squareOwnerName.toUpperCase());
 
 		} else {
 			System.out.printf(
-					"\nThis square is currently owned by %s.\nYou currently have %d resources, and %s has %d.\nWould you like to charge them rent?\n",
-					squareOwnerName, squareOwnerName.toUpperCase(), squareOwner.getBalanceOfResources(),
-					activePlayerName, activePlayer.getBalanceOfResources(), rentCost, activePlayerName);
+					"\nThis square is currently owned by %s.\nYou currently have %d resources, and the rent is %d.\n%s would you like to charge them rent of %d?\n",
+					squareOwnerName, activePlayer.getBalanceOfResources(), rentCost, squareOwnerName.toUpperCase(),
+					rentCost);
 		}
 
 		switch (GUI.yesNoMenu()) {
@@ -476,7 +501,6 @@ public class TurnLauncher {
 			// Charge player for square
 			activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() - standardSquare.getPurchaseCost());
 			// Update square owner
-			standardSquare.setOwned(true);
 			standardSquare.setOwnedBy(activePlayer);
 			// TODO resources name
 			System.out.printf("%s now owns %s, and has %d RESOURCES.\n", activePlayer.getName(),
@@ -502,7 +526,6 @@ public class TurnLauncher {
 		Player highestRollPlayer;
 		boolean matchingRoll;
 
-		highestRoll = 0;
 		playerRoll = 0;
 		highestRollPlayer = playersToRoll.get(0);
 		matchingRoll = false;
@@ -510,10 +533,10 @@ public class TurnLauncher {
 		// press rolls for all players JD
 		System.out.println("Press enter to roll the dice!");
 
-		// TODO: can someone check the logic on this and the Dice to see if it all seems
-		// fine? Players seem to be rolling matching numbers much more than i would
-		// expect JD
 		do {
+			// Moved this inside the do-while, so it gets reset to 0 AP
+			highestRoll = 0;
+
 			UserInput.getUserInputString();
 			for (Player player : playersToRoll) {
 				roll = rollDice();
@@ -607,23 +630,23 @@ public class TurnLauncher {
 	}
 
 	/**
-	 * increases the year(roundNumber) by 1
+	 * increases the month(roundNumber) by 1
 	 */
 	public void roundEnd() {
-		this.roundNumber += 1;
+		this.month += 1;
 	}
 
 	/**
-	 * Runs correct gameover sequence depending on win or loss
+	 * Runs correct game-over sequence depending on win or loss
 	 * 
 	 * @param board
 	 */
 	public void gameOverSequence(Board board) {
 
 		if (board.allSystemComplete()) {
-			GUI.displayGameWonMessage(this.roundNumber);
+			GUI.displayGameWonMessage(this.calendar);
 		} else {
-			GUI.displayGameLossMessage(this.roundNumber);
+			GUI.displayGameLossMessage(this.calendar);
 		}
 
 		endingPlayerScore(board);

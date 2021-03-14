@@ -39,7 +39,6 @@ public class GameLauncher {
 				System.out.println("game rules shown");
 				break;
 			case 3:
-				//TODO: Not working, game does not end until after players have been entered? needs fixed JD
 				Admin.GAME_OVER = true;
 				validOption = true;
 				break;
@@ -71,60 +70,74 @@ public class GameLauncher {
 				turnLauncher.displayPlayers();
 			}
 
-			// TODO: this list need to be made dynamic so that you cant add more players
-			// when at max etc. JD
-			System.out.println(
-					"\nSelect an option:\n1. Add New Player" + "\n2. Modify Existing Player" + "\n3. Begin Game");
+			System.out.printf("\nSelect an option:");
+
+			if (players.size() < MAX_PLAYERS) {
+				System.out.printf("\n1. Add New Player");
+			}
+			if (players.size() >= 1 && players.size() < MAX_PLAYERS) {
+				System.out.printf("\n2. Modify Existing Player");
+			}
+			if (players.size() >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
+				System.out.printf("\n3. Begin Game");
+			}
+			if (players.size() == MAX_PLAYERS) {
+				System.out.printf("\n1. Begin Game\n2. Modify Existing Player");
+			}
 
 			switch (UserInput.getUserInputInt()) {
 			case 1:
 				if (players.size() < MAX_PLAYERS) {
 					turnLauncher.addPlayer();
 				} else {
-					System.out.println("Sorry you are already at the max number of players");
+					start = true;
 				}
 				break;
 			case 2:
-
 				if (players.size() >= 1) {
 					turnLauncher.modifyPlayer();
-				} else {
-					System.out.println("There is no players to modify!");
+					// break inside if, so fall through to default !if
+					break;
 				}
-
-				break;
 			case 3:
-				if (players.size() >= MIN_PLAYERS) {
+				if (players.size() >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
 					start = true;
-				} else {
-					System.out.println("You need to register more players");
+					break;
 				}
-				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 			}
 
 		} while (!start);
 
-		
 		// Allow option to play a long game with greater initial resources
 		// or a short game with default resources
 		GUI.clearConsole(4);
-		System.out.println("\nSelect an option:\n1. Short Game" + "\n2. Long Game");
-		switch (UserInput.getUserInputInt()) {
-		case 1:
-			break;
-		case 2:
-			turnLauncher.setupLongGame();
-			break;
-		default:
-			System.out.println("Invalid Menu Option, please try again");
-		}
+
+		int gameLengthInput;
+		do {
+			System.out.println("\nSelect an option:\n1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
+			gameLengthInput = UserInput.getUserInputInt();
+			switch (gameLengthInput) {
+			case 1:
+				break;
+			case 2:
+				turnLauncher.setupLongGame();
+				break;
+			case 3:
+				// TODO update info with new balance changes
+				System.out.println("Some details about the different modes...");
+
+				break;
+			default:
+				System.out.println("Invalid Menu Option, please try again");
+			}
+		} while (gameLengthInput != 1 && gameLengthInput != 2);
 
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
 
-		GUI.displayIntroMessage();
+		// GUI.displayIntroMessage();
 
 	}
 

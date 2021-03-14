@@ -29,17 +29,17 @@ public class Admin {
 
 		// Intro message
 		GUI introMessage = new GUI();
-		BufferedInterrupter buffInter = new BufferedInterrupter(); // League pun intended
+		BufferedInterrupter buffInter = new BufferedInterrupter();
 		Thread introThread = new Thread(introMessage);
 		Thread inputThread = new Thread(buffInter);
 
-		System.out.println("== Hit enter to skip intro ==");
+		System.out.println("== Hit enter to skip intro ==\n");
 
 		introThread.start();
 
 		inputThread.start();
 
-		// interrupt newThread if still running on input
+		// interrupt introThread if still running on input
 		while (introThread.isAlive()) {
 			if (!inputThread.isAlive()) {
 				introThread.interrupt();
@@ -52,38 +52,44 @@ public class Admin {
 
 		// Runs game start Menu
 		GameLauncher.startMenu();
-		GameLauncher.startGame(turnLauncher);
 
+		if (!GAME_OVER) {
+			GameLauncher.startGame(turnLauncher);
+		}
 
 		while (!GAME_OVER) {
-			
-			// Clear console
+
 			GUI.clearConsole(10);
 
 			System.out.println("It is " + turnLauncher.getActivePlayer().getName() + "'s turn.");
 
-			
 			int activePlayerIndex = turnLauncher.players.indexOf(turnLauncher.getActivePlayer());
 			Square currentPosition = board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition());
 			Boolean endTurn = false;
-	
-			
+
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
 
 			currentPosition = board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition());
-			
 
 			while (!endTurn) {
 
-				/*
-				 * AP - Changed this a little as buy / auction are in the
-				 * "turnLauncher.moveMethod" together. Also threw it in a while loop so it'll
-				 * keep going until they end their turn / game
-				 * TODO: update blank
-				 */
-				System.out.println(
-						"Enter: \n1. blank \n2. Get square details \n3. Increase Development level \n4. End turn \n5. End game");
+				boolean owner = Player.isOwner(board, turnLauncher.getActivePlayer());
+
+				// Check if player owns any squares to develop
+				// TODO also check if they have enough money to develop
+				if (owner) {
+					System.out.printf(
+							"\n[%s]\nEnter: \n1. blank \n2. Get square details \n3. Increase Development level \n4. End turn \n5. End game\n",
+							turnLauncher.getActivePlayer().getName());
+				} else {
+					System.out.printf("\n[%s]\nEnter: \n1. blank \n2. Get square details \n3. End turn \n4. End game\n",
+							turnLauncher.getActivePlayer().getName());
+
+				}
+
+				// TODO: update blank
+				// TODO clean up a bit, code duplication, own method?
 				switch (UserInput.getUserInputInt()) {
 
 				case 1:
@@ -103,33 +109,49 @@ public class Admin {
 
 					break;
 				case 3:
-					// Increase development level
-					System.out.println("Not yet implemented");
+					if (owner) {
+						// Increase development level
+						System.out.println("Not yet implemented");
+					} else {
+						if (activePlayerIndex != turnLauncher.players.size() - 1) {
+							turnLauncher.setActivePlayer(turnLauncher.players.get(activePlayerIndex + 1));
+						} else {
+							turnLauncher.setActivePlayer(turnLauncher.players.get(0));
+							turnLauncher.roundEnd();
+						}
+						endTurn = true;
+					}
 					break;
 				case 4:
+					if (owner) {
 
-					// AP - just c+p code from above, probably needs a method made
-					if (activePlayerIndex != turnLauncher.players.size() - 1) {
-						turnLauncher.setActivePlayer(turnLauncher.players.get(activePlayerIndex + 1));
+						if (activePlayerIndex != turnLauncher.players.size() - 1) {
+							turnLauncher.setActivePlayer(turnLauncher.players.get(activePlayerIndex + 1));
+						} else {
+							turnLauncher.setActivePlayer(turnLauncher.players.get(0));
+							turnLauncher.roundEnd();
+						}
+						endTurn = true;
 					} else {
-						turnLauncher.setActivePlayer(turnLauncher.players.get(0));
-						turnLauncher.roundEnd();
+						GAME_OVER = true;
+						endTurn = true;
+						turnLauncher.getActivePlayer().setBalanceOfResources(-1);
 					}
-
-					endTurn = true;
 					break;
 				case 5:
-					GAME_OVER = true;
-					endTurn = true;
-					turnLauncher.getActivePlayer().setBalanceOfResources(-1);
-					break;
+					if (owner) {
+						GAME_OVER = true;
+						endTurn = true;
+						turnLauncher.getActivePlayer().setBalanceOfResources(-1);
+						break;
+					}
+
 				default:
 					System.out.println("Invalid option - try again");
 
 				}
 			}
 
-			// Clear console
 			GUI.clearConsole(2);
 
 		}
