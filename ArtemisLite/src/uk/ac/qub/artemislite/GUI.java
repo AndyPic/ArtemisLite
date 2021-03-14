@@ -17,7 +17,10 @@ public class GUI implements Runnable {
 	 */
 	@Override
 	public void run() {
-
+		// TODO: this allows a user to enter menu options for the next menu before the
+		// into has finished. this means a user can accidently end/start the game before
+		// seeing the menu.
+		
 		// Keep track of what messages have been printed
 		int progress = 0;
 
@@ -102,6 +105,45 @@ public class GUI implements Runnable {
 	public static void displayGameWonMessage(int turnNumber) {
 		// TODO: add actual ending message
 		System.out.println("\nProject Artemis is a success, the year is " + turnNumber + ".................");
+
+	}
+
+	/**
+	 * displays yes/no menu and asks for user input. Accepts "1" or "yes" from user
+	 * 
+	 * @return returns 1 for yes, 2 nore no.
+	 */
+	public static int yesNoMenu() {
+		String userInput;
+		int userInt;
+		boolean valid;
+
+		valid = false;
+		userInt = 0;
+
+		System.out.println("1. Yes\n2. No");
+
+		do {
+			userInput = UserInput.getUserInputString().trim().toLowerCase();
+
+			switch (userInput.charAt(0)) {
+			case '1':
+			case 'y':
+				userInt = 1;
+				valid = true;
+				break;
+			case '2':
+			case 'n':
+				userInt = 2;
+				valid = true;
+				break;
+			default:
+				System.out.println("Invalid input - please try again");
+			}
+
+		} while (!valid);
+
+		return userInt;
 
 	}
 
