@@ -630,10 +630,11 @@ public class TurnLauncher {
 	}
 
 	/**
-	 * increases the month(roundNumber) by 1
+	 * increases the month by 1
 	 */
 	public void roundEnd() {
-		this.month += 1;
+		month += 1;
+		this.calendar.set(2, month);
 	}
 
 	/**
