@@ -39,8 +39,11 @@ public class GameLauncher {
 				System.out.println("game rules shown");
 				break;
 			case 3:
-				Admin.GAME_OVER = true;
-				validOption = true;
+				System.out.println("Are you sure you want to quit the game?");
+				if (GUI.yesNoMenu() == 1) {
+					Admin.GAME_OVER = true;
+					validOption = true;
+				}
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");

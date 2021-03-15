@@ -6,7 +6,6 @@ package uk.ac.qub.artemislite;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Random;
 
 /**
  * @author Jordan Davis
@@ -15,6 +14,8 @@ import java.util.Random;
  * @author Andrew Pickard
  */
 public class TurnLauncher {
+
+	// Variables
 
 	// TODO: This should prob be private to decrease coupling JD
 	protected ArrayList<Player> players;
@@ -28,16 +29,9 @@ public class TurnLauncher {
 	// halve the default resources from 200 to 100 for a longer game
 	private final int RESOURCE_VALUE_LONG_GAME = -100;
 
-	// Starting date
-	private Calendar calendar = Calendar.getInstance();
-	private int year = 2022;
-	private int month = 0; // January
-	// Set day (date) & time at random
-	private Random rand = new Random();
-	private int date = rand.nextInt(27) + 1; // 1 - 28
-	private int hour = rand.nextInt(12) + 8; // 8 - 20
-	private int min = rand.nextInt(59) + 1; // 1 - 60
-	private int sec = rand.nextInt(59) + 1; // 1 - 60
+	private int turnNumber = 0;
+
+	// Constructors
 
 	/**
 	 * default constructor
@@ -45,8 +39,9 @@ public class TurnLauncher {
 	public TurnLauncher() {
 		this.players = new ArrayList<Player>();
 		this.die = new Die();
-		this.calendar.set(year, month, date, hour, min, sec);
 	}
+
+	// Methods
 
 	/**
 	 * @return the players
@@ -630,11 +625,27 @@ public class TurnLauncher {
 	}
 
 	/**
-	 * increases the month by 1
+	 * Method that increments the calendar date and turnNumber by 1 and displays an
+	 * end of round message to players.
 	 */
 	public void roundEnd() {
-		month += 1;
-		this.calendar.set(2, month);
+		double progress = GUI.missionProgress();
+
+		ArtemisCalendar.getCalendar().incrementDate();
+
+		turnNumber += 1;
+
+		GUI.clearConsole(2);
+
+		System.out.printf("Round %d has ended. The date is now %s, %d.\n", turnNumber,
+				ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)),
+				ArtemisCalendar.getCalendar().get(1));
+		if (progress > 0) {
+			System.out.printf("The Artemis Project is %.1f%s complete.\n", progress, "%");
+		}
+
+		GUI.clearConsole(1);
+
 	}
 
 	/**
@@ -645,9 +656,9 @@ public class TurnLauncher {
 	public void gameOverSequence(Board board) {
 
 		if (board.allSystemComplete()) {
-			GUI.displayGameWonMessage(this.calendar);
+			GUI.displayGameWonMessage();
 		} else {
-			GUI.displayGameLossMessage(this.calendar);
+			GUI.displayGameLossMessage();
 		}
 
 		endingPlayerScore(board);

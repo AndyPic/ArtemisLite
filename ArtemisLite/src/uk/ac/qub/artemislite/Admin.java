@@ -59,8 +59,6 @@ public class Admin {
 
 		while (!GAME_OVER) {
 
-			GUI.clearConsole(10);
-
 			System.out.println("It is " + turnLauncher.getActivePlayer().getName() + "'s turn.");
 
 			int activePlayerIndex = turnLauncher.players.indexOf(turnLauncher.getActivePlayer());
@@ -133,16 +131,22 @@ public class Admin {
 						}
 						endTurn = true;
 					} else {
-						GAME_OVER = true;
-						endTurn = true;
-						turnLauncher.getActivePlayer().setBalanceOfResources(-1);
+						System.out.println("Are you sure you want to declare bankruptcy and end the game?");
+						if (GUI.yesNoMenu() == 1) {
+							GAME_OVER = true;
+							endTurn = true;
+							turnLauncher.getActivePlayer().setBalanceOfResources(-1);
+						}
 					}
 					break;
 				case 5:
 					if (owner) {
-						GAME_OVER = true;
-						endTurn = true;
-						turnLauncher.getActivePlayer().setBalanceOfResources(-1);
+						System.out.println("Are you sure you want to declare bankruptcy and end the game?");
+						if (GUI.yesNoMenu() == 1) {
+							GAME_OVER = true;
+							endTurn = true;
+							turnLauncher.getActivePlayer().setBalanceOfResources(-1);
+						}
 						break;
 					}
 

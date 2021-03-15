@@ -3,8 +3,6 @@
  */
 package uk.ac.qub.artemislite;
 
-import java.util.Calendar;
-
 /**
  * @author Jordan Davis
  * @author David Finlay
@@ -28,9 +26,11 @@ public class GUI implements Runnable {
 
 		// Array of intro message sequence (can be as long as needed)
 		String[] startingMessage = new String[7];
-		startingMessage[0] = "January, 2022.";
+		startingMessage[0] = ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)) + ", "
+				+ ArtemisCalendar.getCalendar().get(1) + ".";
 		startingMessage[1] = "You and your colleagues are tasked with delivering The Artemis Project to success.";
-		startingMessage[2] = "The Artemis Project aims to land the first woman, and next man on the moon by 2024.";
+		// TODO: Change date expected to launch to that in calendar
+		startingMessage[2] = "The Artemis Project aims to launch the first woman, and next man to the moon by 2024.";
 		startingMessage[3] = "In order to accomplish this lofty goal, you must work with your colleagues to ensure 'All Systems are Go!' by launch-day.";
 		startingMessage[4] = "Can your team acquire and fully develop all of the systems needed for a successful Lift-off?";
 		startingMessage[5] = "...or will you just be in it for personal gain?";
@@ -83,31 +83,23 @@ public class GUI implements Runnable {
 	}
 
 	/**
-	 * Displays the intro sequence for the game
-	 */
-	public static void displayIntroMessage() {
-
-		System.out.println("\nIntro message......");
-		System.out.println("Press Enter to begin the game");
-		UserInput.getUserInputString();
-
-	}
-
-	/**
 	 * Displays the game loss message
 	 */
-	public static void displayGameLossMessage(Calendar calendar) {
+	public static void displayGameLossMessage() {
 		// TODO: add actual ending message
-		System.out.println("\nProject Artemis has failed, the date is: " + calendar.getTime());
+		// TODO: show mission progress
+		System.out.printf("On %s The Artemis Project has failed.\n", ArtemisCalendar.getCalendar().getTime());
 
 	}
 
 	/**
 	 * Displayes the game won message
 	 */
-	public static void displayGameWonMessage(Calendar calendar) {
+	public static void displayGameWonMessage() {
 		// TODO: add actual ending message
-		System.out.println("\nProject Artemis is a success, the date is: " + calendar.getTime());
+		// TODO: show time under / over estimated completion date
+		System.out.printf("On %s The Artemis Project has succesfully launched!\n",
+				ArtemisCalendar.getCalendar().getTime());
 
 	}
 
@@ -152,6 +144,17 @@ public class GUI implements Runnable {
 
 		return userInt;
 
+	}
+
+	/**
+	 * Method to calculate the progress towards completing the mission.
+	 * 
+	 * @return
+	 */
+	public static double missionProgress() {
+		// TODO write the method!
+
+		return 0;
 	}
 
 }
