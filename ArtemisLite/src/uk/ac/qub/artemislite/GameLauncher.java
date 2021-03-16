@@ -28,7 +28,7 @@ public class GameLauncher {
 
 		do {
 
-			System.out.println("\nPlease select a menu option by entering a number: (e.g. 1)" + "\n1.Start Game"
+			System.out.println("\n=====| MENU |=====\nHint: you can select a menu option by entering a number: (e.g. 1)" + "\n1.Start Game"
 					+ "\n2.Show Game Rules" + "\n3.Quit Game");
 
 			// TODO: Should we change this so all menus accept a String as valid also? JD
@@ -53,7 +53,7 @@ public class GameLauncher {
 			}
 
 		} while (!validOption);
-		GUI.clearConsole(4);
+		GUI.clearConsole(8);
 	}
 
 	/**
@@ -72,23 +72,23 @@ public class GameLauncher {
 			ArrayList<Player> players = turnLauncher.getPlayers();
 
 			if (turnLauncher.players.size() > 0) {
-				System.out.println("\nCurrent Registered Players:");
+				System.out.println("\n=====| PLAYERS |=====");
 				turnLauncher.displayPlayers();
 			}
 
-			System.out.printf("\nSelect an option:");
+			System.out.printf("\n=====| MENU |=====\n");
 
 			if (players.size() < MAX_PLAYERS) {
-				System.out.printf("\n1. Add New Player");
+				System.out.printf("1. Add New Player\n");
 			}
 			if (players.size() >= 1 && players.size() < MAX_PLAYERS) {
-				System.out.printf("\n2. Modify Existing Player");
+				System.out.printf("2. Modify Existing Player\n");
 			}
 			if (players.size() >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
-				System.out.printf("\n3. Begin Game");
+				System.out.printf("3. Begin Game\n");
 			}
 			if (players.size() == MAX_PLAYERS) {
-				System.out.printf("\n1. Begin Game\n2. Modify Existing Player");
+				System.out.printf("1. Begin Game\n2. Modify Existing Player\n");
 			}
 
 			switch (UserInput.getUserInputInt()) {
@@ -118,11 +118,11 @@ public class GameLauncher {
 
 		// Allow option to play a long game with greater initial resources
 		// or a short game with default resources
-		GUI.clearConsole(4);
+		GUI.clearConsole(8);
 
 		int gameLengthInput;
 		do {
-			System.out.println("\nSelect an option:\n1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
+			System.out.println("\n=====| MENU |=====\n1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
 			gameLengthInput = UserInput.getUserInputInt();
 			switch (gameLengthInput) {
 			case 1:
@@ -133,13 +133,15 @@ public class GameLauncher {
 			case 3:
 				// TODO update info with new balance changes
 				System.out.println("Some details about the different modes...");
-
+				GUI.clearConsole(8);
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 			}
 		} while (gameLengthInput != 1 && gameLengthInput != 2);
-
+		
+		GUI.clearConsole(8);
+		
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
 

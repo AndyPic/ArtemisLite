@@ -76,7 +76,7 @@ public class TurnLauncher {
 
 		players.add(player);
 
-		GUI.clearConsole(4);
+		GUI.clearConsole(8);
 
 	}
 
@@ -97,11 +97,12 @@ public class TurnLauncher {
 	public void findPlayerOrder() {
 
 		Player firstToPlay;
-		System.out.println("Its time to find out who goes first...\n");
-
+		System.out.println("Lets roll the dice to find out who goes first...\n");
+		GUI.clearConsole(8);
+		
 		firstToPlay = allPlayersRoll(players);
 
-		GUI.clearConsole(4);
+		GUI.clearConsole(8);
 
 		// Rearranges the player array so that the correct player is first
 		while (firstToPlay != this.players.get(0)) {
@@ -215,7 +216,7 @@ public class TurnLauncher {
 
 		if (this.players.size() > 1) {
 			do {
-				System.out.println("Select a player to modify:");
+				System.out.println("=====| MODIFY PLAYER |=====");
 				displayPlayers();
 				userInput = UserInput.getUserInputInt() - 1;
 
@@ -233,8 +234,10 @@ public class TurnLauncher {
 		player = this.players.get(userInput);
 		valid = true;
 
+		GUI.clearConsole(8);
+		
 		do {
-			System.out.println("What would you like to do with " + player.getName()
+			System.out.println("=====| PLAYER OPTIONS |=====" + player.getName()
 					+ "?\n1. Modify Name\n2. Delete Player\n3. Go back");
 
 			switch (UserInput.getUserInputInt()) {
@@ -252,6 +255,8 @@ public class TurnLauncher {
 				valid = false;
 			}
 		} while (!valid);
+		
+		GUI.clearConsole(8);
 	}
 
 	/**
@@ -364,7 +369,7 @@ public class TurnLauncher {
 		currentPos = activePlayer.getCurrentPosition();
 
 		System.out.println("You are currently on\n" + board.getSquares().get(currentPos).toString());
-		System.out.println("Ready to roll the dice? press Enter!");
+		System.out.println("Ready to roll the dice?\n-----> PRESS ENTER <-----");
 		UserInput.getUserInputString();
 		GUI.clearConsole(8);
 
@@ -526,7 +531,7 @@ public class TurnLauncher {
 		matchingRoll = false;
 		// TODO: do you want this so each player has to press to roll dice? or just 1
 		// press rolls for all players JD
-		System.out.println("Press enter to roll the dice!");
+		System.out.println("-----> PRESS ENTER <-----");
 
 		do {
 			// Moved this inside the do-while, so it gets reset to 0 AP
@@ -550,13 +555,13 @@ public class TurnLauncher {
 			}
 
 			if (matchingRoll == true) {
-				System.out.println("\nThe roll was a draw, lets try again. Please press enter to roll");
+				System.out.println("\nThe roll was a draw, lets try again. \n-----> PRESS ENTER <-----");
 			}
 
 		} while (matchingRoll);
 
 		System.out.println("\n" + highestRollPlayer.getName() + " got the highest roll of " + highestRoll
-				+ "\nPress enter to continue");
+				+ "\n-----> PRESS ENTER <-----");
 		UserInput.getUserInputString();
 
 		GUI.clearConsole(8);
@@ -669,7 +674,9 @@ public class TurnLauncher {
 			GUI.displayGameLossMessage(board);
 		}
 
-		endingPlayerScore(board);
+		if(this.players.size() > 0) {
+			endingPlayerScore(board);
+		}
 
 	}
 

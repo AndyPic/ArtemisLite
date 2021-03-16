@@ -56,5 +56,14 @@ public class UserInput {
 		return scanner.nextLine();
 
 	}
+	
+	//TODO: was this method removed previously on error?
+	/**
+	 * Method to close the scanner
+	 */
+	public static void closeScanner() {
+		scanner.close();
+	}
+
 
 }

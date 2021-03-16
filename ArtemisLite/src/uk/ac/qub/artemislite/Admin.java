@@ -71,11 +71,11 @@ public class Admin {
 				// TODO also check if they have enough money to develop
 				if (owner) {
 					System.out.printf(
-							"\n[%s]\nEnter: \n1. View all element ownership \n2. View my elements \n3. Get current square details \n4. Increase Development level \n5. End turn \n6. End game\n",
+							"\n[%s]\n=====| MENU |===== \n1. View all element ownership \n2. View my elements \n3. Get current square details \n4. Increase Development level \n5. End turn \n6. End game\n",
 							turnLauncher.getActivePlayer().getName());
 				} else {
 					System.out.printf(
-							"\n[%s]\nEnter: \n1. View all element ownership \n2. Get current square details \n3. End turn \n4. End game\n",
+							"\n[%s]\n=====| MENU |===== \n1. View all element ownership \n2. Get current square details \n3. End turn \n4. End game\n",
 							turnLauncher.getActivePlayer().getName());
 
 				}

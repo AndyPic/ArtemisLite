@@ -76,7 +76,7 @@ public class GUI implements Runnable {
 		for (int loop = 0; loop < numberOfLines; loop++) {
 			System.out.println();
 		}
-
+		
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class GUI implements Runnable {
 	}
 
 	/**
-	 * Displayes the game won message
+	 * Displays the game won message
 	 */
 	public static void displayGameWonMessage() {
 		// TODO: add actual ending message
