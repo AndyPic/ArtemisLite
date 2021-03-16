@@ -54,18 +54,16 @@ public class Admin {
 
 		while (!GameLauncher.isGameOver()) {
 			
-			System.out.printf("Date: April 2020\n");
-			
 			System.out.printf("It's "+turnLauncher.getActivePlayer().getName()+"'s turn.\n");
 			
-			//TODO: method calls need cleaned up
+			System.out.printf("Date: April 2020\n");
+			
+			//TODO: method calls need cleaned up + this is duplicated code JD
 			System.out.printf("=====| PLAYER: %s |=====| RESOURCES: £%d |=====| LOCATION: %s |=====\n\n",turnLauncher.getActivePlayer().getName(),turnLauncher.getActivePlayer().getBalanceOfResources(), board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition()).getSquareName());
-
 
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
-			
-			
+
 			TurnLauncher.setTurnOver(false);
 			while (!TurnLauncher.isEndTurn()) {
 

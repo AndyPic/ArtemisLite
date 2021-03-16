@@ -97,7 +97,7 @@ public class TurnLauncher {
 	public void findPlayerOrder() {
 
 		Player firstToPlay;
-		System.out.println("Lets roll the dice to find out who goes first...\n");
+		System.out.println("Lets roll the dice to find out who goes first...");
 
 		firstToPlay = allPlayersRoll(players);
 
@@ -369,15 +369,20 @@ public class TurnLauncher {
 
 		currentPos = activePlayer.getCurrentPosition();
 
-		System.out.println("You are currently on\n" + board.getSquares().get(currentPos).toString());
-		System.out.println("Ready to roll the dice?\n-----> PRESS ENTER <-----");
+		System.out.printf("You are currently on %s\n", board.getSquares().get(currentPos).getSquareName());
+		// TODO: we somehow need to workout how to show the player more info about what
+		// squares are ahead so they feel like they are actually playing a game and not
+		// just hitting roll dice JD
+		System.out.println("Ahead of you is...");
+		System.out.println("\n-----> ROLL THE DICE <-----");
 		UserInput.getUserInputString();
 		GUI.clearConsole(8);
 
 		roll = rollDice();
-		System.out.println("You" + roll);
 
 		newPos = activePlayer.getCurrentPosition() + getRollValue(roll);
+
+		System.out.println("You" + roll);
 
 		if (newPos > 11) {
 			newPos -= 12;
@@ -386,12 +391,24 @@ public class TurnLauncher {
 			activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() + 200);
 		}
 
+		// TODO: method calls need cleaned up + this is duplicated code JD
+		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: £%d |=====| LOCATION: %s |=====\n\n",
+				getActivePlayer().getName(), getActivePlayer().getBalanceOfResources(),
+				board.getSquares().get(getActivePlayer().getCurrentPosition()).getSquareName());
+
 		// Update player position
 		activePlayer.setCurrentPosition(newPos);
 
 		newSquare = board.getSquares().get(newPos);
 
-		System.out.println("You are now on\n" + newSquare.toString());
+		System.out.printf("You have landed on %s\n",
+				board.getSquares().get(getActivePlayer().getCurrentPosition()).getSquareName());
+
+		System.out.println("\n=====| DETAILS |=====");
+		// TODO: we need the details shown to the player to be dynamic, currently all
+		// details are shown. No point showing dev costs of a square if it is already
+		// owned by another player JD
+		System.out.println(newSquare.toString());
 
 	} // END
 
@@ -535,7 +552,6 @@ public class TurnLauncher {
 		System.out.println("-----> PRESS ENTER <-----");
 
 		do {
-			// Moved this inside the do-while, so it gets reset to 0 AP
 			highestRoll = 0;
 
 			UserInput.getUserInputString();
@@ -554,15 +570,17 @@ public class TurnLauncher {
 				}
 
 			}
-
 			if (matchingRoll == true) {
-				System.out.println("\nThe roll was a draw, lets try again. \n-----> PRESS ENTER <-----");
+				System.out.println("\n-----> DRAW, ROLL AGAIN <-----");
 			}
 
 		} while (matchingRoll);
-
-		System.out.println("\n" + highestRollPlayer.getName() + " got the highest roll of " + highestRoll
-				+ "\n-----> PRESS ENTER <-----");
+		// TODO: do you think using "--> <--" every time the player need to press enter
+		// is
+		// intuitive enough? or do we need to write "press enter" every time
+		System.out.printf(
+				"\n=====| WINNER: %s |=====\nHint: when you see --> <-- just press enter!\n\n-----> READY TO BEGIN? <-----\n",
+				highestRollPlayer.getName());
 		UserInput.getUserInputString();
 
 		GUI.clearConsole(8);
