@@ -14,6 +14,9 @@ public class GameLauncher {
 
 	private final static int MIN_PLAYERS = 2;
 	private final static int MAX_PLAYERS = 4;
+	
+	// Sets game-over, main game loop
+	private static boolean gameOver = false;
 
 	/**
 	 * Game starting Menu
@@ -41,7 +44,7 @@ public class GameLauncher {
 			case 3:
 				System.out.println("Are you sure you want to quit the game?");
 				if (GUI.yesNoMenu() == 1) {
-					Admin.GAME_OVER = true;
+					gameOver = true;
 					validOption = true;
 				}
 				break;
@@ -142,6 +145,28 @@ public class GameLauncher {
 
 		// GUI.displayIntroMessage();
 
+	}
+
+	/**
+	 * @return the gameOver
+	 */
+	public static boolean isGameOver() {
+		return gameOver;
+	}
+	
+	/**
+	 * 
+	 * @param turnLauncher
+	 * @param board
+	 */
+	public static void endGame() {
+		
+		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
+		
+		if (GUI.yesNoMenu() == 1) {
+			gameOver = true;
+		}
+		
 	}
 
 }

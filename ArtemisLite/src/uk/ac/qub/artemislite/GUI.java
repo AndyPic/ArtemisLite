@@ -17,6 +17,7 @@ public class GUI implements Runnable {
 	 */
 	@Override
 	public void run() {
+		// TODO fix input fall-through
 
 		// Keep track of what messages have been printed
 		int progress = 0;
@@ -84,7 +85,8 @@ public class GUI implements Runnable {
 	public static void displayGameLossMessage(Board board) {
 		// TODO: add actual ending message
 		// TODO: show mission progress
-		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n", ArtemisCalendar.getCalendar().getTime(), GUI.missionProgress(board), "%");
+		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n",
+				ArtemisCalendar.getCalendar().getTime(), GUI.missionProgress(board), "%");
 
 	}
 

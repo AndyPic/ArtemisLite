@@ -12,12 +12,14 @@ import java.util.Scanner;
 public class UserInput {
 
 	static Scanner scanner = new Scanner(System.in);
-	
+
 	/**
 	 * 
 	 */
 	public static void clearScanner() {
+
 		scanner.nextLine();
+
 	}
 
 	/**
@@ -53,13 +55,6 @@ public class UserInput {
 
 		return scanner.nextLine();
 
-	}
-
-	/**
-	 * Method to close the scanner
-	 */
-	public static void closeScanner() {
-		scanner.close();
 	}
 
 }
