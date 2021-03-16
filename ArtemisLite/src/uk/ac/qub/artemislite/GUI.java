@@ -142,7 +142,7 @@ public class GUI implements Runnable {
 		return userInt;
 
 	}
-
+	
 	/**
 	 * Method to calculate the progress towards completing the mission.
 	 * 

@@ -98,8 +98,7 @@ public class TurnLauncher {
 
 		Player firstToPlay;
 		System.out.println("Lets roll the dice to find out who goes first...\n");
-		GUI.clearConsole(8);
-		
+
 		firstToPlay = allPlayersRoll(players);
 
 		GUI.clearConsole(8);
@@ -113,7 +112,7 @@ public class TurnLauncher {
 		}
 
 		activePlayer = firstToPlay;
-
+		GUI.clearConsole(8);
 	}
 
 	/**
@@ -174,7 +173,7 @@ public class TurnLauncher {
 		String name;
 		boolean valid;
 
-		System.out.println("Please enter your name");
+		System.out.println("Please enter your name:");
 
 		do {
 			valid = true;
@@ -213,6 +212,7 @@ public class TurnLauncher {
 		int userInput = 0;
 		boolean valid = false;
 		Player player = null;
+		String playerName;
 
 		if (this.players.size() > 1) {
 			do {
@@ -232,13 +232,14 @@ public class TurnLauncher {
 		}
 
 		player = this.players.get(userInput);
+		playerName = player.getName();
 		valid = true;
 
 		GUI.clearConsole(8);
-		
+
 		do {
-			System.out.println("=====| PLAYER OPTIONS |=====" + player.getName()
-					+ "?\n1. Modify Name\n2. Delete Player\n3. Go back");
+			System.out.println("=====| PLAYER OPTIONS |=====" + "?\n1. Modify " + playerName + "\n2. Delete "
+					+ playerName + "\n3. Go back");
 
 			switch (UserInput.getUserInputInt()) {
 			case 1:
@@ -246,7 +247,7 @@ public class TurnLauncher {
 				break;
 			case 2:
 				this.players.remove(userInput);
-				System.out.println("Player has been deleted");
+				System.out.println(playerName + " has been deleted");
 				break;
 			case 3:
 				break;
@@ -255,7 +256,7 @@ public class TurnLauncher {
 				valid = false;
 			}
 		} while (!valid);
-		
+
 		GUI.clearConsole(8);
 	}
 
@@ -674,7 +675,7 @@ public class TurnLauncher {
 			GUI.displayGameLossMessage(board);
 		}
 
-		if(this.players.size() > 0) {
+		if (this.players.size() > 0) {
 			endingPlayerScore(board);
 		}
 

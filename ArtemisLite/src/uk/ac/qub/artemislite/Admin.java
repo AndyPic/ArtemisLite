@@ -53,8 +53,14 @@ public class Admin {
 		}
 
 		while (!GameLauncher.isGameOver()) {
+			
+			System.out.printf("Date: April 2020\n");
+			
+			System.out.printf("It's "+turnLauncher.getActivePlayer().getName()+"'s turn.\n");
+			
+			//TODO: method calls need cleaned up
+			System.out.printf("=====| PLAYER: %s |=====| RESOURCES: £%d |=====| LOCATION: %s |=====\n\n",turnLauncher.getActivePlayer().getName(),turnLauncher.getActivePlayer().getBalanceOfResources(), board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition()).getSquareName());
 
-			System.out.println("It is " + turnLauncher.getActivePlayer().getName() + "'s turn.");
 
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
@@ -62,11 +68,11 @@ public class Admin {
 			
 			TurnLauncher.setTurnOver(false);
 			while (!TurnLauncher.isEndTurn()) {
-				
-				
 
 				// Check if player owns any squares
 				boolean owner = Player.isOwner(board, turnLauncher.getActivePlayer());
+				
+				//TODO: need to add dynamic date from ArtemisCalendar here.
 
 				// TODO also check if they have enough money to develop
 				if (owner) {
