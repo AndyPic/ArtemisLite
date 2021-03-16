@@ -12,11 +12,6 @@ package uk.ac.qub.artemislite;
 public class Admin {
 
 	/**
-	 * Sets game over (main game loop)
-	 */
-	public static boolean GAME_OVER = false;
-
-	/**
 	 * @param args
 	 * @throws Exception
 	 */
@@ -47,108 +42,85 @@ public class Admin {
 		}
 		// Stops the input thread after intro message finished
 		inputThread.interrupt();
-		
-		UserInput.clearScanner();
 
 		GUI.clearConsole(1);
 
 		// Runs game start Menu
 		GameLauncher.startMenu();
 
-		if (!GAME_OVER) {
+		if (!GameLauncher.isGameOver()) {
 			GameLauncher.startGame(turnLauncher);
 		}
 
-		while (!GAME_OVER) {
+		while (!GameLauncher.isGameOver()) {
 
 			System.out.println("It is " + turnLauncher.getActivePlayer().getName() + "'s turn.");
 
-			int activePlayerIndex = turnLauncher.players.indexOf(turnLauncher.getActivePlayer());
-			Square currentPosition = board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition());
-			Boolean endTurn = false;
-
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
+			
+			
+			TurnLauncher.setTurnOver(false);
+			while (!TurnLauncher.isEndTurn()) {
+				
+				
 
-			currentPosition = board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition());
-
-			while (!endTurn) {
-
+				// Check if player owns any squares
 				boolean owner = Player.isOwner(board, turnLauncher.getActivePlayer());
 
-				// Check if player owns any squares to develop
 				// TODO also check if they have enough money to develop
 				if (owner) {
 					System.out.printf(
-							"\n[%s]\nEnter: \n1. blank \n2. Get square details \n3. Increase Development level \n4. End turn \n5. End game\n",
+							"\n[%s]\nEnter: \n1. View all element ownership \n2. View my elements \n3. Get current square details \n4. Increase Development level \n5. End turn \n6. End game\n",
 							turnLauncher.getActivePlayer().getName());
 				} else {
-					System.out.printf("\n[%s]\nEnter: \n1. blank \n2. Get square details \n3. End turn \n4. End game\n",
+					System.out.printf(
+							"\n[%s]\nEnter: \n1. View all element ownership \n2. Get current square details \n3. End turn \n4. End game\n",
 							turnLauncher.getActivePlayer().getName());
 
 				}
 
-				// TODO: update blank
 				// TODO clean up a bit, code duplication, own method?
 				switch (UserInput.getUserInputInt()) {
 
 				case 1:
-
+					board.viewElementOwnership();
 					break;
 				case 2:
 
-					if (currentPosition instanceof StandardSquare) {
-						StandardSquare ssq = (StandardSquare) currentPosition;
-						System.out.println(ssq.toString());
-					} else if (currentPosition instanceof ResourceSquare) {
-						ResourceSquare rsq = (ResourceSquare) currentPosition;
-						System.out.println(rsq.toString());
+					if (owner) {
+						board.viewMyElements(turnLauncher.getActivePlayer());
 					} else {
-						System.out.println(currentPosition.toString());
+						turnLauncher.getActivePlayer().getCurrentPositionDetails(board);
 					}
 
 					break;
 				case 3:
 					if (owner) {
-						// Increase development level
-						System.out.println("Not yet implemented");
+						turnLauncher.getActivePlayer().getCurrentPositionDetails(board);
 					} else {
-						if (activePlayerIndex != turnLauncher.players.size() - 1) {
-							turnLauncher.setActivePlayer(turnLauncher.players.get(activePlayerIndex + 1));
-						} else {
-							turnLauncher.setActivePlayer(turnLauncher.players.get(0));
-							turnLauncher.roundEnd(board);
-						}
-						endTurn = true;
+						turnLauncher.endTurn(board);
 					}
 					break;
 				case 4:
 					if (owner) {
-
-						if (activePlayerIndex != turnLauncher.players.size() - 1) {
-							turnLauncher.setActivePlayer(turnLauncher.players.get(activePlayerIndex + 1));
-						} else {
-							turnLauncher.setActivePlayer(turnLauncher.players.get(0));
-							turnLauncher.roundEnd(board);
-						}
-						endTurn = true;
+						// Increase development level
+						System.out.println("Increase development level - Not yet implemented");
 					} else {
-						System.out.println("Are you sure you want to declare bankruptcy and end the game?");
-						if (GUI.yesNoMenu() == 1) {
-							GAME_OVER = true;
-							endTurn = true;
-							turnLauncher.getActivePlayer().setBalanceOfResources(-1);
-						}
+						GameLauncher.endGame();
+						turnLauncher.endTurn(board);
 					}
 					break;
 				case 5:
 					if (owner) {
-						System.out.println("Are you sure you want to declare bankruptcy and end the game?");
-						if (GUI.yesNoMenu() == 1) {
-							GAME_OVER = true;
-							endTurn = true;
-							turnLauncher.getActivePlayer().setBalanceOfResources(-1);
-						}
+						turnLauncher.endTurn(board);
+						break;
+					}
+
+				case 6:
+					if (owner) {
+						GameLauncher.endGame();
+						turnLauncher.endTurn(board);
 						break;
 					}
 

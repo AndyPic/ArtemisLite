@@ -59,6 +59,21 @@ public class Player {
 	}
 
 	/**
+	 * Method that returns details about the players currently occupied square
+	 */
+	public void getCurrentPositionDetails(Board board) {
+		if (board.getSquares().get(currentPosition) instanceof StandardSquare) {
+			StandardSquare ssq = (StandardSquare) board.getSquares().get(currentPosition);
+			System.out.println(ssq.toString());
+		} else if (board.getSquares().get(currentPosition) instanceof ResourceSquare) {
+			ResourceSquare rsq = (ResourceSquare) board.getSquares().get(currentPosition);
+			System.out.println(rsq.toString());
+		} else {
+			System.out.println(board.getSquares().get(currentPosition).toString());
+		}
+	}
+
+	/**
 	 * @return the name
 	 */
 	public String getName() {

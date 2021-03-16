@@ -86,4 +86,48 @@ public class Board {
 
 	}
 
+	/**
+	 * Method to display all elements ownership status
+	 * 
+	 */
+	public void viewElementOwnership() {
+
+		for (Square sq : this.squares) {
+
+			if (sq instanceof StandardSquare) {
+				StandardSquare stdSq = (StandardSquare) sq;
+
+				if (stdSq.getOwnedBy() != null) {
+					System.out.printf("[%02d][%s][%s]: Owned by %s.\n", stdSq.getBoardPosition(), stdSq.getSquareName(),
+							stdSq.getSquareSystem().getName(), stdSq.getOwnedBy().getName());
+				} else {
+					System.out.printf("[%02d][%s][%s]: Not owned.\n", stdSq.getBoardPosition(), stdSq.getSquareName(),
+							stdSq.getSquareSystem().getName());
+				}
+			}
+		}
+	}// END
+
+	/**
+	 * Method to display the elements owned by a player
+	 * 
+	 * @param board
+	 * @param activePlayer
+	 */
+	public void viewMyElements(Player activePlayer) {
+
+		System.out.println("You own the following elements: ");
+
+		for (Square sq : this.squares) {
+
+			if (sq instanceof StandardSquare) {
+				StandardSquare stdSq = (StandardSquare) sq;
+
+				if (stdSq.getOwnedBy() == activePlayer) {
+					System.out.println(stdSq.toString());
+				}
+			}
+		}
+	}// END
+
 }

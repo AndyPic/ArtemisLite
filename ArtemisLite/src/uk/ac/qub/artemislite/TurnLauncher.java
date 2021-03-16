@@ -30,6 +30,8 @@ public class TurnLauncher {
 
 	private int turnNumber = 0;
 
+	private static boolean turnOver = false;
+
 	// Constructors
 
 	/**
@@ -627,7 +629,7 @@ public class TurnLauncher {
 	 * end of round message to players.
 	 */
 	public void roundEnd(Board board) {
-		
+
 		double progress = GUI.missionProgress(board);
 
 		ArtemisCalendar.getCalendar().incrementDate();
@@ -646,7 +648,7 @@ public class TurnLauncher {
 		GUI.clearConsole(1);
 
 	}
-	
+
 	/**
 	 * @return the turnNumber
 	 */
@@ -669,6 +671,39 @@ public class TurnLauncher {
 
 		endingPlayerScore(board);
 
+	}
+
+	/**
+	 * Method to end the current players turn.
+	 * 
+	 * @param board
+	 */
+	public void endTurn(Board board) {
+
+		int activePlayerIndex = players.indexOf(getActivePlayer());
+
+		if (activePlayerIndex != players.size() - 1) {
+			setActivePlayer(players.get(activePlayerIndex + 1));
+		} else {
+			setActivePlayer(players.get(0));
+			roundEnd(board);
+		}
+		turnOver = true;
+
+	}
+
+	/**
+	 * @return the endTurn
+	 */
+	public static boolean isEndTurn() {
+		return turnOver;
+	}
+
+	/**
+	 * @param turnOver the turnOver to set
+	 */
+	public static void setTurnOver(boolean turnOver) {
+		TurnLauncher.turnOver = turnOver;
 	}
 
 }
