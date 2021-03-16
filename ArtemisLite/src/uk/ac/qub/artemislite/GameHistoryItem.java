@@ -11,12 +11,11 @@ package uk.ac.qub.artemislite;
 public class GameHistoryItem {
 
 	// keeps a global record of the move number as a counter
-	public static int GAME_COUNTER = 0;
+	public static int GAME_COUNTER = 0; // Not sure it's customary to use this naming convention for non-constants?
 
 	// non-static instance counter for the move
 	int gameCounter;
-	
-	
+
 	private String playerName;
 
 	/**
@@ -33,7 +32,7 @@ public class GameHistoryItem {
 	 * the value of the above gameHistoryAction transaction
 	 */
 	private int resourceValue;
-	
+
 	/**
 	 * total dice roll
 	 */
@@ -45,23 +44,23 @@ public class GameHistoryItem {
 	public GameHistoryItem() {
 		// increment the game counter on each instantiation of a GameHistoryItem
 		++GAME_COUNTER;
-		
+
 		// create the non-static counter reference for this history item object
 		gameCounter = GameHistoryItem.GAME_COUNTER;
 
-		
 	}
 
 	/**
 	 * constructor with fields
-	 * @param gameCounter is the counter for the game move
+	 * 
+	 * @param gameCounter          is the counter for the game move
 	 * @param playerName
 	 * @param boardLandingPosition
 	 * @param gameHistoryAction
 	 * @param resourceValue
 	 */
 	public GameHistoryItem(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction,
-			int resourceValue, int diceRollTotal ) {
+			int resourceValue, int diceRollTotal) {
 		this();
 		this.playerName = playerName;
 		this.boardLandingPosition = boardLandingPosition;
@@ -72,11 +71,11 @@ public class GameHistoryItem {
 
 	public void displayAll() {
 		String historyOutput;
-		
-		historyOutput = "On move: " + this.gameCounter + " Player: " + this.playerName + " rolled " + this.diceRollTotal 
-				+ " and landed on element: " + this.boardLandingPosition + ", choosing to: " + this.gameHistoryAction.label + " costing: "
-				+ this.resourceValue + " resources\n";
-		
+
+		historyOutput = "On move: " + this.gameCounter + " Player: " + this.playerName + " rolled " + this.diceRollTotal
+				+ " and landed on element: " + this.boardLandingPosition + ", choosing to: "
+				+ this.gameHistoryAction.label + " costing: " + this.resourceValue + " resources\n";
+
 		System.out.print(historyOutput);
 	}
 

@@ -55,6 +55,11 @@ public class Board {
 		return squares;
 	}
 
+	/**
+	 * Method to check whether all systems have been fully developed
+	 * 
+	 * @return
+	 */
 	public boolean allSystemComplete() {
 
 		boolean complete;

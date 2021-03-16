@@ -4,7 +4,6 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 
 /**
@@ -238,7 +237,6 @@ public class TurnLauncher {
 
 			switch (UserInput.getUserInputInt()) {
 			case 1:
-				// TODO can't pick current name (eg switch from andy to andy)?
 				promptName(player);
 				break;
 			case 2:
@@ -628,8 +626,9 @@ public class TurnLauncher {
 	 * Method that increments the calendar date and turnNumber by 1 and displays an
 	 * end of round message to players.
 	 */
-	public void roundEnd() {
-		double progress = GUI.missionProgress();
+	public void roundEnd(Board board) {
+		
+		double progress = GUI.missionProgress(board);
 
 		ArtemisCalendar.getCalendar().incrementDate();
 
@@ -647,6 +646,13 @@ public class TurnLauncher {
 		GUI.clearConsole(1);
 
 	}
+	
+	/**
+	 * @return the turnNumber
+	 */
+	public int getTurnNumber() {
+		return turnNumber;
+	}
 
 	/**
 	 * Runs correct game-over sequence depending on win or loss
@@ -658,7 +664,7 @@ public class TurnLauncher {
 		if (board.allSystemComplete()) {
 			GUI.displayGameWonMessage();
 		} else {
-			GUI.displayGameLossMessage();
+			GUI.displayGameLossMessage(board);
 		}
 
 		endingPlayerScore(board);

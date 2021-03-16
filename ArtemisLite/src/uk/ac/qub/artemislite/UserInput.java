@@ -12,6 +12,13 @@ import java.util.Scanner;
 public class UserInput {
 
 	static Scanner scanner = new Scanner(System.in);
+	
+	/**
+	 * 
+	 */
+	public static void clearScanner() {
+		scanner.nextLine();
+	}
 
 	/**
 	 * Return int value for user input
