@@ -17,9 +17,6 @@ public class GUI implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// TODO: this allows a user to enter menu options for the next menu before the
-		// into has finished. this means a user can accidently end/start the game before
-		// seeing the menu.
 
 		// Keep track of what messages have been printed
 		int progress = 0;
@@ -50,7 +47,6 @@ public class GUI implements Runnable {
 			try {
 				System.out.println(startingMessage[loop]);
 				progress++;
-				// TODO Change sleep to whatever feels right
 				Thread.sleep(1337);
 			} catch (InterruptedException e) {
 				// Break out of for loop on interrupt
@@ -85,10 +81,10 @@ public class GUI implements Runnable {
 	/**
 	 * Displays the game loss message
 	 */
-	public static void displayGameLossMessage() {
+	public static void displayGameLossMessage(Board board) {
 		// TODO: add actual ending message
 		// TODO: show mission progress
-		System.out.printf("On %s The Artemis Project has failed.\n", ArtemisCalendar.getCalendar().getTime());
+		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n", ArtemisCalendar.getCalendar().getTime(), GUI.missionProgress(board), "%");
 
 	}
 
@@ -122,7 +118,6 @@ public class GUI implements Runnable {
 			userInput = UserInput.getUserInputString().trim().toLowerCase();
 
 			// Inelegant fix to trying to perform charAt on an empty String
-			// TODO Better fix if anyone can? - AP
 			userInput += "x";
 
 			switch (userInput.charAt(0)) {
@@ -151,10 +146,41 @@ public class GUI implements Runnable {
 	 * 
 	 * @return
 	 */
-	public static double missionProgress() {
-		// TODO write the method!
+	public static double missionProgress(Board board) {
 
-		return 0;
-	}
+		// Get resource amount for completion
+		double totalCost = 0;
+
+		for (SquareDetails square : SquareDetails.values()) {
+			totalCost += square.getCost();
+			totalCost += square.getMajorCost();
+			totalCost += (square.getMinorCost() * 3);
+		}
+
+		// Get resource amount currently invested
+		double currentProgress = 0;
+
+		for (Square b : board.getSquares()) {
+
+			if (b instanceof StandardSquare) {
+				StandardSquare stdSq = (StandardSquare) b;
+
+				if (stdSq.getOwnedBy() != null) {
+
+					currentProgress += stdSq.getRentCost();
+
+					if (stdSq.getCurrentMajorDevLevel() > 0) {
+						currentProgress += (stdSq.getCurrentMajorDevLevel() * stdSq.getMajorDevCost());
+					}
+
+					if (stdSq.getCurrentMinorDevLevel() > 0) {
+						currentProgress += (stdSq.getCurrentMinorDevLevel() * stdSq.getMinorDevCost());
+					}
+				}
+			}
+		}
+
+		return (currentProgress / totalCost) * 100;
+	} // END
 
 }

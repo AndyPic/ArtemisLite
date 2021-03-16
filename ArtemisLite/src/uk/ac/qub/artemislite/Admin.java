@@ -47,6 +47,8 @@ public class Admin {
 		}
 		// Stops the input thread after intro message finished
 		inputThread.interrupt();
+		
+		UserInput.clearScanner();
 
 		GUI.clearConsole(1);
 
@@ -115,7 +117,7 @@ public class Admin {
 							turnLauncher.setActivePlayer(turnLauncher.players.get(activePlayerIndex + 1));
 						} else {
 							turnLauncher.setActivePlayer(turnLauncher.players.get(0));
-							turnLauncher.roundEnd();
+							turnLauncher.roundEnd(board);
 						}
 						endTurn = true;
 					}
@@ -127,7 +129,7 @@ public class Admin {
 							turnLauncher.setActivePlayer(turnLauncher.players.get(activePlayerIndex + 1));
 						} else {
 							turnLauncher.setActivePlayer(turnLauncher.players.get(0));
-							turnLauncher.roundEnd();
+							turnLauncher.roundEnd(board);
 						}
 						endTurn = true;
 					} else {

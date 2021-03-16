@@ -17,12 +17,10 @@ public class ArtemisCalendar extends GregorianCalendar {
 
 	// Variables
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private static ArtemisCalendar calendar = new ArtemisCalendar();
+	private Random rand = new Random();
 
 	private static int startYear = 0;
 	private static int startMonth = 0;
@@ -34,7 +32,7 @@ public class ArtemisCalendar extends GregorianCalendar {
 
 	private int currentYear = 0;
 	private int currentMonth = 0;
-	private int currentDay = 0;
+	private int currentDay = 1;
 
 	// Constructors
 
@@ -73,16 +71,17 @@ public class ArtemisCalendar extends GregorianCalendar {
 
 			currentMonth = 0;
 			currentYear += 1;
-			currentDay = 0;
+			currentDay = 1;
 
 			calendar.set(1, currentYear);
-			calendar.set(5, currentDay);
 
 		} else {
 			currentMonth += 1;
+			currentDay = 1;
 		}
 
 		calendar.set(2, currentMonth);
+		calendar.set(5, currentDay);
 
 	}
 
@@ -93,8 +92,6 @@ public class ArtemisCalendar extends GregorianCalendar {
 	 * @param players
 	 */
 	public void turnEndDate(ArrayList<Player> players) {
-
-		Random rand = new Random();
 
 		int noPlayers = players.size();
 		int monthSize = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
