@@ -16,15 +16,22 @@ public class GameHistoryStorage {
 
 	private static ArrayList<GameHistoryItem> gameHistory = new ArrayList<GameHistoryItem>();
 	
+	
+	/**
+	 * default constructor
+	 */
+	public GameHistoryStorage() {
+		
+	}
+	
 	/**
 	 * adds a game history item to the game history
 	 * @param gameHistoryItem
 	 */
-	public static void addMoveToHistory(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction,
-			int resourceValue, int diceRollTotal) {
+	public void addMoveToHistory(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction) {
 		// create a history item object
 		
-		ghi = new GameHistoryItem(playerName, boardLandingPosition, gameHistoryAction, resourceValue, diceRollTotal);
+		ghi = new GameHistoryItem(playerName, boardLandingPosition, gameHistoryAction);
 		
 		// add this history item to the game history
 		gameHistory.add(ghi);
@@ -33,7 +40,8 @@ public class GameHistoryStorage {
 	/**
 	 * outputs to console each gameHistoryItem in the gameHistory arrayList
 	 */
-	public static void displayMoveHistory() {
+	public void displayMoveHistory() {
+		System.out.println("Game Move History...");
 		for (GameHistoryItem gameHistoryItem: gameHistory) {
 			gameHistoryItem.displayAll();
 		}

@@ -46,7 +46,7 @@ public class Square {
 	 */
 	@Override
 	public String toString() {
-		return String.format("[%02d][%s][%s]:\n", boardPosition, squareName, squareSystem.getName());
+		return String.format("[%02d][%s][%s]:\n\n", boardPosition, squareName, squareSystem.getName());
 	}
 
 	/**

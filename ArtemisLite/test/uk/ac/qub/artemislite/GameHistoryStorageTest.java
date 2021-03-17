@@ -17,68 +17,59 @@ import org.junit.jupiter.api.Test;
 class GameHistoryStorageTest {
 
 	// setup test variables
-	
-	String playerNameValid1, playerNameValid2, playerNameValid3, playerNameValid4;	
+
+	String playerNameValid1, playerNameValid2, playerNameValid3, playerNameValid4;
 	int boardLandingPosValid1, boardLandingPosValid2, boardLandingPosValid3, boardLandingPosValid4;
-	GameHistoryAction gameHistoryActionValid1, gameHistoryActionValid2, gameHistoryActionValid3, gameHistoryActionValid4;
-	int resourceValueValid1, resourceValueValid2, resourceValueValid3, resourceValueValid4;
-	int diceRollValid1, diceRollValid2, diceRollValid3, diceRollValid4;
+	GameHistoryAction gameHistoryActionValid1, gameHistoryActionValid2, gameHistoryActionValid3,
+			gameHistoryActionValid4;
 
 	// console output variable setup
-    private PrintStream sysOut;
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	private PrintStream sysOut;
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
-	
 	@BeforeEach
 	void setUp() throws Exception {
-			
+
 		playerNameValid1 = "player1";
 		boardLandingPosValid1 = 3;
 		gameHistoryActionValid1 = GameHistoryAction.DEVELOP_PORTFOLIO;
-		resourceValueValid1 = 120;
-		diceRollValid1=5;
-		
+
 		playerNameValid2 = "player2";
 		boardLandingPosValid2 = 8;
 		gameHistoryActionValid2 = GameHistoryAction.DEVELOP_THIS_ELEMENT;
-		resourceValueValid2 = 110;
-		diceRollValid2=7;
-		
+
 		playerNameValid3 = "player3";
 		boardLandingPosValid3 = 4;
 		gameHistoryActionValid3 = GameHistoryAction.FORFEIT_RESOURCES;
-		resourceValueValid3 = 50;
-		diceRollValid3=1;
-		
+
 		playerNameValid4 = "player4";
 		boardLandingPosValid4 = 7;
 		gameHistoryActionValid4 = GameHistoryAction.PURCHASE_THIS_ELEMENT;
-		resourceValueValid4 = 150;
-		diceRollValid4=12;
-		
-        sysOut = System.out;
-        System.setOut(new PrintStream(outContent));
-	}
 
+		sysOut = System.out;
+		System.setOut(new PrintStream(outContent));
+	}
 
 	@Test
 	void testAddAndDisplayMoveHistory() {
-		GameHistoryStorage.addMoveToHistory(playerNameValid1, boardLandingPosValid1, gameHistoryActionValid1, resourceValueValid1, diceRollValid1);
-		GameHistoryStorage.addMoveToHistory(playerNameValid2, boardLandingPosValid2, gameHistoryActionValid2, resourceValueValid2, diceRollValid2);
-		GameHistoryStorage.addMoveToHistory(playerNameValid3, boardLandingPosValid3, gameHistoryActionValid3, resourceValueValid3, diceRollValid3);
-		GameHistoryStorage.addMoveToHistory(playerNameValid4, boardLandingPosValid4, gameHistoryActionValid4, resourceValueValid4, diceRollValid4);
-		GameHistoryStorage.displayMoveHistory();
-		String expectedResult = "On move: 1 Player: player1 rolled 5 and landed on element: 3, choosing to: develop portfolio costing: 120 resources\n"
-				+ "On move: 2 Player: player2 rolled 7 and landed on element: 8, choosing to: develop this element costing: 110 resources\n"
-				+ "On move: 3 Player: player3 rolled 1 and landed on element: 4, choosing to: forfeit resources costing: 50 resources\n"
-				+ "On move: 4 Player: player4 rolled 12 and landed on element: 7, choosing to: purchase this element costing: 150 resources\n";
-		assertEquals(expectedResult, outContent.toString());
+		GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
+		gameHistoryStorage.addMoveToHistory(playerNameValid1, boardLandingPosValid1, gameHistoryActionValid1);
+		gameHistoryStorage.addMoveToHistory(playerNameValid2, boardLandingPosValid2, gameHistoryActionValid2);
+		gameHistoryStorage.addMoveToHistory(playerNameValid3, boardLandingPosValid3, gameHistoryActionValid3);
+		gameHistoryStorage.addMoveToHistory(playerNameValid4, boardLandingPosValid4, gameHistoryActionValid4);
+		
+		 gameHistoryStorage.displayMoveHistory();
+		 String expectedResult = "Game Move History...\n"
+		 + "Action number   1. Location: element  3. Player player1 developed portfolio\n"
+		 + "Action number   2. Location: element  8. Player player2 developed this element\n"
+		 + "Action number   3. Location: element  4. Player player3 forfeit resources\n"
+		 + "Action number   4. Location: element  7. Player player4 purchased this element\n";
+		 assertEquals(expectedResult, outContent.toString());
 	}
-	
-	
-    @After
-    public void revertStreams() {
-        System.setOut(sysOut);
-    }
+
+	@After
+	public void revertStreams() {
+		System.setOut(sysOut);
+	}
 
 }

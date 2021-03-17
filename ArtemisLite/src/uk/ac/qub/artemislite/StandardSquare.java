@@ -62,11 +62,11 @@ public class StandardSquare extends Square {
 	@Override
 	public String toString() {
 		if (ownedBy == null)
-			return super.toString() + String.format("%15s\t%d\nMinor dev cost:\t%d\nMajor dev cost:\t%d\n%15s\t%d",
+			return super.toString() + String.format("%15s\t%d\nMinor dev cost:\t%d\nMajor dev cost:\t%d\n%15s\t%d\n",
 					"Cost to buy:", purchaseCost, minorDevCost, majorDevCost, "Rent cost:", rentCost);
 
 		return super.toString()
-				+ String.format("%15s\t%s\nMinor dev levl:\t%d\nMinor dev cost:\t%d\nMajor dev levl:\t%d\nMajor dev cost:\t%d\n%15s\t%d",
+				+ String.format("%15s\t%s\nMinor dev levl:\t%d\nMinor dev cost:\t%d\nMajor dev levl:\t%d\nMajor dev cost:\t%d\n%15s\t%d\n",
 						"Owned by:", ownedBy.getName(), currentMinorDevLevel, minorDevCost, currentMajorDevLevel,
 						majorDevCost, "Rent cost:", rentCost);
 
