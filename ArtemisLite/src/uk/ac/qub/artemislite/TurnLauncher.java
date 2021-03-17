@@ -261,7 +261,7 @@ public class TurnLauncher {
 	}
 
 	/**
-	 * Increases the initial value of resources for all players for a longer game
+	 * Decreases the initial value of resources for all players for a longer game
 	 */
 	public void setupLongGame() {
 		ModifyPlayerResources.modifyResourcesAllPlayers(players, this.RESOURCE_VALUE_LONG_GAME);
@@ -344,8 +344,8 @@ public class TurnLauncher {
 			System.out.printf("\nThe winner of the auction is: %s\n", highRollPlayer.getName());
 
 			// Update player currency
-			highRollPlayer.setBalanceOfResources(highRollPlayer.getBalanceOfResources() - purchaseCost);
-
+			ModifyPlayerResources.modifyResourcesSinglePlayer(highRollPlayer, -purchaseCost);
+			
 			// Update square ownership
 			standardSquare.setOwnedBy(highRollPlayer);
 
@@ -397,7 +397,7 @@ public class TurnLauncher {
 		activePlayer.setCurrentPosition(newPos);
 
 		// TODO: method calls need cleaned up + this is duplicated code JD
-		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: £%d |=====| LOCATION: %s |=====\n",
+		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: ï¿½%d |=====| LOCATION: %s |=====\n",
 				getActivePlayer().getName(), getActivePlayer().getBalanceOfResources(),
 				board.getSquares().get(getActivePlayer().getCurrentPosition()).getSquareName());
 
@@ -406,7 +406,7 @@ public class TurnLauncher {
 		if (completedLap) {
 			// TODO Resources for passing GO - needs doing properly!
 			System.out.println("\nYou passed GO +200 resources woooop!\n");
-			activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() + 200);
+			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
 		}
 
 		newSquare = board.getSquares().get(newPos);
@@ -508,9 +508,9 @@ public class TurnLauncher {
 		switch (GUI.yesNoMenu()) {
 		case 1:
 			// Take rent off active player
-			activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() - rentCost);
+			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -rentCost);
 			// Give rent to square owner
-			squareOwner.setBalanceOfResources(squareOwner.getBalanceOfResources() + rentCost);
+			ModifyPlayerResources.modifyResourcesSinglePlayer(squareOwner, rentCost);
 			System.out.printf("%s charged %s rent of [%d].\n%s now has [%d].\n%s now has [%d].\n", squareOwnerName,
 					activePlayerName, rentCost, squareOwnerName, squareOwner.getBalanceOfResources(), activePlayerName,
 					activePlayer.getBalanceOfResources());
@@ -540,7 +540,7 @@ public class TurnLauncher {
 		switch (GUI.yesNoMenu()) {
 		case 1:
 			// Charge player for square
-			activePlayer.setBalanceOfResources(activePlayer.getBalanceOfResources() - standardSquare.getPurchaseCost());
+			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -standardSquare.getPurchaseCost());
 			// Update square owner
 			standardSquare.setOwnedBy(activePlayer);
 			// TODO resources name
@@ -656,7 +656,7 @@ public class TurnLauncher {
 		// checks if player is not bankrupt then calculates score
 		for (Player player : this.players) {
 			if (player.getBalanceOfResources() > 0) {
-				player.setBalanceOfResources(calculatePlayerWorth(player, board));
+				ModifyPlayerResources.modifyResourcesSinglePlayer(player, calculatePlayerWorth(player, board));
 			}
 		}
 

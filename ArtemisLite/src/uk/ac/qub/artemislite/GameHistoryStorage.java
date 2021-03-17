@@ -20,11 +20,10 @@ public class GameHistoryStorage {
 	 * adds a game history item to the game history
 	 * @param gameHistoryItem
 	 */
-	public static void addMoveToHistory(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction,
-			int resourceValue, int diceRollTotal) {
+	public static void addMoveToHistory(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction, int diceRollTotal) {
 		// create a history item object
 		
-		ghi = new GameHistoryItem(playerName, boardLandingPosition, gameHistoryAction, resourceValue, diceRollTotal);
+		ghi = new GameHistoryItem(playerName, boardLandingPosition, gameHistoryAction, diceRollTotal);
 		
 		// add this history item to the game history
 		gameHistory.add(ghi);

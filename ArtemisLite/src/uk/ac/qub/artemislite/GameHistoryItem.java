@@ -29,11 +29,6 @@ public class GameHistoryItem {
 	private GameHistoryAction gameHistoryAction;
 
 	/**
-	 * the value of the above gameHistoryAction transaction
-	 */
-	private int resourceValue;
-
-	/**
 	 * total dice roll
 	 */
 	private int diceRollTotal;
@@ -57,24 +52,22 @@ public class GameHistoryItem {
 	 * @param playerName
 	 * @param boardLandingPosition
 	 * @param gameHistoryAction
-	 * @param resourceValue
+	 * 
 	 */
-	public GameHistoryItem(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction,
-			int resourceValue, int diceRollTotal) {
+	public GameHistoryItem(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction, int diceRollTotal) {
 		this();
 		this.playerName = playerName;
 		this.boardLandingPosition = boardLandingPosition;
 		this.gameHistoryAction = gameHistoryAction;
-		this.resourceValue = resourceValue;
 		this.diceRollTotal = diceRollTotal;
 	}
 
 	public void displayAll() {
 		String historyOutput;
 
-		historyOutput = "On move: " + this.gameCounter + " Player: " + this.playerName + " rolled " + this.diceRollTotal
-				+ " and landed on element: " + this.boardLandingPosition + ", choosing to: "
-				+ this.gameHistoryAction.label + " costing: " + this.resourceValue + " resources\n";
+		historyOutput = "On move " + this.gameCounter + ", " + this.playerName + " rolled " + this.diceRollTotal
+				+ ", landing on element " + this.boardLandingPosition + " and "
+				+ this.gameHistoryAction.label + "\n";
 
 		System.out.print(historyOutput);
 	}
