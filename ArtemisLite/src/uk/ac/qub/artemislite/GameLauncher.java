@@ -88,7 +88,7 @@ public class GameLauncher {
 				System.out.printf("3. Begin Game\n");
 			}
 			if (players.size() == MAX_PLAYERS) {
-				System.out.printf("1. Begin Game\n2. Modify Existing Player\n");
+				System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Player\n");
 			}
 
 			switch (UserInput.getUserInputInt()) {

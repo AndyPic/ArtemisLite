@@ -54,12 +54,13 @@ public class Admin {
 
 		while (!GameLauncher.isGameOver()) {
 			
-			System.out.printf("It's "+turnLauncher.getActivePlayer().getName()+"'s turn.\n");
-			
-			System.out.printf("Date: April 2020\n");
-			
 			//TODO: method calls need cleaned up + this is duplicated code JD
-			System.out.printf("=====| PLAYER: %s |=====| RESOURCES: £%d |=====| LOCATION: %s |=====\n\n",turnLauncher.getActivePlayer().getName(),turnLauncher.getActivePlayer().getBalanceOfResources(), board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition()).getSquareName());
+			System.out.printf("=====| PLAYER: %s |=====| RESOURCES: £%d |=====| LOCATION: %s |=====\n",turnLauncher.getActivePlayer().getName(),turnLauncher.getActivePlayer().getBalanceOfResources(), board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition()).getSquareName());
+
+			//TODO: need to add dynamic date from ArtemisCalendar here.
+			System.out.printf("\nDate: April 2020\n");
+			
+			System.out.printf("\nIt's "+turnLauncher.getActivePlayer().getName()+"'s turn.\n");
 
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
@@ -69,18 +70,19 @@ public class Admin {
 
 				// Check if player owns any squares
 				boolean owner = Player.isOwner(board, turnLauncher.getActivePlayer());
-				
-				//TODO: need to add dynamic date from ArtemisCalendar here.
 
+				//TODO: method calls need cleaned up + this is duplicated code JD
+				System.out.printf("=====| PLAYER: %s |=====| RESOURCES: £%d |=====| LOCATION: %s |=====\n",turnLauncher.getActivePlayer().getName(),turnLauncher.getActivePlayer().getBalanceOfResources(), board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition()).getSquareName());
+				
+				System.out.println("\nPlease select one of the below options");
+				
 				// TODO also check if they have enough money to develop
 				if (owner) {
 					System.out.printf(
-							"\n[%s]\n=====| MENU |===== \n1. View all element ownership \n2. View my elements \n3. Get current square details \n4. Increase Development level \n5. End turn \n6. End game\n",
-							turnLauncher.getActivePlayer().getName());
+							"\n=====| MENU |===== \n1. View all element ownership \n2. View my elements \n3. Get current square details \n4. Increase Development level \n5. End turn \n6. End game\n");
 				} else {
 					System.out.printf(
-							"\n[%s]\n=====| MENU |===== \n1. View all element ownership \n2. Get current square details \n3. End turn \n4. End game\n",
-							turnLauncher.getActivePlayer().getName());
+							"\n=====| MENU |===== \n1. View all element ownership \n2. Get current square details \n3. End turn \n4. End game\n");
 
 				}
 
@@ -118,6 +120,7 @@ public class Admin {
 				case 5:
 					if (owner) {
 						turnLauncher.endTurn(board);
+						GUI.clearConsole(20);
 						break;
 					}
 

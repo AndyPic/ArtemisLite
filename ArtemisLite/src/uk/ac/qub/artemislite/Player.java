@@ -14,7 +14,7 @@ public class Player {
 	// Instance Vars
 
 	private String name;
-	private int balanceOfResources = 2001; // Set starting resources
+	private int balanceOfResources = 201; // Set starting resources
 	private int currentPosition = 0; // Set starting position
 
 	// Constructors
