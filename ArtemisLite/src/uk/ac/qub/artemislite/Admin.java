@@ -59,8 +59,8 @@ public class Admin {
 					turnLauncher.getActivePlayer().getName(), turnLauncher.getActivePlayer().getBalanceOfResources(),
 					board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition()).getSquareName());
 
-			// TODO: need to add dynamic date from ArtemisCalendar here.
-			System.out.printf("\nDate: April 2020\n");
+			System.out.printf("\nDate: %s, %s.\n", ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)),
+					ArtemisCalendar.getCalendar().get(1));
 
 			System.out.printf("\nIt's " + turnLauncher.getActivePlayer().getName() + "'s turn.\n");
 
@@ -145,7 +145,6 @@ public class Admin {
 
 					}
 
-					
 				} catch (BankruptException bankruptExc) {
 					// declare the game over at a BankruptException
 					bankruptExc.getLocalizedMessage();
