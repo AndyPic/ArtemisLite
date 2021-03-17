@@ -157,6 +157,13 @@ public class GameLauncher {
 	}
 	
 	/**
+	 * allow gameOver to be declared externally from 
+	 */
+	public static void declareGameOver() {
+		gameOver = true;
+	}
+	
+	/**
 	 * 
 	 * @param turnLauncher
 	 * @param board

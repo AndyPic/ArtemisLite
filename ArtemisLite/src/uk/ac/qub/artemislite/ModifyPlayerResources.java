@@ -27,7 +27,7 @@ public class ModifyPlayerResources {
 		if (newBalance < 0) {
 			// this is a game-over state! - need way of reaching Admin.GAME_OVER to set its state as true
 			// throw new exception as reminder!!
-			throw new BankruptException("Player: " + player.getName() + " is bankrupt!");
+			throw new BankruptException("Player: " + player.getName() + " is bankrupt");
 		} else {
 			player.setBalanceOfResources(newBalance);
 		}
@@ -48,7 +48,7 @@ public class ModifyPlayerResources {
 			if (newBalance < 0) {
 				// this is a game-over state! need way of reaching Admin.GAME_OVER to set its state as true
 				// throw new exception as reminder!!
-				throw new BankruptException("Player: " + player.getName() + " is bankrupt!");
+				throw new BankruptException("Player: " + player.getName() + " is bankrupt");
 			} else {
 				player.setBalanceOfResources(newBalance);
 			}

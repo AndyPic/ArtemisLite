@@ -58,14 +58,9 @@ public class GameHistoryItem {
 	}
 
 	public void displayAll() {
-		String historyOutput;
 
-		historyOutput = "On move " + this.gameCounter + ", " + this.playerName + " landed on element " + this.boardLandingPosition + " and "
-				+ this.gameHistoryAction.label + "\n";
-
-		System.out.print(historyOutput);
+		System.out.printf("Action number %3s. Location: element %2s. Player %s %s\n", this.gameCounter,
+				this.boardLandingPosition, this.playerName, this.gameHistoryAction.label);
 	}
-
-
 
 }

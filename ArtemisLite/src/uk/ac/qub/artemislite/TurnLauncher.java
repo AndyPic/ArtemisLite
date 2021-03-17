@@ -31,7 +31,7 @@ public class TurnLauncher {
 	private int turnNumber = 0;
 
 	private static boolean turnOver = false;
-	
+
 	// variable to hold a history of game moves, accessible at package level
 	protected GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
 
@@ -100,8 +100,9 @@ public class TurnLauncher {
 	public void findPlayerOrder() {
 
 		Player firstToPlay;
-		System.out.println("Lets roll the dice to find out who goes first...\n\nHint: when you see --> <-- just press enter!\n");
-		
+		System.out.println(
+				"Lets roll the dice to find out who goes first...\n\nHint: when you see --> <-- just press enter!\n");
+
 		firstToPlay = allPlayersRoll(players);
 
 		GUI.clearConsole(8);
@@ -292,7 +293,8 @@ public class TurnLauncher {
 		activePlayerName = activePlayer.getName();
 		playersWant = new ArrayList<Player>();
 		GUI.clearConsole(20);
-		System.out.printf("=====| AUCTION BEGINS |=====\n%s is being auctioned because %s %s\n", squareName, activePlayerName, reasonToAuction);
+		System.out.printf("=====| AUCTION BEGINS |=====\n%s is being auctioned because %s %s\n", squareName,
+				activePlayerName, reasonToAuction);
 
 		for (int loop = 0; loop < players.size(); loop++) {
 			// Do nothing if player is active player
@@ -349,8 +351,9 @@ public class TurnLauncher {
 			// Update player currency
 			ModifyPlayerResources.modifyResourcesSinglePlayer(highRollPlayer, -purchaseCost);
 			// add move to the game history
-			gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), highRollPlayer.getCurrentPosition(), GameHistoryAction.PURCHASE_THIS_ELEMENT);
-			
+			gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), highRollPlayer.getCurrentPosition(),
+					GameHistoryAction.PURCHASE_THIS_ELEMENT_AT_AUCTION);
+
 			// Update square ownership
 			standardSquare.setOwnedBy(highRollPlayer);
 
@@ -358,8 +361,8 @@ public class TurnLauncher {
 			System.out.printf("\n%s now owns %s, and has %d RESOURCES.\n", highRollPlayer.getName(), squareName,
 					highRollPlayer.getBalanceOfResources());
 		}
-		
-		//TODO: update UI for auction winner
+
+		// TODO: update UI for auction winner
 
 	}// END
 
@@ -402,7 +405,7 @@ public class TurnLauncher {
 		activePlayer.setCurrentPosition(newPos);
 
 		// TODO: method calls need cleaned up + this is duplicated code JD
-		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: �%d |=====| LOCATION: %s |=====\n",
+		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
 				getActivePlayer().getName(), getActivePlayer().getBalanceOfResources(),
 				board.getSquares().get(getActivePlayer().getCurrentPosition()).getSquareName());
 
@@ -412,8 +415,6 @@ public class TurnLauncher {
 			// TODO Resources for passing GO - needs doing properly!
 			System.out.println("\nYou passed GO +200 resources woooop!\n");
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
-			// add this move to the game history
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.GAIN_RESOURCES);
 		}
 
 		newSquare = board.getSquares().get(newPos);
@@ -434,7 +435,8 @@ public class TurnLauncher {
 		// TODO: we need the details shown to the player to be dynamic, currently all
 		// details are shown. No point showing dev costs of a square if it is already
 		// owned by another player JD
-		//TODO: should find some way to display all rent costs for a square rather than just the current one JD
+		// TODO: should find some way to display all rent costs for a square rather than
+		// just the current one JD
 		System.out.println(newSquare.toString());
 
 	} // END
@@ -469,12 +471,13 @@ public class TurnLauncher {
 						System.out.printf("%s and no other player have enough RESOURCES to buy %s.\n",
 								activePlayer.getName(), standardSquare.getSquareName());
 						// add a non-action move to gameHistory
-						gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.NO_ACTION);
+						gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+								GameHistoryAction.NO_ACTION);
 					}
 				}
 
 			}
-			
+
 		}
 		System.out.println("-----> CONTINUE <-----");
 		UserInput.getUserInputString();
@@ -483,10 +486,13 @@ public class TurnLauncher {
 
 	/**
 	 * Give player the option to charge rent from the active player
-	 * 
+	 *
 	 * @param standardSquare
+	 * @throws BankruptException whenever the deduction of resources causes the
+	 *                           player balance to become negative. Exception caught
+	 *                           in Admin
 	 */
-	public void chargeRent(StandardSquare standardSquare) {
+	public void chargeRent(StandardSquare standardSquare) throws BankruptException {
 		String activePlayerName, squareOwnerName;
 		int rentCost;
 		Player squareOwner;
@@ -519,8 +525,9 @@ public class TurnLauncher {
 			// Take rent off active player
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -rentCost);
 			// add move to game history
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.FORFEIT_RESOURCES);
-			
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+					GameHistoryAction.FORFEIT_RESOURCES);
+
 			// Give rent to square owner
 			ModifyPlayerResources.modifyResourcesSinglePlayer(squareOwner, rentCost);
 			System.out.printf("%s charged %s rent of [%d].\n%s now has [%d].\n%s now has [%d].\n", squareOwnerName,
@@ -530,7 +537,8 @@ public class TurnLauncher {
 		case 2:
 			System.out.printf("%s chose to not charge %s rent.\n", squareOwnerName, activePlayerName);
 			// add a non-action move to game history
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.NO_ACTION);
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+					GameHistoryAction.NO_ACTION);
 			break;
 		default:
 			System.out.println("Welp... that's not supposed to happen");
@@ -556,8 +564,9 @@ public class TurnLauncher {
 			// Charge player for square
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -standardSquare.getPurchaseCost());
 			// add move to game history
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.PURCHASE_THIS_ELEMENT);
-			
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+					GameHistoryAction.PURCHASE_THIS_ELEMENT);
+
 			// Update square owner
 			standardSquare.setOwnedBy(activePlayer);
 			// TODO resources name
@@ -568,7 +577,8 @@ public class TurnLauncher {
 			// Auction the square, doesn't want to buy
 			auctionSquare("doesn't want to buy it.", standardSquare);
 			// add a non-action move to game history
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.NO_ACTION);
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+					GameHistoryAction.NO_ACTION);
 			break;
 		}
 
@@ -621,9 +631,7 @@ public class TurnLauncher {
 		// TODO: do you think using "--> <--" every time the player need to press enter
 		// is
 		// intuitive enough? or do we need to write "press enter" every time
-		System.out.printf(
-				"\n=====| WINNER: %s |=====\n-----> CONTINUE <-----\n",
-				highestRollPlayer.getName());
+		System.out.printf("\n=====| WINNER: %s |=====\n-----> CONTINUE <-----\n", highestRollPlayer.getName());
 		UserInput.getUserInputString();
 
 		GUI.clearConsole(8);
@@ -732,14 +740,13 @@ public class TurnLauncher {
 	 * @param board
 	 */
 	public void gameOverSequence(Board board) {
-	
-		
+
 		if (board.allSystemComplete()) {
 			GUI.displayGameWonMessage();
 		} else {
 			GUI.displayGameLossMessage(board);
 		}
-		
+
 		// on completion, show a history of game moves
 		gameHistoryStorage.displayMoveHistory();
 

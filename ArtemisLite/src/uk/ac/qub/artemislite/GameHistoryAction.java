@@ -9,12 +9,12 @@ package uk.ac.qub.artemislite;
  */
 public enum GameHistoryAction {
 
-	GAIN_RESOURCES("gained 200 resources"),				// landing on the resources square
-	PURCHASE_THIS_ELEMENT("purchased this element"), 	// when landing on an unowned or auctioned square
-	DEVELOP_THIS_ELEMENT("developed this element"),		// develop this element 
-	DEVELOP_PORTFOLIO("developed portfolio"), 			// develop any owned element other than the current position
-	FORFEIT_RESOURCES("forfeit resources"), 			// when landing on a square owned by another player
-	NO_ACTION("did nothing"),							// when unable to purchase a square
+	PURCHASE_THIS_ELEMENT("purchased this element"), 						// when landing on an unowned square
+	PURCHASE_THIS_ELEMENT_AT_AUCTION("purchased this element at auction"), 	// when purchasing square at auction
+	DEVELOP_THIS_ELEMENT("developed this element"),							// develop this element 
+	DEVELOP_PORTFOLIO("developed portfolio"), 								// develop any owned element other than the current position
+	FORFEIT_RESOURCES("forfeit resources"), 								// when landing on a square owned by another player
+	NO_ACTION("took no action"),											// when unable to purchase a square
 	QUIT("quit");									
 	
 	// note, claim resources is not an value in this enum because
