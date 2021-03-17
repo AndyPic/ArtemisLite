@@ -53,7 +53,7 @@ public class GameLauncher {
 			}
 
 		} while (!validOption);
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class GameLauncher {
 
 		// Allow option to play a long game with greater initial resources
 		// or a short game with default resources
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 
 		int gameLengthInput;
 		do {
@@ -133,14 +133,14 @@ public class GameLauncher {
 			case 3:
 				// TODO update info with new balance changes
 				System.out.println("Some details about the different modes...");
-				GUI.clearConsole(8);
+				GUI.clearConsole(20);
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 			}
 		} while (gameLengthInput != 1 && gameLengthInput != 2);
 		
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 		
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
@@ -162,20 +162,6 @@ public class GameLauncher {
 	public static void declareGameOver() {
 		gameOver = true;
 	}
-	
-	/**
-	 * 
-	 * @param turnLauncher
-	 * @param board
-	 */
-	public static void endGame() {
-		
-		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
-		
-		if (GUI.yesNoMenu() == 1) {
-			gameOver = true;
-		}
-		
-	}
+
 
 }

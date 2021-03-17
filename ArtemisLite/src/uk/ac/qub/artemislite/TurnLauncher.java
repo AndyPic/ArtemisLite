@@ -79,7 +79,7 @@ public class TurnLauncher {
 
 		players.add(player);
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 
 	}
 
@@ -105,7 +105,7 @@ public class TurnLauncher {
 
 		firstToPlay = allPlayersRoll(players);
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 
 		// Rearranges the player array so that the correct player is first
 		while (firstToPlay != this.players.get(0)) {
@@ -116,7 +116,7 @@ public class TurnLauncher {
 		}
 
 		activePlayer = firstToPlay;
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 	}
 
 	/**
@@ -207,6 +207,22 @@ public class TurnLauncher {
 		player.setName(name);
 
 	}
+	
+	
+	/**
+	 * end game warning
+	 */
+	public void endGame() {
+		
+		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
+		
+		if (GUI.yesNoMenu() == 1) {
+			GameLauncher.declareGameOver();
+			//Set player bankrupt
+			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -activePlayer.getBalanceOfResources());
+		}
+		
+	}
 
 	/**
 	 * Modify or delete a player
@@ -239,7 +255,7 @@ public class TurnLauncher {
 		playerName = player.getName();
 		valid = true;
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 
 		do {
 			System.out.println("=====| PLAYER OPTIONS |=====" + "?\n1. Modify " + playerName + "\n2. Delete "
@@ -261,7 +277,7 @@ public class TurnLauncher {
 			}
 		} while (!valid);
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 	}
 
 	/**
@@ -607,7 +623,7 @@ public class TurnLauncher {
 			highestRoll = 0;
 
 			UserInput.getUserInputString();
-			GUI.clearConsole(8);
+			GUI.clearConsole(20);
 			for (Player player : playersToRoll) {
 				roll = rollDice();
 				playerRoll = getRollValue(roll);
@@ -634,7 +650,7 @@ public class TurnLauncher {
 		System.out.printf("\n=====| WINNER: %s |=====\n-----> CONTINUE <-----\n", highestRollPlayer.getName());
 		UserInput.getUserInputString();
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 		return highestRollPlayer;
 
 	}
@@ -788,5 +804,6 @@ public class TurnLauncher {
 	public static void setTurnOver(boolean turnOver) {
 		TurnLauncher.turnOver = turnOver;
 	}
+	
 
 }

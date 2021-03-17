@@ -122,7 +122,7 @@ public class Admin {
 							// Increase development level
 							System.out.println("Increase development level - Not yet implemented");
 						} else {
-							GameLauncher.endGame();
+							turnLauncher.endGame();
 							turnLauncher.endTurn(board);
 						}
 						break;
@@ -135,7 +135,7 @@ public class Admin {
 
 					case 6:
 						if (owner) {
-							GameLauncher.endGame();
+							turnLauncher.endGame();
 							turnLauncher.endTurn(board);
 							break;
 						}
