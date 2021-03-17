@@ -29,11 +29,6 @@ public class GameHistoryItem {
 	private GameHistoryAction gameHistoryAction;
 
 	/**
-	 * total dice roll
-	 */
-	private int diceRollTotal;
-
-	/**
 	 * default constructor
 	 */
 	public GameHistoryItem() {
@@ -54,30 +49,23 @@ public class GameHistoryItem {
 	 * @param gameHistoryAction
 	 * 
 	 */
-	public GameHistoryItem(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction, int diceRollTotal) {
+	public GameHistoryItem(String playerName, int boardLandingPosition, GameHistoryAction gameHistoryAction) {
+		// explicitly call default constructor to ensure game counter is incremented
 		this();
 		this.playerName = playerName;
 		this.boardLandingPosition = boardLandingPosition;
 		this.gameHistoryAction = gameHistoryAction;
-		this.diceRollTotal = diceRollTotal;
 	}
 
 	public void displayAll() {
 		String historyOutput;
 
-		historyOutput = "On move " + this.gameCounter + ", " + this.playerName + " rolled " + this.diceRollTotal
-				+ ", landing on element " + this.boardLandingPosition + " and "
+		historyOutput = "On move " + this.gameCounter + ", " + this.playerName + " landed on element " + this.boardLandingPosition + " and "
 				+ this.gameHistoryAction.label + "\n";
 
 		System.out.print(historyOutput);
 	}
 
-	public int getDiceRollTotal() {
-		return diceRollTotal;
-	}
 
-	public void setDiceRollTotal(int diceRollTotal) {
-		this.diceRollTotal = diceRollTotal;
-	}
 
 }

@@ -31,6 +31,9 @@ public class TurnLauncher {
 	private int turnNumber = 0;
 
 	private static boolean turnOver = false;
+	
+	// variable to hold a history of game moves, accessible at package level
+	protected GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
 
 	// Constructors
 
@@ -345,6 +348,8 @@ public class TurnLauncher {
 
 			// Update player currency
 			ModifyPlayerResources.modifyResourcesSinglePlayer(highRollPlayer, -purchaseCost);
+			// add move to the game history
+			gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), highRollPlayer.getCurrentPosition(), GameHistoryAction.PURCHASE_THIS_ELEMENT);
 			
 			// Update square ownership
 			standardSquare.setOwnedBy(highRollPlayer);
@@ -407,6 +412,8 @@ public class TurnLauncher {
 			// TODO Resources for passing GO - needs doing properly!
 			System.out.println("\nYou passed GO +200 resources woooop!\n");
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
+			// add this move to the game history
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.GAIN_RESOURCES);
 		}
 
 		newSquare = board.getSquares().get(newPos);
@@ -461,6 +468,8 @@ public class TurnLauncher {
 					} else if (loop == (players.size() - 1)) {
 						System.out.printf("%s and no other player have enough RESOURCES to buy %s.\n",
 								activePlayer.getName(), standardSquare.getSquareName());
+						// add a non-action move to gameHistory
+						gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.NO_ACTION);
 					}
 				}
 
@@ -509,6 +518,9 @@ public class TurnLauncher {
 		case 1:
 			// Take rent off active player
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -rentCost);
+			// add move to game history
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.FORFEIT_RESOURCES);
+			
 			// Give rent to square owner
 			ModifyPlayerResources.modifyResourcesSinglePlayer(squareOwner, rentCost);
 			System.out.printf("%s charged %s rent of [%d].\n%s now has [%d].\n%s now has [%d].\n", squareOwnerName,
@@ -517,6 +529,8 @@ public class TurnLauncher {
 			break;
 		case 2:
 			System.out.printf("%s chose to not charge %s rent.\n", squareOwnerName, activePlayerName);
+			// add a non-action move to game history
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.NO_ACTION);
 			break;
 		default:
 			System.out.println("Welp... that's not supposed to happen");
@@ -541,6 +555,9 @@ public class TurnLauncher {
 		case 1:
 			// Charge player for square
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -standardSquare.getPurchaseCost());
+			// add move to game history
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.PURCHASE_THIS_ELEMENT);
+			
 			// Update square owner
 			standardSquare.setOwnedBy(activePlayer);
 			// TODO resources name
@@ -550,6 +567,8 @@ public class TurnLauncher {
 		case 2:
 			// Auction the square, doesn't want to buy
 			auctionSquare("doesn't want to buy it.", standardSquare);
+			// add a non-action move to game history
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.NO_ACTION);
 			break;
 		}
 
@@ -713,12 +732,16 @@ public class TurnLauncher {
 	 * @param board
 	 */
 	public void gameOverSequence(Board board) {
-
+	
+		
 		if (board.allSystemComplete()) {
 			GUI.displayGameWonMessage();
 		} else {
 			GUI.displayGameLossMessage(board);
 		}
+		
+		// on completion, show a history of game moves
+		gameHistoryStorage.displayMoveHistory();
 
 		if (this.players.size() > 0) {
 			endingPlayerScore(board);
