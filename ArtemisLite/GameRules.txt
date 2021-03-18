@@ -1,0 +1,33 @@
+Game Rules: 
+
+Game Objective:
+The game is won when all elements on the board have been fully developed and the Artemis mission os ready to launch.
+When a player runs out of resources they are bankrupted, the game will end and scores will be calculated to find the most successful player.
+Can your team acquire and fully develop all of the systems needed for a successful Lift-off? or will you just be in it for personal gain?
+
+Components:
+A board that contains 4 systems, 1 resource square and 1 blank square.
+Each system consists of 2 or 3 elements, each of which can have 3 minor developments and 1 major development.
+The game contains 2 of 6-sided dice.
+
+Setup:
+1. Between 2 and 4 playes can be added to the game and can decide thier own player name. 
+2. Players can select either a Long or Short game. A short game will reduce the players ability to ear resources. 
+3. Each player rolls the dice, highest roll goes first. 
+
+Game Play:
+1. The dice are thrown and the player moves by the number of elements indicated.
+2. If the element is unowned then the player will be given the option to but it. If they cannot afford the element or do not what to buy it then it will be offered to all other players at the origional cost.
+3. If the element is owned by another player they may be required to pay increasing rent costs depending on the specific element.
+4. The player will then be presented with other possible options for thier turn such as viewing free elements or increasing development level of a element.
+
+Resource Square:
+Any player that lands on or passes the resource square will be rewarded £200 for a normal game or £100 for a long game.
+
+Free Square:
+If a player lands on this square no further action is required and they will not be charged any rent cost.
+
+Bankrupt:
+A player is declared bankrupt if they owe more money than they can pay to another player. Players my not borrow or lend money however they can choose not to chage rent for their elements.
+
+_________________________________________________________________________________________________________
