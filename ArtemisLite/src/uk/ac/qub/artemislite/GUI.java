@@ -184,4 +184,6 @@ public class GUI implements Runnable {
 		return (currentProgress / totalCost) * 100;
 	} // END
 
+
+	
 }

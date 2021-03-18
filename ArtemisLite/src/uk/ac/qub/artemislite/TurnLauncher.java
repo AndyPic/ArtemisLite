@@ -420,10 +420,7 @@ public class TurnLauncher {
 		// Update player position
 		activePlayer.setCurrentPosition(newPos);
 
-		// TODO: method calls need cleaned up + this is duplicated code JD
-		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
-				getActivePlayer().getName(), getActivePlayer().getBalanceOfResources(),
-				board.getSquares().get(getActivePlayer().getCurrentPosition()).getSquareName());
+		GameLauncher.mainHeadder();
 
 		System.out.printf("\nYou %s\n", roll);
 

@@ -26,7 +26,7 @@ public class GameLauncher {
 	 */
 	public static void introMessage() {
 		// Intro message
-		//TODO: can this be made static? 
+		// TODO: can this be made static?
 		GUI introMessage = new GUI();
 		BufferedInterrupter buffInter = new BufferedInterrupter();
 		Thread introThread = new Thread(introMessage);
@@ -55,9 +55,8 @@ public class GameLauncher {
 	 * Game starting Menu
 	 */
 	public static void startMenu() {
-		boolean validOption = false;
 
-		System.out.println("Welcome to Artemis Lite");
+		boolean gameBegin = false;
 
 		do {
 
@@ -68,7 +67,7 @@ public class GameLauncher {
 			// (e.g.'Start game')
 			switch (UserInput.getUserInputInt()) {
 			case 1:
-				validOption = true;
+				gameBegin = true;
 				break;
 			case 2:
 				// TODO: Game rules method needed JD
@@ -78,14 +77,15 @@ public class GameLauncher {
 				System.out.println("Are you sure you want to quit the game?");
 				if (GUI.yesNoMenu() == 1) {
 					declareGameOver();
-					validOption = true;
+					gameBegin = true;
 				}
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 			}
 
-		} while (!validOption);
+		} while (!gameBegin);
+
 		GUI.clearConsole(20);
 
 		if (!gameOver) {
@@ -101,96 +101,100 @@ public class GameLauncher {
 	 */
 	public static void startGame() {
 
+		System.out.println("Now its time to add players. This game supports between " + MIN_PLAYERS + " and "
+				+ MAX_PLAYERS + " players.");
+
+		createPlayers();
+
+		int gameLengthInput;
+		do {
+			System.out.println("\n=====| MENU |=====\n1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
+			gameLengthInput = UserInput.getUserInputInt();
+			switch (gameLengthInput) {
+			case 1:
+				break;
+			case 2:
+				turnLauncher.setupLongGame();
+				break;
+			case 3:
+				// TODO update info with new balance changes
+				System.out.println("Some details about the different modes...");
+				GUI.clearConsole(20);
+				break;
+			default:
+				System.out.println("Invalid Menu Option, please try again");
+			}
+		} while (gameLengthInput != 1 && gameLengthInput != 2);
+
+		GUI.clearConsole(20);
+
+		// finds the order that players will take their turn
+		turnLauncher.findPlayerOrder();
+
+		// Game Loop
+		GameLauncher.gameLoop();
+
+	}
+
+	/**
+	 * runs menu to setup new players / modify existing
+	 */
+	public static void createPlayers() {
+		ArrayList<Player> players;
 		boolean start = false;
+		int numOfPlayers;
 
-		if (!gameOver) {
+		while (!start) {
+			
+			players = turnLauncher.getPlayers();
+			numOfPlayers = players.size();
 
-			System.out.println("Now its time to add players. This game supports between " + MIN_PLAYERS + " and "
-					+ MAX_PLAYERS + " players.");
+			if (numOfPlayers > 0) {
+				System.out.println("\n=====| PLAYERS |=====");
+				turnLauncher.displayPlayers();
+			}
 
-			do {
-				ArrayList<Player> players = turnLauncher.getPlayers();
+			System.out.printf("\n=====| MENU |=====\n");
 
-				if (turnLauncher.players.size() > 0) {
-					System.out.println("\n=====| PLAYERS |=====");
-					turnLauncher.displayPlayers();
+			if (numOfPlayers < MAX_PLAYERS) {
+				System.out.printf("1. Add New Player\n");
+			}
+			if (numOfPlayers >= 1 && players.size() < MAX_PLAYERS) {
+				System.out.printf("2. Modify Existing Player\n");
+			}
+			if (numOfPlayers >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
+				System.out.printf("3. Begin Game\n");
+			}
+			if (numOfPlayers == MAX_PLAYERS) {
+				System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Player\n");
+			}
+
+			switch (UserInput.getUserInputInt()) {
+			case 1:
+				if (numOfPlayers < MAX_PLAYERS) {
+					turnLauncher.addPlayer();
+				} else {
+					start = true;
 				}
-
-				System.out.printf("\n=====| MENU |=====\n");
-
-				if (players.size() < MAX_PLAYERS) {
-					System.out.printf("1. Add New Player\n");
-				}
-				if (players.size() >= 1 && players.size() < MAX_PLAYERS) {
-					System.out.printf("2. Modify Existing Player\n");
-				}
-				if (players.size() >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
-					System.out.printf("3. Begin Game\n");
-				}
-				if (players.size() == MAX_PLAYERS) {
-					System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Player\n");
-				}
-
-				switch (UserInput.getUserInputInt()) {
-				case 1:
-					if (players.size() < MAX_PLAYERS) {
-						turnLauncher.addPlayer();
-					} else {
-						start = true;
-					}
+				break;
+			case 2:
+				if (numOfPlayers >= 1) {
+					turnLauncher.modifyPlayer();
+					// break inside if, so fall through to default !if
 					break;
-				case 2:
-					if (players.size() >= 1) {
-						turnLauncher.modifyPlayer();
-						// break inside if, so fall through to default !if
-						break;
-					}
-				case 3:
-					if (players.size() >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
-						start = true;
-						break;
-					}
-				default:
-					System.out.println("Invalid Menu Option, please try again");
 				}
-
-			} while (!start);
-
-			// Allow option to play a long game with greater initial resources
-			// or a short game with default resources
-			GUI.clearConsole(20);
-
-			int gameLengthInput;
-			do {
-				System.out
-						.println("\n=====| MENU |=====\n1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
-				gameLengthInput = UserInput.getUserInputInt();
-				switch (gameLengthInput) {
-				case 1:
+			case 3:
+				if (numOfPlayers >= MIN_PLAYERS && numOfPlayers < MAX_PLAYERS) {
+					start = true;
 					break;
-				case 2:
-					turnLauncher.setupLongGame();
-					break;
-				case 3:
-					// TODO update info with new balance changes
-					System.out.println("Some details about the different modes...");
-					GUI.clearConsole(20);
-					break;
-				default:
-					System.out.println("Invalid Menu Option, please try again");
 				}
-			} while (gameLengthInput != 1 && gameLengthInput != 2);
-
-			GUI.clearConsole(20);
-
-			// finds the order that players will take their turn
-			turnLauncher.findPlayerOrder();
+			default:
+				System.out.println("Invalid Menu Option, please try again");
+			}
 
 		}
-		
-		//Game Loop
-		GameLauncher.gameLoop();
-		
+
+		GUI.clearConsole(20);
 	}
 
 	/**
@@ -200,10 +204,7 @@ public class GameLauncher {
 
 		while (!gameOver) {
 
-			// TODO: method calls need cleaned up + this is duplicated code JD
-			System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
-					turnLauncher.getActivePlayer().getName(), turnLauncher.getActivePlayer().getBalanceOfResources(),
-					board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition()).getSquareName());
+			mainHeadder();
 
 			System.out.printf("\nDate: %s, %s.\n", ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)),
 					ArtemisCalendar.getCalendar().get(1));
@@ -219,11 +220,7 @@ public class GameLauncher {
 				// Check if player owns any squares
 				boolean owner = Player.isOwner(board, turnLauncher.getActivePlayer());
 
-				// TODO: method calls need cleaned up + this is duplicated code JD
-				System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
-						turnLauncher.getActivePlayer().getName(),
-						turnLauncher.getActivePlayer().getBalanceOfResources(),
-						board.getSquares().get(turnLauncher.getActivePlayer().getCurrentPosition()).getSquareName());
+				mainHeadder();
 
 				System.out.println("\nPlease select one of the below options");
 
@@ -317,6 +314,8 @@ public class GameLauncher {
 			GUI.displayGameLossMessage(board);
 		}
 
+		// TODO:bug, message is being displayed even when there is no game history to
+		// show
 		// on completion, show a history of game moves
 		turnLauncher.gameHistoryStorage.displayMoveHistory();
 
@@ -325,9 +324,25 @@ public class GameLauncher {
 		}
 
 	}
-	
+
+	/**
+	 * sets the game over state
+	 */
 	public static void declareGameOver() {
 		gameOver = true;
+	}
+
+	/**
+	 * main UI display headder
+	 */
+	public static void mainHeadder() {
+
+		Player activePlayer = turnLauncher.getActivePlayer();
+
+		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
+				activePlayer.getName(), activePlayer.getBalanceOfResources(),
+				board.getSquares().get(activePlayer.getCurrentPosition()).getSquareName());
+
 	}
 
 }
