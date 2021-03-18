@@ -751,28 +751,6 @@ public class TurnLauncher {
 	}
 
 	/**
-	 * Runs correct game-over sequence depending on win or loss
-	 * 
-	 * @param board
-	 */
-	public void gameOverSequence(Board board) {
-
-		if (board.allSystemComplete()) {
-			GUI.displayGameWonMessage();
-		} else {
-			GUI.displayGameLossMessage(board);
-		}
-
-		// on completion, show a history of game moves
-		gameHistoryStorage.displayMoveHistory();
-
-		if (this.players.size() > 0) {
-			endingPlayerScore(board);
-		}
-
-	}
-
-	/**
 	 * Method to end the current players turn.
 	 * 
 	 * @param board

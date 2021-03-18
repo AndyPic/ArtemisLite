@@ -118,23 +118,22 @@ public class GUI implements Runnable {
 
 		do {
 			userInput = UserInput.getUserInputString().trim().toLowerCase();
-
-			// Inelegant fix to trying to perform charAt on an empty String
-			userInput += "x";
-
-			switch (userInput.charAt(0)) {
-			case '1':
-			case 'y':
-				userInt = 1;
-				valid = true;
-				break;
-			case '2':
-			case 'n':
-				userInt = 2;
-				valid = true;
-				break;
-			default:
-				System.out.println("Invalid input - please try again");
+			
+			if(userInput.length()>0) {
+				switch (userInput.charAt(0)) {
+				case '1':
+				case 'y':
+					userInt = 1;
+					valid = true;
+					break;
+				case '2':
+				case 'n':
+					userInt = 2;
+					valid = true;
+					break;
+				default:
+					System.out.println("Invalid input - please try again");
+				}
 			}
 
 		} while (!valid);
