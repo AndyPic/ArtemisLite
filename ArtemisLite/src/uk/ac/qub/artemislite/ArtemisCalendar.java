@@ -127,4 +127,11 @@ public class ArtemisCalendar extends GregorianCalendar {
 		return calendar;
 	}
 
+	/**
+	 * Displays current game date
+	 */
+	public static void displayDate() {
+		System.out.printf("\nDate: %s, %s.\n", getMonthName(getCalendar().get(2)), getCalendar().get(1));
+	}
+
 }

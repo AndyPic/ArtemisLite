@@ -17,6 +17,7 @@ public class GameLauncher {
 
 	private final static int MIN_PLAYERS = 2;
 	private final static int MAX_PLAYERS = 4;
+	private final static String MENU_HEADER = "\n=====| MENU |=====\n";
 
 	// Sets game-over, main game loop
 	private static boolean gameOver = false;
@@ -60,7 +61,7 @@ public class GameLauncher {
 
 		do {
 
-			System.out.println("\n=====| MENU |=====\nHint: you can select a menu option by entering a number: (e.g. 1)"
+			System.out.println(MENU_HEADER + "Hint: you can select a menu option by entering a number: (e.g. 1)"
 					+ "\n1.Start Game" + "\n2.Show Game Rules" + "\n3.Quit Game");
 
 			// TODO: Should we change this so all menus accept a String as valid also? JD
@@ -108,7 +109,7 @@ public class GameLauncher {
 
 		int gameLengthInput;
 		do {
-			System.out.println("\n=====| MENU |=====\n1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
+			System.out.println(MENU_HEADER + "1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
 			gameLengthInput = UserInput.getUserInputInt();
 			switch (gameLengthInput) {
 			case 1:
@@ -145,16 +146,16 @@ public class GameLauncher {
 		int numOfPlayers;
 
 		while (!start) {
-			
+
 			players = turnLauncher.getPlayers();
 			numOfPlayers = players.size();
 
 			if (numOfPlayers > 0) {
-				System.out.println("\n=====| PLAYERS |=====");
+				System.out.print(MENU_HEADER);
 				turnLauncher.displayPlayers();
 			}
 
-			System.out.printf("\n=====| MENU |=====\n");
+			System.out.print(MENU_HEADER);
 
 			if (numOfPlayers < MAX_PLAYERS) {
 				System.out.printf("1. Add New Player\n");
@@ -206,97 +207,14 @@ public class GameLauncher {
 
 			mainHeadder();
 
-			System.out.printf("\nDate: %s, %s.\n", ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)),
-					ArtemisCalendar.getCalendar().get(1));
+			ArtemisCalendar.displayDate();
 
 			System.out.printf("\nIt's " + turnLauncher.getActivePlayer().getName() + "'s turn.\n");
 
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
-
-			TurnLauncher.setTurnOver(false);
-			while (!TurnLauncher.isEndTurn()) {
-
-				// Check if player owns any squares
-				boolean owner = Player.isOwner(board, turnLauncher.getActivePlayer());
-
-				mainHeadder();
-
-				System.out.println("\nPlease select one of the below options");
-
-				// TODO also check if they have enough money to develop
-				if (owner) {
-					System.out.printf(
-							"\n=====| MENU |===== \n1. View all element ownership \n2. View my elements \n3. Get current square details \n4. Increase Development level \n5. End turn \n6. End game\n");
-				} else {
-					System.out.printf(
-							"\n=====| MENU |===== \n1. View all element ownership \n2. Get current square details \n3. End turn \n4. End game\n");
-
-				}
-
-				// surround with try / catch to catch BankruptcyException when modifying player
-				// resources would result in a negative balance
-				try {
-
-					// TODO clean up a bit, code duplication, own method?
-					switch (UserInput.getUserInputInt()) {
-
-					case 1:
-						board.viewElementOwnership();
-						break;
-					case 2:
-
-						if (owner) {
-							board.viewMyElements(turnLauncher.getActivePlayer());
-						} else {
-							turnLauncher.getActivePlayer().getCurrentPositionDetails(board);
-						}
-
-						break;
-					case 3:
-						if (owner) {
-							turnLauncher.getActivePlayer().getCurrentPositionDetails(board);
-						} else {
-							turnLauncher.endTurn(board);
-						}
-						break;
-					case 4:
-						if (owner) {
-							// Increase development level
-							System.out.println("Increase development level - Not yet implemented");
-						} else {
-							turnLauncher.endGame();
-							turnLauncher.endTurn(board);
-						}
-						break;
-					case 5:
-						if (owner) {
-							turnLauncher.endTurn(board);
-							GUI.clearConsole(20);
-							break;
-						}
-
-					case 6:
-						if (owner) {
-							turnLauncher.endGame();
-							turnLauncher.endTurn(board);
-							break;
-						}
-
-					default:
-						System.out.println("Invalid option - try again");
-
-					}
-
-				} catch (BankruptException bankruptExc) {
-					// declare the game over at a BankruptException
-					bankruptExc.getLocalizedMessage();
-					declareGameOver();
-				}
-			}
-
-			GUI.clearConsole(2);
-
+			turnLauncher.playerTurnMenu(board);
+			
 		}
 
 	}
@@ -343,6 +261,13 @@ public class GameLauncher {
 				activePlayer.getName(), activePlayer.getBalanceOfResources(),
 				board.getSquares().get(activePlayer.getCurrentPosition()).getSquareName());
 
+	}
+
+	/**
+	 * @return the menuHeader
+	 */
+	public static String getMenuHeader() {
+		return MENU_HEADER;
 	}
 
 }

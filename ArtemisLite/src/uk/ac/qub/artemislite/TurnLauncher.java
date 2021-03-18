@@ -754,7 +754,7 @@ public class TurnLauncher {
 	 */
 	public void endTurn(Board board) {
 
-		int activePlayerIndex = players.indexOf(getActivePlayer());
+		int activePlayerIndex = players.indexOf(activePlayer);
 
 		if (activePlayerIndex != players.size() - 1) {
 			setActivePlayer(players.get(activePlayerIndex + 1));
@@ -779,6 +779,95 @@ public class TurnLauncher {
 	public static void setTurnOver(boolean turnOver) {
 		TurnLauncher.turnOver = turnOver;
 	}
+	
+	public void playerTurnMenu(Board board) {
+		TurnLauncher.setTurnOver(false);
+		while (!TurnLauncher.isEndTurn()) {
+
+			// Check if player owns any squares
+			boolean owner = Player.isOwner(board, getActivePlayer());
+
+			GameLauncher.mainHeadder();
+
+			System.out.println("\nPlease select one of the below options");
+
+			// TODO also check if they have enough money to develop
+			if (owner) {
+				System.out.print(GameLauncher.getMenuHeader()
+						+ "1. View all element ownership \n2. View my elements \n3. Get current square details \n4. Increase Development level \n5. End turn \n6. End game\n");
+			} else {
+				System.out.print(GameLauncher.getMenuHeader()
+						+ "1. View all element ownership \n2. Get current square details \n3. End turn \n4. End game\n");
+
+			}
+
+			// surround with try / catch to catch BankruptcyException when modifying player
+			// resources would result in a negative balance
+			try {
+
+				// TODO clean up a bit, code duplication, own method?
+				switch (UserInput.getUserInputInt()) {
+
+				case 1:
+					board.viewElementOwnership();
+					break;
+				case 2:
+
+					if (owner) {
+						board.viewMyElements(getActivePlayer());
+					} else {
+						getActivePlayer().getCurrentPositionDetails(board);
+					}
+
+					break;
+				case 3:
+					if (owner) {
+						getActivePlayer().getCurrentPositionDetails(board);
+					} else {
+						endTurn(board);
+					}
+					break;
+				case 4:
+					if (owner) {
+						// Increase development level
+						System.out.println("Increase development level - Not yet implemented");
+					} else {
+						endGame();
+						endTurn(board);
+					}
+					break;
+				case 5:
+					if (owner) {
+						endTurn(board);
+						GUI.clearConsole(20);
+						break;
+					}
+
+				case 6:
+					if (owner) {
+						endGame();
+						endTurn(board);
+						break;
+					}
+
+				default:
+					System.out.println("Invalid option - try again");
+
+				}
+
+			} catch (BankruptException bankruptExc) {
+				// declare the game over at a BankruptException
+				bankruptExc.getLocalizedMessage();
+				GameLauncher.declareGameOver();
+			}
+		}
+
+		GUI.clearConsole(2);
+
+	}
+	
+	
+	
 	
 
 }
