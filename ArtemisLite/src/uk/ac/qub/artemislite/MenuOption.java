@@ -7,23 +7,21 @@ package uk.ac.qub.artemislite;
  */
 public enum MenuOption {
 
-	VIEW_ALL_ELEMENTS ("View all elements", true),
-	VIEW_PLAYER_ELEMENTS ("View elements you own", true),
-	GET_SQUARE_DETAILS ("Get current element details", true),
-	INCREASE_DEVELOPMENT ("Increase element development", false),
-	END_TURN ("End your turn", true),
-	END_GAME ("End the game", true);
+	VIEW_ALL_ELEMENTS ("View all elements"),
+	VIEW_PLAYER_ELEMENTS ("View elements you own"),
+	GET_SQUARE_DETAILS ("Get current element details"),
+	INCREASE_DEVELOPMENT ("Increase element development"),
+	END_TURN ("End your turn"),
+	END_GAME ("End the game");
 	
 	private final String menuOption;
-	private final boolean defaultState;
-	
+
 	/**
 	 * 
 	 * @param menuOption
 	 */
-	private MenuOption(String menuOption, boolean defaultState) {
+	private MenuOption(String menuOption) {
 		this.menuOption = menuOption;
-		this.defaultState = defaultState;
 	}
 	
 	/**
@@ -32,10 +30,6 @@ public enum MenuOption {
 	 */
 	public String getMenuOption() {
 		return this.menuOption;
-	}
-	
-	public boolean getDefaultState() {
-		return this.defaultState;
 	}
 	
 }

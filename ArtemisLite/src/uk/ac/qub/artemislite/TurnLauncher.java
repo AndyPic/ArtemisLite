@@ -43,7 +43,7 @@ public class TurnLauncher {
 		this.menu = new LinkedHashMap<MenuOption, Boolean>();
 
 		for (MenuOption menuOption : MenuOption.values()) {
-			menu.put(menuOption, menuOption.getDefaultState());
+			menu.put(menuOption, true);
 		}
 
 	}
@@ -707,14 +707,18 @@ public class TurnLauncher {
 
 		int activePlayerIndex = players.indexOf(activePlayer);
 
-		if (activePlayerIndex != players.size() - 1) {
-			setActivePlayer(players.get(activePlayerIndex + 1));
-		} else {
-			setActivePlayer(players.get(0));
-			roundEnd(board);
-		}
-		turnOver = true;
+		System.out.println("Are you sure you want to end your turn?");
 
+		if (GUI.yesNoMenu() == 1) {
+
+			if (activePlayerIndex != players.size() - 1) {
+				setActivePlayer(players.get(activePlayerIndex + 1));
+			} else {
+				setActivePlayer(players.get(0));
+				roundEnd(board);
+			}
+			turnOver = true;
+		}
 	}
 
 	/**
@@ -724,15 +728,19 @@ public class TurnLauncher {
 		return turnOver;
 	}
 
+	/**
+	 * Displays the menu for a players turn
+	 * 
+	 * @param board
+	 */
 	public void playerTurnMenu(Board board) {
 		turnOver = false;
 		while (!turnOver) {
-
+			// TODO: refactor needed JD
 			int menuNum, userInput;
 			boolean validUserInput;
 			MenuOption userMenuSelection;
 			ArrayList<MenuOption> keysList = new ArrayList<MenuOption>();
-			;
 
 			GameLauncher.mainHeadder();
 
@@ -741,8 +749,8 @@ public class TurnLauncher {
 			menuNum = 1;
 			validUserInput = false;
 
-			System.out.print(GameLauncher.getMenuHeader());
-			
+			System.out.printf("\nPlease select one of the following options:\n%s", GameLauncher.getMenuHeader());
+
 			for (Entry<MenuOption, Boolean> option : menu.entrySet()) {
 				if (option.getValue()) {
 					System.out.printf("%s. %s\n", menuNum++, option.getKey().getMenuOption());
@@ -754,7 +762,7 @@ public class TurnLauncher {
 			do {
 				userInput = UserInput.getUserInputInt();
 
-				if (userInput > 0 && userInput < keysList.size()) {
+				if (userInput > 0 && userInput <= keysList.size()) {
 					validUserInput = true;
 				} else {
 					System.out.println("Invalid option - try again");
@@ -762,7 +770,7 @@ public class TurnLauncher {
 
 			} while (!validUserInput);
 
-			userMenuSelection = keysList.get(userInput);
+			userMenuSelection = keysList.get(userInput-1);
 
 			// surround with try / catch to catch BankruptcyException when modifying player
 			// resources would result in a negative balance
@@ -777,7 +785,7 @@ public class TurnLauncher {
 				} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
 					// TODO also check if they have enough money to develop
 					// Increase development level
-					// this should really be its own method, but I couldn't fix the
+					// TODO: this should really be its own method, but I couldn't fix the
 					// static/non-static thing-JSM
 					boolean developing = true;
 
@@ -845,17 +853,25 @@ public class TurnLauncher {
 
 		// check if player can dev
 		boolean canDevelop = false;
+		boolean ownsElement = false;
 		for (Square square : board.getSquares()) {
 			if (square instanceof StandardSquare) {
 				StandardSquare stdSquare = (StandardSquare) square;
 
+				if (stdSquare.isOwnedBy(activePlayer)) {
+					ownsElement = true;
+				}
+
 				if (stdSquare.isOwnedBy(activePlayer) && !stdSquare.isMaxDevelopment()) {
 					canDevelop = true;
-					break;
 				}
+
 			}
 		}
 		menu.put(MenuOption.INCREASE_DEVELOPMENT, canDevelop);
+		menu.put(MenuOption.VIEW_PLAYER_ELEMENTS, ownsElement);
+
+		// check if player owns property
 
 	}
 

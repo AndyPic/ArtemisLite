@@ -94,7 +94,7 @@ public class GameLauncher {
 		GUI.clearConsole(20);
 
 		if (!gameOver) {
-			GameLauncher.startGame();
+			startGame();
 		}
 
 	}
@@ -102,20 +102,20 @@ public class GameLauncher {
 	public static void showGameRules() {
 		File file = new File("GameRules.txt");
 		String line;
-		
+
 		GUI.clearConsole(20);
-		
+
 		try {
 			FileReader fileReader = new FileReader(file);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			
+
 			line = bufferedReader.readLine();
-			
-			while(line!=null) {
+
+			while (line != null) {
 				System.out.println(line);
 				line = bufferedReader.readLine();
 			}
-			
+
 			bufferedReader.close();
 			fileReader.close();
 
@@ -128,7 +128,7 @@ public class GameLauncher {
 		} catch (Exception e) {
 			System.out.println("A error has occured, please restart the app");
 		}
-		
+
 	}
 
 	/**
@@ -168,8 +168,7 @@ public class GameLauncher {
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
 
-		// Game Loop
-		GameLauncher.gameLoop();
+		gameLoop();
 
 	}
 
