@@ -111,8 +111,8 @@ public class ArtemisCalendar extends GregorianCalendar {
 	public static String getMonthName(int month) {
 
 		String monthName = new DateFormatSymbols().getMonths()[month];
-		// Capitalise the 1st letter
-		monthName = monthName.substring(0, 1).toUpperCase() + monthName.substring(1).toLowerCase();
+
+		GUI.capitaliseFirstLetter(monthName);
 
 		return monthName;
 	}
