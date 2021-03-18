@@ -45,12 +45,12 @@ public class Player {
 	 * @param player
 	 * @return
 	 */
-	public static boolean isOwner(Board board, Player player) {
+	public boolean isOwner(Board board) {
 
 		for (int loop = 0; loop < board.getSquares().size(); loop++) {
 			if (board.getSquares().get(loop) instanceof StandardSquare) {
 				StandardSquare stSq = (StandardSquare) board.getSquares().get(loop);
-				if (stSq.getOwnedBy() == player) {
+				if (stSq.getOwnedBy() == this) {
 					return true;
 				}
 			}

@@ -16,7 +16,9 @@ public class Admin {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-
+		
+		GameLauncher gameLauncher = new GameLauncher();
+		
 		TurnLauncher turnLauncher = new TurnLauncher();
 
 		// create Board
@@ -31,7 +33,6 @@ public class Admin {
 		System.out.println("== Hit enter to skip intro ==\n");
 
 		introThread.start();
-
 		inputThread.start();
 
 		// interrupt introThread if still running on input
@@ -46,10 +47,10 @@ public class Admin {
 		GUI.clearConsole(1);
 
 		// Runs game start Menu
-		GameLauncher.startMenu();
+		gameLauncher.startMenu();
 
 		if (!GameLauncher.isGameOver()) {
-			GameLauncher.startGame(turnLauncher);
+			gameLauncher.startGame(turnLauncher);
 		}
 
 		while (!GameLauncher.isGameOver()) {
@@ -68,10 +69,10 @@ public class Admin {
 			turnLauncher.checkElement(board);
 
 			TurnLauncher.setTurnOver(false);
-			while (!TurnLauncher.isEndTurn()) {
+			while (!TurnLauncher.isTurnOver()) {
 
 				// Check if player owns any squares
-				boolean owner = Player.isOwner(board, turnLauncher.getActivePlayer());
+				boolean owner = turnLauncher.getActivePlayer().isOwner(board);
 
 				// TODO: method calls need cleaned up + this is duplicated code JD
 				System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
@@ -122,7 +123,7 @@ public class Admin {
 							// Increase development level
 							System.out.println("Increase development level - Not yet implemented");
 						} else {
-							GameLauncher.endGame();
+							gameLauncher.endGame();
 							turnLauncher.endTurn(board);
 						}
 						break;
@@ -135,7 +136,7 @@ public class Admin {
 
 					case 6:
 						if (owner) {
-							GameLauncher.endGame();
+							gameLauncher.endGame();
 							turnLauncher.endTurn(board);
 							break;
 						}
@@ -156,7 +157,7 @@ public class Admin {
 
 		}
 
-		turnLauncher.gameOverSequence(board);
+		gameLauncher.gameOverSequence(board);
 
 		// Close scanner
 		UserInput.closeScanner();

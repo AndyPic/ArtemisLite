@@ -35,9 +35,9 @@ class ResourcesComparatorTest {
 		p2.setBalanceOfResources(201);
 
 		
-		turnLauncher.players.add(p1);
-		turnLauncher.players.add(p2);
-		turnLauncher.players.add(p3);
+		TurnLauncher.getPlayers().add(p1);
+		TurnLauncher.getPlayers().add(p2);
+		TurnLauncher.getPlayers().add(p3);
 		
 	}
 
@@ -46,12 +46,12 @@ class ResourcesComparatorTest {
 		
 		turnLauncher.displayPlayers();
 		
-		Collections.sort(turnLauncher.players, Collections.reverseOrder(new ResourcesComparator()));
+		Collections.sort(TurnLauncher.getPlayers(), Collections.reverseOrder(new ResourcesComparator()));
 		System.out.println();
 		
 		turnLauncher.displayPlayers();
 		
-		Collections.sort(turnLauncher.players, new ResourcesComparator());
+		Collections.sort(TurnLauncher.getPlayers(), new ResourcesComparator());
 		System.out.println();
 		
 		turnLauncher.displayPlayers();

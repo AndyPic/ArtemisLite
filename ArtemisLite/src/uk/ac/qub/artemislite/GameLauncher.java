@@ -12,24 +12,24 @@ import java.util.ArrayList;
  */
 public class GameLauncher {
 
-	private final static int MIN_PLAYERS = 2;
-	private final static int MAX_PLAYERS = 4;
-	
+	private final int MIN_PLAYERS = 2;
+	private final int MAX_PLAYERS = 4;
+
 	// Sets game-over, main game loop
 	private static boolean gameOver = false;
 
 	/**
 	 * Game starting Menu
 	 */
-	public static void startMenu() {
+	public void startMenu() {
 		boolean validOption = false;
 
 		System.out.println("Welcome to Artemis Lite");
 
 		do {
 
-			System.out.println("\n=====| MENU |=====\nHint: you can select a menu option by entering a number: (e.g. 1)" + "\n1.Start Game"
-					+ "\n2.Show Game Rules" + "\n3.Quit Game");
+			System.out.println("\n=====| MENU |=====\nHint: you can select a menu option by entering a number: (e.g. 1)"
+					+ "\n1.Start Game" + "\n2.Show Game Rules" + "\n3.Quit Game");
 
 			// TODO: Should we change this so all menus accept a String as valid also? JD
 			// (e.g.'Start game')
@@ -61,7 +61,7 @@ public class GameLauncher {
 	 * 
 	 * @param turnLauncher
 	 */
-	public static void startGame(TurnLauncher turnLauncher) {
+	public void startGame(TurnLauncher turnLauncher) {
 
 		boolean start = false;
 
@@ -69,9 +69,9 @@ public class GameLauncher {
 				+ MAX_PLAYERS + " players.");
 
 		do {
-			ArrayList<Player> players = turnLauncher.getPlayers();
+			ArrayList<Player> players = TurnLauncher.getPlayers();
 
-			if (turnLauncher.players.size() > 0) {
+			if (players.size() > 0) {
 				System.out.println("\n=====| PLAYERS |=====");
 				turnLauncher.displayPlayers();
 			}
@@ -139,9 +139,9 @@ public class GameLauncher {
 				System.out.println("Invalid Menu Option, please try again");
 			}
 		} while (gameLengthInput != 1 && gameLengthInput != 2);
-		
+
 		GUI.clearConsole(8);
-		
+
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
 
@@ -155,27 +155,94 @@ public class GameLauncher {
 	public static boolean isGameOver() {
 		return gameOver;
 	}
-	
+
 	/**
-	 * allow gameOver to be declared externally from 
+	 * allow gameOver to be declared externally from
 	 */
 	public static void declareGameOver() {
 		gameOver = true;
 	}
-	
+
+	/**
+	 * Displays the game loss message
+	 */
+	public void displayGameLossMessage(Board board) {
+		// TODO: add actual ending message
+		// TODO: show mission progress
+		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n",
+				ArtemisCalendar.getCalendar().getTime(), GameStatistics.missionProgress(board), "%");
+
+	}
+
+	/**
+	 * Displays the game won message
+	 */
+	public void displayGameWonMessage() {
+		// TODO: add actual ending message
+		// TODO: show time under / over estimated completion date
+		System.out.printf("On %s The Artemis Project has succesfully launched!\n",
+				ArtemisCalendar.getCalendar().getTime());
+
+	}
+
+	/**
+	 * Runs correct game-over sequence depending on win or loss
+	 * 
+	 * @param board
+	 */
+	public void gameOverSequence(Board board) {
+
+		if (board.allSystemComplete()) {
+			displayGameWonMessage();
+		} else {
+			displayGameLossMessage(board);
+		}
+
+		postGameMenu(board);
+
+	}
+
+	public void postGameMenu(Board board) {
+
+		int userInput;
+		do {
+			GUI.clearConsole(1);
+			System.out.printf("=====| MENU |===== \n1. View score board\n2. View full move history\n3. Exit game");
+			GUI.clearConsole(1);
+			userInput = UserInput.getUserInputInt();
+			switch (userInput) {
+			case 1:
+				if (TurnLauncher.getPlayers().size() > 0) {
+					GameStatistics.endingPlayerScore(board);
+				}
+				break;
+			case 2:
+				TurnLauncher.getGameHistoryStorage().displayMoveHistory();
+				break;
+			case 3:
+				GUI.clearConsole(2);
+				System.out.println("====| Thank you for playing Artemis Lite |====");
+				break;
+			default:
+				System.out.println("Invalid input, try again.");
+			}
+		} while (userInput != 3);
+
+	}
+
 	/**
 	 * 
 	 * @param turnLauncher
 	 * @param board
 	 */
-	public static void endGame() {
-		
+	public void endGame() {
+
 		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
-		
+
 		if (GUI.yesNoMenu() == 1) {
 			gameOver = true;
 		}
-		
+
 	}
 
 }
