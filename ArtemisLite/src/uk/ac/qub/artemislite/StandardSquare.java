@@ -65,10 +65,10 @@ public class StandardSquare extends Square {
 			return super.toString() + String.format("%15s\t%d\nMinor dev cost:\t%d\nMajor dev cost:\t%d\n%15s\t%d\n",
 					"Cost to buy:", purchaseCost, minorDevCost, majorDevCost, "Rent cost:", rentCost);
 
-		return super.toString()
-				+ String.format("%15s\t%s\nMinor dev levl:\t%d\nMinor dev cost:\t%d\nMajor dev levl:\t%d\nMajor dev cost:\t%d\n%15s\t%d\n",
-						"Owned by:", ownedBy.getName(), currentMinorDevLevel, minorDevCost, currentMajorDevLevel,
-						majorDevCost, "Rent cost:", rentCost);
+		return super.toString() + String.format(
+				"%15s\t%s\nMinor dev levl:\t%d\nMinor dev cost:\t%d\nMajor dev levl:\t%d\nMajor dev cost:\t%d\n%15s\t%d\n",
+				"Owned by:", ownedBy.getName(), currentMinorDevLevel, minorDevCost, currentMajorDevLevel, majorDevCost,
+				"Rent cost:", rentCost);
 
 	}
 
@@ -141,25 +141,58 @@ public class StandardSquare extends Square {
 		}
 
 	}
+
 	/**
 	 * displays current details to screen
 	 */
 	public void displayDetails() {
-	System.out.println("Cost:" +this.purchaseCost);
-	System.out.println("Current Rent:" +this.rentCost);
-	if (this.currentMajorDevLevel!=0) {
-		// outputs fully developed if major dev is greater than 0. May change if we decide to have more than one major development
-		System.out.println("Fully Developed");
-	} else {
-		System.out.println("Current Development level:" +this.currentMinorDevLevel);
-		System.out.println("Development Cost:" +this.minorDevCost);
-	}
-	if (ownedBy != null) {
-		System.out.println("Square is currently owned by: "+this.ownedBy);
-	} else {
-		System.out.println("Square is unowned");
+		System.out.println("Cost:" + this.purchaseCost);
+		System.out.println("Current Rent:" + this.rentCost);
+		if (this.currentMajorDevLevel != 0) {
+			// outputs fully developed if major dev is greater than 0. May change if we
+			// decide to have more than one major development
+			System.out.println("Fully Developed");
+		} else {
+			System.out.println("Current Development level:" + this.currentMinorDevLevel);
+			System.out.println("Development Cost:" + this.minorDevCost);
+		}
+		if (ownedBy != null) {
+			System.out.println("Square is currently owned by: " + this.ownedBy);
+		} else {
+			System.out.println("Square is unowned");
+		}
+
 	}
 	
+	/**
+	 * checks if element has reached max development
+	 * @return true if development is maxed
+	 */
+	public boolean isMaxDevelopment() {
+		boolean isMax = false;
+		
+		if(MAX_MAJOR_DEV == currentMajorDevLevel) {
+			isMax = true;
+		} 
+		
+		return isMax;
+		
+	}
+	
+	/**
+	 * checks if element is owned by specified player
+	 * @param player to check
+	 * @return true if element is owned by player
+	 */
+	public boolean isOwnedBy(Player player) {
+		boolean isOwnedByPlayer = false;
+
+		if(ownedBy!=null && ownedBy.equals(player)) {
+			isOwnedByPlayer = true;
+		}
+		
+		return isOwnedByPlayer;
+		
 	}
 
 	/**
@@ -246,7 +279,6 @@ public class StandardSquare extends Square {
 		this.rentCost = rentCost;
 	}
 
-
 	/**
 	 * @return the ownedBy
 	 */
@@ -281,7 +313,5 @@ public class StandardSquare extends Square {
 	public int getMAX_MAJOR_DEV() {
 		return MAX_MAJOR_DEV;
 	}
-	
-	
 
 }

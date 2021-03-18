@@ -4,6 +4,8 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 /**
  * @author Jordan Davis
@@ -21,11 +23,14 @@ public class TurnLauncher {
 	// Variables
 
 	protected static GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
-	private static boolean turnOver = false;
+	private boolean turnOver = false;
 	private static ArrayList<Player> players;
 	private Player activePlayer;
 	private Die die;
 	private int turnNumber = 0;
+	// view all element, view my element, get square detail, increase dev level, end
+	// turn, end game
+	private LinkedHashMap<MenuOption, Boolean> menu;
 
 	// Constructors
 
@@ -33,9 +38,19 @@ public class TurnLauncher {
 	 * default constructor
 	 */
 	public TurnLauncher() {
-		TurnLauncher.players = new ArrayList<Player>();
+		players = new ArrayList<Player>();
 		this.die = new Die();
+		this.menu = new LinkedHashMap<MenuOption, Boolean>();
+
+		for (MenuOption menuOption : MenuOption.values()) {
+			menu.put(menuOption, menuOption.getDefaultState());
+		}
+
 	}
+//	
+//	for (SquareDetails squareDetails : SquareDetails.values()) {
+//		SystemType systemType = squareDetails.getSystem();
+//		switch (systemType) {
 
 	// Methods
 
@@ -215,6 +230,7 @@ public class TurnLauncher {
 		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
 
 		if (GUI.yesNoMenu() == 1) {
+			turnOver = true;
 			GameLauncher.declareGameOver();
 			// Set player bankrupt
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -activePlayer.getBalanceOfResources());
@@ -282,7 +298,8 @@ public class TurnLauncher {
 	 * Decreases the initial value of resources for all players for a longer game
 	 */
 	public void setupLongGame() {
-		//TODO: this should also reduce the resources gained on each lap of the board? JD
+		// TODO: this should also reduce the resources gained on each lap of the board?
+		// JD
 		ModifyPlayerResources.modifyResourcesAllPlayers(players, this.RESOURCE_VALUE_LONG_GAME);
 	}
 
@@ -661,8 +678,6 @@ public class TurnLauncher {
 
 		ArtemisCalendar.getCalendar().incrementDate();
 
-		turnNumber += 1;
-
 		GUI.clearConsole(2);
 
 		System.out.printf("Round %d has ended. The date is now %s, %d.\n", turnNumber,
@@ -705,90 +720,56 @@ public class TurnLauncher {
 	/**
 	 * @return the endTurn
 	 */
-	public static boolean isTurnOver() {
+	public boolean isTurnOver() {
 		return turnOver;
 	}
 
-	/**
-	 * @param turnOver the turnOver to set
-	 */
-	public static void setTurnOver(boolean turnOver) {
-		TurnLauncher.turnOver = turnOver;
-	}
-
 	public void playerTurnMenu(Board board) {
-		TurnLauncher.setTurnOver(false);
-		while (!TurnLauncher.isTurnOver()) {
-
-			// Check if player owns any squares
-			boolean owner = getActivePlayer().isOwner(board);
+		turnOver = false;
+		while (!turnOver) {
 
 			GameLauncher.mainHeadder();
 
 			System.out.println("\nPlease select one of the below options");
 
-			// TODO also check if they have enough money to develop
-			if (owner) {
-				System.out.print(GameLauncher.getMenuHeader()
-						+ "1. View all element ownership \n2. View my elements \n3. Get current square details \n4. Increase Development level \n5. End turn \n6. End game\n");
-			} else {
-				System.out.print(GameLauncher.getMenuHeader()
-						+ "1. View all element ownership \n2. Get current square details \n3. End turn \n4. End game\n");
+			checkPossibleMenuOptions(board);
+
+			GameLauncher.getMenuHeader();
+
+			int menuNum = 1;
+			MenuOption userMenuSelection;
+			ArrayList<MenuOption> keysList = new ArrayList<MenuOption>();
+
+			for (Entry<MenuOption, Boolean> option : menu.entrySet()) {
+				if (option.getValue()) {
+					System.out.printf("%s. %s\n", menuNum++, option.getKey().getMenuOption());
+					keysList.add(option.getKey());
+				}
 
 			}
+
+			userMenuSelection = keysList.get(UserInput.getUserInputInt() - 1);
 
 			// surround with try / catch to catch BankruptcyException when modifying player
 			// resources would result in a negative balance
 			try {
 
-				// TODO clean up a bit, code duplication, own method?
-				switch (UserInput.getUserInputInt()) {
-
-				case 1:
+				if (userMenuSelection.equals(MenuOption.VIEW_ALL_ELEMENTS)) {
 					board.viewElementOwnership();
-					break;
-				case 2:
-
-					if (owner) {
-						board.viewMyElements(getActivePlayer());
-					} else {
-						getActivePlayer().getCurrentPositionDetails(board);
-					}
-
-					break;
-				case 3:
-					if (owner) {
-						getActivePlayer().getCurrentPositionDetails(board);
-					} else {
-						endTurn(board);
-					}
-					break;
-				case 4:
-					if (owner) {
-						// Increase development level
-						System.out.println("Increase development level - Not yet implemented");
-					} else {
-						endGame();
-						endTurn(board);
-					}
-					break;
-				case 5:
-					if (owner) {
-						endTurn(board);
-						GUI.clearConsole(20);
-						break;
-					}
-
-				case 6:
-					if (owner) {
-						endGame();
-						endTurn(board);
-						break;
-					}
-
-				default:
+				} else if (userMenuSelection.equals(MenuOption.VIEW_ALL_ELEMENTS)) {
+					board.viewMyElements(activePlayer);
+				} else if (userMenuSelection.equals(MenuOption.GET_SQUARE_DETAILS)) {
+					activePlayer.getCurrentPositionDetails(board);
+				} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
+					// TODO also check if they have enough money to develop
+					// Increase development level
+					System.out.println("Increase development level - Not yet implemented");
+				} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
+					endTurn(board);
+				} else if (userMenuSelection.equals(MenuOption.END_GAME)) {
+					endGame();
+				} else {
 					System.out.println("Invalid option - try again");
-
 				}
 
 			} catch (BankruptException bankruptExc) {
@@ -799,6 +780,24 @@ public class TurnLauncher {
 		}
 
 		GUI.clearConsole(2);
+
+	}
+
+	public void checkPossibleMenuOptions(Board board) {
+
+		// check if player can dev
+		boolean canDevelop = false;
+		for (Square square : board.getSquares()) {
+			if (square instanceof StandardSquare) {
+				StandardSquare stdSquare = (StandardSquare) square;
+
+				if (stdSquare.isOwnedBy(activePlayer) && !stdSquare.isMaxDevelopment()) {
+					canDevelop = true;
+					break;
+				}
+			}
+		}
+		menu.put(MenuOption.INCREASE_DEVELOPMENT, canDevelop);
 
 	}
 
