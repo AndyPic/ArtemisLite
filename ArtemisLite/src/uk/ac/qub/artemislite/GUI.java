@@ -97,8 +97,8 @@ public class GUI implements Runnable {
 
 		do {
 			userInput = UserInput.getUserInputString().trim().toLowerCase();
-			
-			if(userInput.length()>0) {
+
+			if (userInput.length() > 0) {
 				switch (userInput.charAt(0)) {
 				case '1':
 				case 'y':
@@ -121,6 +121,19 @@ public class GUI implements Runnable {
 
 	}
 
+	/**
+	 * Method to capitalise the first letter of a String.
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static String capitaliseFirstLetter(String input) {
 
-	
+		// Check if 1st char is already Uppercase
+		if (!Character.isUpperCase(input.charAt(0))) {
+			input = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+		}
+		return input;
+	}
+
 }
