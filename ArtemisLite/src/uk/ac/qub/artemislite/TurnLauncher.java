@@ -31,6 +31,7 @@ public class TurnLauncher {
 	// view all element, view my element, get square detail, increase dev level, end
 	// turn, end game
 	private LinkedHashMap<MenuOption, Boolean> menu;
+	private final static String CONTINUE_HEADER = "\n-----> CONTINUE <-----\n";
 
 	// Constructors
 
@@ -93,7 +94,7 @@ public class TurnLauncher {
 
 		players.add(player);
 
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 
 	}
 
@@ -119,7 +120,7 @@ public class TurnLauncher {
 
 		firstToPlay = allPlayersRoll(players);
 
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 
 		// Rearranges the player array so that the correct player is first
 		while (firstToPlay != players.get(0)) {
@@ -130,7 +131,7 @@ public class TurnLauncher {
 		}
 
 		activePlayer = firstToPlay;
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 	}
 
 	/**
@@ -170,7 +171,7 @@ public class TurnLauncher {
 	public int getRollValue(String roll) {
 
 		/*
-		 * removes all non-digit chars and whitespace Regex explanation: [^ ] = match
+		 * removes all non-digit chars and whitespace. Regex explanation: [^ ] = match
 		 * any character not in the brackets \d = any digit + = match adjacent
 		 * characters
 		 */
@@ -269,7 +270,7 @@ public class TurnLauncher {
 		playerName = player.getName();
 		valid = true;
 
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 
 		do {
 			System.out.println("=====| PLAYER OPTIONS |=====" + "?\n1. Modify " + playerName + "\n2. Delete "
@@ -291,7 +292,7 @@ public class TurnLauncher {
 			}
 		} while (!valid);
 
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 	}
 
 	/**
@@ -324,7 +325,7 @@ public class TurnLauncher {
 		squareName = standardSquare.getSquareName();
 		activePlayerName = activePlayer.getName();
 		playersWant = new ArrayList<Player>();
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 		System.out.printf("=====| AUCTION BEGINS |=====\n%s is being auctioned because %s %s\n", squareName,
 				activePlayerName, reasonToAuction);
 
@@ -378,7 +379,7 @@ public class TurnLauncher {
 		// If someone wanted the square, do some maths
 		if (highRollPlayer != null) {
 			// Announce winner of auction
-			System.out.printf("\nThe winner of the auction is: %s\n", highRollPlayer.getName());
+			System.out.printf("\n=====| WINNER: %s |=====\n", highRollPlayer.getName());
 
 			// Update player currency
 			ModifyPlayerResources.modifyResourcesSinglePlayer(highRollPlayer, -purchaseCost);
@@ -390,7 +391,7 @@ public class TurnLauncher {
 			standardSquare.setOwnedBy(highRollPlayer);
 
 			// Tell players what happened
-			System.out.printf("\n%s now owns %s, and has %d RESOURCES.\n", highRollPlayer.getName(), squareName,
+			System.out.printf("\n%s now owns %s, and has £%d remaining.\n", highRollPlayer.getName(), squareName,
 					highRollPlayer.getBalanceOfResources());
 		}
 
@@ -419,7 +420,7 @@ public class TurnLauncher {
 		// just hitting roll dice JD
 		System.out.println("\n-----> ROLL THE DICE <-----");
 		UserInput.getUserInputString();
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 
 		roll = rollDice();
 
@@ -456,7 +457,7 @@ public class TurnLauncher {
 			if (stdSrquare.getOwnedBy() != null) {
 				System.out.printf(" It is owned by %s.\n", stdSrquare.getOwnedBy().getName());
 			} else {
-				System.out.printf(" It is not owned.\n", stdSrquare.getPurchaseCost());
+				System.out.printf(" It is not owned and costs £%d to purchase\n", stdSrquare.getPurchaseCost());
 			}
 		}
 
@@ -508,9 +509,9 @@ public class TurnLauncher {
 			}
 
 		}
-		System.out.println("-----> CONTINUE <-----");
+		System.out.println(CONTINUE_HEADER);
 		UserInput.getUserInputString();
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 	}
 
 	/**
@@ -636,7 +637,7 @@ public class TurnLauncher {
 			highestRoll = 0;
 
 			UserInput.getUserInputString();
-			GUI.clearConsole(20);
+			GUI.clearConsole();
 			for (Player player : playersToRoll) {
 				roll = rollDice();
 				playerRoll = getRollValue(roll);
@@ -660,10 +661,10 @@ public class TurnLauncher {
 		// TODO: do you think using "--> <--" every time the player need to press enter
 		// is
 		// intuitive enough? or do we need to write "press enter" every time
-		System.out.printf("\n=====| WINNER: %s |=====\n-----> CONTINUE <-----\n", highestRollPlayer.getName());
+		System.out.printf("\n=====| WINNER: %s |=====\n%s\n", highestRollPlayer.getName(), CONTINUE_HEADER);
 		UserInput.getUserInputString();
 
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 		return highestRollPlayer;
 
 	}
@@ -735,6 +736,7 @@ public class TurnLauncher {
 	 */
 	public void playerTurnMenu(Board board) {
 		turnOver = false;
+		boolean firstMenuOfTurn = true;
 		while (!turnOver) {
 			// TODO: refactor needed JD
 			int menuNum, userInput;
@@ -742,14 +744,17 @@ public class TurnLauncher {
 			MenuOption userMenuSelection;
 			ArrayList<MenuOption> keysList = new ArrayList<MenuOption>();
 
-			GameLauncher.mainHeadder();
+			if (firstMenuOfTurn) {
+				GameLauncher.mainHeadder();
+			}
 
 			checkPossibleMenuOptions(board);
 
 			menuNum = 1;
 			validUserInput = false;
 
-			System.out.printf("\nPlease select one of the following options:\n%s", GameLauncher.getMenuHeader());
+			System.out.printf("\nIts still your turn! Please select one of the following options:\n%s",
+					GameLauncher.getMenuHeader());
 
 			for (Entry<MenuOption, Boolean> option : menu.entrySet()) {
 				if (option.getValue()) {
@@ -770,19 +775,26 @@ public class TurnLauncher {
 
 			} while (!validUserInput);
 
-			userMenuSelection = keysList.get(userInput-1);
+			userMenuSelection = keysList.get(userInput - 1);
+
+			GUI.clearConsole();
 
 			// surround with try / catch to catch BankruptcyException when modifying player
 			// resources would result in a negative balance
 			try {
-
 				if (userMenuSelection.equals(MenuOption.VIEW_ALL_ELEMENTS)) {
+					GameLauncher.mainHeadder();
+					System.out.printf("\nAll game elements:\n\n");
 					board.viewElementOwnership();
 				} else if (userMenuSelection.equals(MenuOption.VIEW_PLAYER_ELEMENTS)) {
+					GameLauncher.mainHeadder();
 					board.viewMyElements(activePlayer);
 				} else if (userMenuSelection.equals(MenuOption.GET_SQUARE_DETAILS)) {
+					GameLauncher.mainHeadder();
+					System.out.printf("\nYou are currently on : ");
 					activePlayer.getCurrentPositionDetails(board);
 				} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
+					GameLauncher.mainHeadder();
 					// TODO also check if they have enough money to develop
 					// Increase development level
 					// TODO: this should really be its own method, but I couldn't fix the
@@ -843,15 +855,17 @@ public class TurnLauncher {
 				bankruptExc.getLocalizedMessage();
 				GameLauncher.declareGameOver();
 			}
+
+			firstMenuOfTurn = false;
+
 		}
 
-		GUI.clearConsole(2);
+		GUI.clearConsole();
 
 	}
 
 	public void checkPossibleMenuOptions(Board board) {
 
-		// check if player can dev
 		boolean canDevelop = false;
 		boolean ownsElement = false;
 		for (Square square : board.getSquares()) {
@@ -870,8 +884,6 @@ public class TurnLauncher {
 		}
 		menu.put(MenuOption.INCREASE_DEVELOPMENT, canDevelop);
 		menu.put(MenuOption.VIEW_PLAYER_ELEMENTS, ownsElement);
-
-		// check if player owns property
 
 	}
 

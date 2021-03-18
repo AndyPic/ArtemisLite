@@ -91,7 +91,6 @@ public class Board {
 	 * 
 	 */
 	public void viewElementOwnership() {
-
 		for (Square sq : this.squares) {
 
 			if (sq instanceof StandardSquare) {
@@ -115,7 +114,6 @@ public class Board {
 	 * @param activePlayer
 	 */
 	public void viewMyElements(Player activePlayer) {
-
 		System.out.println("You own the following elements: ");
 
 		for (Square sq : this.squares) {

@@ -67,6 +67,18 @@ public class GUI implements Runnable {
 	}// END
 
 	/**
+	 * 'Clears the console' by printing 25 blank lines in console. 
+	 * Overloaded version of this method accepts specific number of lines to clear
+	 */
+	public static void clearConsole() {
+
+		for (int loop = 0; loop <= 25; loop++) {
+			System.out.println();
+		}
+
+	}
+	
+	/**
 	 * 'Clears the console' by printing {@link numberOfLines} blank lines in
 	 * console.
 	 * 

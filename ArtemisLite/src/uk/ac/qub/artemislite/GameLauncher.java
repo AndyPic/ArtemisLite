@@ -91,7 +91,7 @@ public class GameLauncher {
 
 		} while (!gameBegin);
 
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 
 		if (!gameOver) {
 			startGame();
@@ -103,7 +103,7 @@ public class GameLauncher {
 		File file = new File("GameRules.txt");
 		String line;
 
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 
 		try {
 			FileReader fileReader = new FileReader(file);
@@ -156,14 +156,14 @@ public class GameLauncher {
 			case 3:
 				// TODO update info with new balance changes
 				System.out.println("Some details about the different modes...");
-				GUI.clearConsole(20);
+				GUI.clearConsole();
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 			}
 		} while (gameLengthInput != 1 && gameLengthInput != 2);
 
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
@@ -230,7 +230,7 @@ public class GameLauncher {
 
 		}
 
-		GUI.clearConsole(20);
+		GUI.clearConsole();
 	}
 
 	/**
