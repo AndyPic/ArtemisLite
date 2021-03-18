@@ -206,21 +206,20 @@ public class TurnLauncher {
 		player.setName(name);
 
 	}
-	
-	
+
 	/**
 	 * end game warning
 	 */
 	public void endGame() {
-		
+
 		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
-		
+
 		if (GUI.yesNoMenu() == 1) {
 			GameLauncher.declareGameOver();
-			//Set player bankrupt
+			// Set player bankrupt
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -activePlayer.getBalanceOfResources());
 		}
-		
+
 	}
 
 	/**
@@ -715,13 +714,13 @@ public class TurnLauncher {
 	public static void setTurnOver(boolean turnOver) {
 		TurnLauncher.turnOver = turnOver;
 	}
-	
+
 	public void playerTurnMenu(Board board) {
 		TurnLauncher.setTurnOver(false);
-		while (!TurnLauncher.isEndTurn()) {
+		while (!TurnLauncher.isTurnOver()) {
 
 			// Check if player owns any squares
-			boolean owner = Player.isOwner(board, getActivePlayer());
+			boolean owner = getActivePlayer().isOwner(board);
 
 			GameLauncher.mainHeadder();
 
@@ -801,9 +800,5 @@ public class TurnLauncher {
 		GUI.clearConsole(2);
 
 	}
-	
-	
-	
-	
 
 }
