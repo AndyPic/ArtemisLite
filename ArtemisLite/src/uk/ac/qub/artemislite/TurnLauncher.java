@@ -454,7 +454,7 @@ public class TurnLauncher {
 	} // END
 
 	/**
-	 * checks the element for any responsabilities when landed on
+	 * checks the element for any responsibilities when landed on
 	 */
 	public void checkElement(Board board) {
 		int pos;
@@ -715,6 +715,9 @@ public class TurnLauncher {
 	public static void setTurnOver(boolean turnOver) {
 		TurnLauncher.turnOver = turnOver;
 	}
+	
+	
+
 
 	public void playerTurnMenu(Board board) {
 		TurnLauncher.setTurnOver(false);
@@ -765,8 +768,52 @@ public class TurnLauncher {
 					break;
 				case 4:
 					if (owner) {
-						// Increase development level
-						System.out.println("Increase development level - Not yet implemented");
+						// this should really be its own method, but I couldn't fix the static/non-static thing-JSM
+							boolean developing = true;
+							
+							while(developing = true) {
+								// ask which square to develop
+								System.out.println("Which element would you like to develop?");
+								// maybe display squares owned by active player here
+								
+								String chosenSq = null;
+								chosenSq.equals(UserInput.getUserInputString());
+								StandardSquare ssq = new StandardSquare();
+								
+								// check if player owns square
+								if(ssq.getOwnedBy().equals(activePlayer)) {
+									// check if player can afford to increase development
+									// include some way of switching between major and minor devs
+									if(activePlayer.getBalanceOfResources() >= ssq.getMinorDevCost()) {
+										try {
+											// increase development level
+											ssq.increaseDev();
+										} catch (Exception e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+										
+									} else {
+										System.out.println("You cannot afford this");
+									}
+								} else {
+									System.out.println("You do not own this square");
+								}
+								
+								// ask if they want to develop another square
+								System.out.println("Would you like to develop another square?");
+								switch (GUI.yesNoMenu()) {
+								case 1:
+									developing = true;
+									break;
+								case 2:
+									developing = false;
+									break;
+								default:
+									System.out.println("That shouldn't happen");
+								}
+								
+							}
 					} else {
 						endGame();
 						endTurn(board);
