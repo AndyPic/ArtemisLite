@@ -3,6 +3,11 @@
  */
 package uk.ac.qub.artemislite;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -71,8 +76,7 @@ public class GameLauncher {
 				gameBegin = true;
 				break;
 			case 2:
-				// TODO: Game rules method needed JD
-				System.out.println("game rules shown");
+				showGameRules();
 				break;
 			case 3:
 				System.out.println("Are you sure you want to quit the game?");
@@ -93,6 +97,38 @@ public class GameLauncher {
 			GameLauncher.startGame();
 		}
 
+	}
+
+	public static void showGameRules() {
+		File file = new File("GameRules.txt");
+		String line;
+		
+		GUI.clearConsole(20);
+		
+		try {
+			FileReader fileReader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			line = bufferedReader.readLine();
+			
+			while(line!=null) {
+				System.out.println(line);
+				line = bufferedReader.readLine();
+			}
+			
+			bufferedReader.close();
+			fileReader.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("Game rules have not been found");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("There was a problem opening game rules");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("A error has occured, please restart the app");
+		}
+		
 	}
 
 	/**

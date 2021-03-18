@@ -282,6 +282,7 @@ public class TurnLauncher {
 	 * Decreases the initial value of resources for all players for a longer game
 	 */
 	public void setupLongGame() {
+		//TODO: this should also reduce the resources gained on each lap of the board? JD
 		ModifyPlayerResources.modifyResourcesAllPlayers(players, this.RESOURCE_VALUE_LONG_GAME);
 	}
 
