@@ -15,24 +15,24 @@ import java.util.Random;
  */
 public class ArtemisCalendar extends GregorianCalendar {
 
-	// Variables
+	// Constants
 
 	private static final long serialVersionUID = 1L;
+	// Defines by what date the mission should be complete, (YYYY, MM, D)
+	private static final ArtemisCalendar END_DATE = new ArtemisCalendar(2024, 11, 1);
+	
+	private final int CALENDAR_YEAR = 1;
+	private final int CALENDAR_MONTH = 2;
+	private final int CALENDAR_DAY = 5;
 
-	private static ArtemisCalendar calendar = new ArtemisCalendar();
+	// Variables
+
 	private Random rand = new Random();
-
-	private static int startYear = 0;
-	private static int startMonth = 0;
-	private static int startDay = 0;
-
-	// Defines by what date the mission should be complete
-	// private int completionYear = startYear + 2;
-	// private int completionMonth = 11;
-
-	private int currentYear = 0;
+	private int currentYear = 2020;
 	private int currentMonth = 0;
 	private int currentDay = 1;
+	// Set the starting date, (YYYY, MM, D)
+	private static ArtemisCalendar calendar = new ArtemisCalendar(2020, 0, 1);
 
 	// Constructors
 
@@ -41,6 +41,13 @@ public class ArtemisCalendar extends GregorianCalendar {
 	 */
 	public ArtemisCalendar() {
 		super();
+	}
+
+	/**
+	 * Constructor with args
+	 */
+	public ArtemisCalendar(int year, int month, int day) {
+		this.set(year, month, day);
 	}
 
 	// Methods
@@ -54,18 +61,6 @@ public class ArtemisCalendar extends GregorianCalendar {
 	 */
 	public void incrementDate() {
 
-		// Set-up based on current date.
-		if (startYear == 0) {
-
-			startYear = calendar.get(1);
-			startMonth = calendar.get(2);
-			startDay = calendar.get(5);
-
-			currentYear = startYear;
-			currentMonth = startMonth;
-			currentDay = startDay;
-		}
-
 		// Increment the date
 		if (currentMonth + 1 >= 12) {
 
@@ -73,21 +68,23 @@ public class ArtemisCalendar extends GregorianCalendar {
 			currentYear += 1;
 			currentDay = 1;
 
-			calendar.set(1, currentYear);
+			calendar.set(CALENDAR_YEAR, currentYear);
 
 		} else {
 			currentMonth += 1;
 			currentDay = 1;
 		}
 
-		calendar.set(2, currentMonth);
-		calendar.set(5, currentDay);
+		calendar.set(CALENDAR_MONTH, currentMonth);
+		calendar.set(CALENDAR_DAY, currentDay);
 
 	}
 
 	/**
 	 * Method to increase the day of month for each player that takes a turn within
 	 * 1 round
+	 * 
+	 * TODO: USE IT OR LOSE IT!
 	 * 
 	 * @param players
 	 */
@@ -101,7 +98,7 @@ public class ArtemisCalendar extends GregorianCalendar {
 		int daysPerTurn = rand.nextInt((monthSize / noPlayers) - (12 / noPlayers)) + (12 / noPlayers);
 
 		// Increase date by no. of days for turn
-		calendar.set(5, (currentDay += daysPerTurn));
+		calendar.set(CALENDAR_DAY, (currentDay += daysPerTurn));
 
 	}
 

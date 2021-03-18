@@ -4,7 +4,6 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * @author Jordan Davis
@@ -14,26 +13,19 @@ import java.util.Collections;
  */
 public class TurnLauncher {
 
-	// Variables
-
-	// TODO: This should prob be private to decrease coupling JD
-	protected ArrayList<Player> players;
-
-	private Player activePlayer;
-
-	private Die die;
+	// Constants
 
 	private final int NUM_OF_DICE = 2;
-
-	// halve the default resources from 200 to 100 for a longer game
 	private final int RESOURCE_VALUE_LONG_GAME = -100;
 
-	private int turnNumber = 0;
+	// Variables
 
+	protected static GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
 	private static boolean turnOver = false;
-
-	// variable to hold a history of game moves, accessible at package level
-	protected GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
+	private static ArrayList<Player> players;
+	private Player activePlayer;
+	private Die die;
+	private int turnNumber = 0;
 
 	// Constructors
 
@@ -41,16 +33,23 @@ public class TurnLauncher {
 	 * default constructor
 	 */
 	public TurnLauncher() {
-		this.players = new ArrayList<Player>();
+		TurnLauncher.players = new ArrayList<Player>();
 		this.die = new Die();
 	}
 
 	// Methods
 
 	/**
+	 * @return the gameHistoryStorage
+	 */
+	public static GameHistoryStorage getGameHistoryStorage() {
+		return gameHistoryStorage;
+	}
+
+	/**
 	 * @return the players
 	 */
-	public ArrayList<Player> getPlayers() {
+	public static ArrayList<Player> getPlayers() {
 		return players;
 	}
 
@@ -88,7 +87,7 @@ public class TurnLauncher {
 	 */
 	public void displayPlayers() {
 
-		for (int loop = 1; loop <= this.players.size(); loop++) {
+		for (int loop = 1; loop <= players.size(); loop++) {
 			System.out.println(loop + ". " + players.get(loop - 1).getName());
 		}
 
@@ -108,10 +107,10 @@ public class TurnLauncher {
 		GUI.clearConsole(20);
 
 		// Rearranges the player array so that the correct player is first
-		while (firstToPlay != this.players.get(0)) {
+		while (firstToPlay != players.get(0)) {
 
-			this.players.add(this.players.get(0));
-			this.players.remove(0);
+			players.add(players.get(0));
+			players.remove(0);
 
 		}
 
@@ -234,13 +233,13 @@ public class TurnLauncher {
 		Player player = null;
 		String playerName;
 
-		if (this.players.size() > 1) {
+		if (players.size() > 1) {
 			do {
 				System.out.println("=====| MODIFY PLAYER |=====");
 				displayPlayers();
 				userInput = UserInput.getUserInputInt() - 1;
 
-				if (userInput >= 0 && userInput < this.players.size()) {
+				if (userInput >= 0 && userInput < players.size()) {
 					valid = true;
 				}
 
@@ -251,7 +250,7 @@ public class TurnLauncher {
 			} while (!valid);
 		}
 
-		player = this.players.get(userInput);
+		player = players.get(userInput);
 		playerName = player.getName();
 		valid = true;
 
@@ -266,7 +265,7 @@ public class TurnLauncher {
 				promptName(player);
 				break;
 			case 2:
-				this.players.remove(userInput);
+				players.remove(userInput);
 				System.out.println(playerName + " has been deleted");
 				break;
 			case 3:
@@ -653,72 +652,12 @@ public class TurnLauncher {
 	}
 
 	/**
-	 * Calculates the total worth of a Player
-	 * 
-	 * @param player
-	 */
-	public int calculatePlayerWorth(Player player, Board board) {
-
-		int playerValue;
-		StandardSquare stdSquare;
-
-		playerValue = player.getBalanceOfResources();
-
-		for (Square square : board.getSquares()) {
-
-			if (square instanceof StandardSquare) {
-
-				stdSquare = (StandardSquare) square;
-
-				if (stdSquare.getOwnedBy() != null && stdSquare.getOwnedBy().equals(player)) {
-
-					playerValue += stdSquare.getPurchaseCost();
-					playerValue += (stdSquare.getCurrentMinorDevLevel() * stdSquare.getMinorDevCost());
-					playerValue += (stdSquare.getCurrentMajorDevLevel() * stdSquare.getMajorDevCost());
-
-				}
-
-			}
-
-		}
-
-		return playerValue;
-
-	}
-
-	/**
-	 * Finds the ending scores of all players
-	 */
-	public void endingPlayerScore(Board board) {
-
-		System.out.println("The scores are as follows:");
-
-		// checks if player is not bankrupt then calculates score
-		for (Player player : this.players) {
-			if (player.getBalanceOfResources() > 0) {
-				ModifyPlayerResources.modifyResourcesSinglePlayer(player, calculatePlayerWorth(player, board));
-			}
-		}
-
-		// Orders the players in decending order
-		Collections.sort(this.players, Collections.reverseOrder(new ResourcesComparator()));
-
-		// displays all player scores
-		for (Player player : this.players) {
-			if (player.getBalanceOfResources() > 0) {
-				System.out.println(player.getName() + " : " + player.getBalanceOfResources());
-			} else
-				System.out.println(player.getName() + " : Bankrupt");
-		}
-	}
-
-	/**
 	 * Method that increments the calendar date and turnNumber by 1 and displays an
 	 * end of round message to players.
 	 */
 	public void roundEnd(Board board) {
 
-		double progress = GUI.missionProgress(board);
+		double progress = GameStatistics.missionProgress(board);
 
 		ArtemisCalendar.getCalendar().incrementDate();
 
@@ -726,9 +665,6 @@ public class TurnLauncher {
 
 		GUI.clearConsole(2);
 
-		// TODO: we need to be carful with using a real date. The intro is hard coded to
-		// mention 2024 meaning that in 4 years the game wont make sense. Need to make
-		// intro dyanmic or make in game dates match artemis mission timeline JD
 		System.out.printf("Round %d has ended. The date is now %s, %d.\n", turnNumber,
 				ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)),
 				ArtemisCalendar.getCalendar().get(1));
@@ -769,7 +705,7 @@ public class TurnLauncher {
 	/**
 	 * @return the endTurn
 	 */
-	public static boolean isEndTurn() {
+	public static boolean isTurnOver() {
 		return turnOver;
 	}
 

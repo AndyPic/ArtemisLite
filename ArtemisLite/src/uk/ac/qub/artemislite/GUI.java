@@ -22,13 +22,14 @@ public class GUI implements Runnable {
 		// Keep track of what messages have been printed
 		int progress = 0;
 
-		// Array of intro message sequence (can be as long as needed)
+		// Array of intro message sequence
 		String[] startingMessage = new String[7];
 		startingMessage[0] = ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)) + ", "
 				+ ArtemisCalendar.getCalendar().get(1) + ".";
 		startingMessage[1] = "You and your colleagues are tasked with delivering The Artemis Project to success.";
-		// TODO: Change date expected to launch to that in calendar
-		startingMessage[2] = "The Artemis Project aims to launch the first woman, and next man to the moon by 2024.";
+		startingMessage[2] = "The Artemis Project aims to launch the first woman, and next man to the moon by "
+				+ ArtemisCalendar.getMonthName(ArtemisCalendar.getEndDate().get(2)) + ", "
+				+ ArtemisCalendar.getEndDate().get(1) + ".";
 		startingMessage[3] = "In order to accomplish this lofty goal, you must work with your colleagues to ensure 'All Systems are Go!' by launch-day.";
 		startingMessage[4] = "Can your team acquire and fully develop all of the systems needed for a successful Lift-off?";
 		startingMessage[5] = "...or will you just be in it for personal gain?";
@@ -76,28 +77,6 @@ public class GUI implements Runnable {
 		for (int loop = 0; loop < numberOfLines; loop++) {
 			System.out.println();
 		}
-		
-	}
-
-	/**
-	 * Displays the game loss message
-	 */
-	public static void displayGameLossMessage(Board board) {
-		// TODO: add actual ending message
-		// TODO: show mission progress
-		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n",
-				ArtemisCalendar.getCalendar().getTime(), GUI.missionProgress(board), "%");
-
-	}
-
-	/**
-	 * Displays the game won message
-	 */
-	public static void displayGameWonMessage() {
-		// TODO: add actual ending message
-		// TODO: show time under / over estimated completion date
-		System.out.printf("On %s The Artemis Project has succesfully launched!\n",
-				ArtemisCalendar.getCalendar().getTime());
 
 	}
 
@@ -141,48 +120,6 @@ public class GUI implements Runnable {
 		return userInt;
 
 	}
-	
-	/**
-	 * Method to calculate the progress towards completing the mission.
-	 * 
-	 * @return
-	 */
-	public static double missionProgress(Board board) {
-
-		// Get resource amount for completion
-		double totalCost = 0;
-
-		for (SquareDetails square : SquareDetails.values()) {
-			totalCost += square.getCost();
-			totalCost += square.getMajorCost();
-			totalCost += (square.getMinorCost() * 3);
-		}
-
-		// Get resource amount currently invested
-		double currentProgress = 0;
-
-		for (Square b : board.getSquares()) {
-
-			if (b instanceof StandardSquare) {
-				StandardSquare stdSq = (StandardSquare) b;
-
-				if (stdSq.getOwnedBy() != null) {
-
-					currentProgress += stdSq.getRentCost();
-
-					if (stdSq.getCurrentMajorDevLevel() > 0) {
-						currentProgress += (stdSq.getCurrentMajorDevLevel() * stdSq.getMajorDevCost());
-					}
-
-					if (stdSq.getCurrentMinorDevLevel() > 0) {
-						currentProgress += (stdSq.getCurrentMinorDevLevel() * stdSq.getMinorDevCost());
-					}
-				}
-			}
-		}
-
-		return (currentProgress / totalCost) * 100;
-	} // END
 
 
 	

@@ -251,6 +251,73 @@ public class GameLauncher {
 	}
 
 	/**
+	 * Displays the game loss message
+	 */
+	public void displayGameLossMessage(Board board) {
+		// TODO: add actual ending message
+		// TODO: show mission progress
+		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n",
+				ArtemisCalendar.getCalendar().getTime(), GameStatistics.missionProgress(board), "%");
+
+	}
+
+	/**
+	 * Displays the game won message
+	 */
+	public void displayGameWonMessage() {
+		// TODO: add actual ending message
+		// TODO: show time under / over estimated completion date
+		System.out.printf("On %s The Artemis Project has succesfully launched!\n",
+				ArtemisCalendar.getCalendar().getTime());
+
+	}
+
+	/**
+	 * Runs correct game-over sequence depending on win or loss
+	 * 
+	 * @param board
+	 */
+	public void gameOverSequence(Board board) {
+
+		if (board.allSystemComplete()) {
+			displayGameWonMessage();
+		} else {
+			displayGameLossMessage(board);
+		}
+
+		postGameMenu(board);
+
+	}
+
+	public void postGameMenu(Board board) {
+
+		int userInput;
+		do {
+			GUI.clearConsole(1);
+			System.out.printf("=====| MENU |===== \n1. View score board\n2. View full move history\n3. Exit game");
+			GUI.clearConsole(1);
+			userInput = UserInput.getUserInputInt();
+			switch (userInput) {
+			case 1:
+				if (TurnLauncher.getPlayers().size() > 0) {
+					GameStatistics.endingPlayerScore(board);
+				}
+				break;
+			case 2:
+				TurnLauncher.getGameHistoryStorage().displayMoveHistory();
+				break;
+			case 3:
+				GUI.clearConsole(2);
+				System.out.println("====| Thank you for playing Artemis Lite |====");
+				break;
+			default:
+				System.out.println("Invalid input, try again.");
+			}
+		} while (userInput != 3);
+
+	}
+
+	/**
 	 * main UI display headder
 	 */
 	public static void mainHeadder() {
