@@ -147,7 +147,7 @@ public class GameLauncher {
 
 		while (!start) {
 
-			players = turnLauncher.getPlayers();
+			players = TurnLauncher.getPlayers();
 			numOfPlayers = players.size();
 
 			if (numOfPlayers > 0) {
@@ -214,31 +214,7 @@ public class GameLauncher {
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
 			turnLauncher.playerTurnMenu(board);
-			
-		}
 
-	}
-
-	/**
-	 * Runs correct game-over sequence depending on win or loss
-	 * 
-	 * @param board
-	 */
-	public static void gameOverSequence() {
-
-		if (board.allSystemComplete()) {
-			GUI.displayGameWonMessage();
-		} else {
-			GUI.displayGameLossMessage(board);
-		}
-
-		// TODO:bug, message is being displayed even when there is no game history to
-		// show
-		// on completion, show a history of game moves
-		turnLauncher.gameHistoryStorage.displayMoveHistory();
-
-		if (turnLauncher.players.size() > 0) {
-			turnLauncher.endingPlayerScore(board);
 		}
 
 	}
@@ -253,7 +229,7 @@ public class GameLauncher {
 	/**
 	 * Displays the game loss message
 	 */
-	public void displayGameLossMessage(Board board) {
+	public static void displayGameLossMessage(Board board) {
 		// TODO: add actual ending message
 		// TODO: show mission progress
 		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n",
@@ -264,7 +240,7 @@ public class GameLauncher {
 	/**
 	 * Displays the game won message
 	 */
-	public void displayGameWonMessage() {
+	public static void displayGameWonMessage() {
 		// TODO: add actual ending message
 		// TODO: show time under / over estimated completion date
 		System.out.printf("On %s The Artemis Project has succesfully launched!\n",
@@ -277,7 +253,7 @@ public class GameLauncher {
 	 * 
 	 * @param board
 	 */
-	public void gameOverSequence(Board board) {
+	public static void gameOverSequence() {
 
 		if (board.allSystemComplete()) {
 			displayGameWonMessage();
@@ -285,16 +261,15 @@ public class GameLauncher {
 			displayGameLossMessage(board);
 		}
 
-		postGameMenu(board);
+		postGameMenu();
 
 	}
 
-	public void postGameMenu(Board board) {
+	public static void postGameMenu() {
 
 		int userInput;
 		do {
-			GUI.clearConsole(1);
-			System.out.printf("=====| MENU |===== \n1. View score board\n2. View full move history\n3. Exit game");
+			System.out.printf("%s \n1. View score board\n2. View full move history\n3. Exit game", MENU_HEADER);
 			GUI.clearConsole(1);
 			userInput = UserInput.getUserInputInt();
 			switch (userInput) {

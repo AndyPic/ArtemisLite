@@ -20,10 +20,10 @@ public class ArtemisCalendar extends GregorianCalendar {
 	private static final long serialVersionUID = 1L;
 	// Defines by what date the mission should be complete, (YYYY, MM, D)
 	private static final ArtemisCalendar END_DATE = new ArtemisCalendar(2024, 11, 1);
-	
-	private final int CALENDAR_YEAR = 1;
-	private final int CALENDAR_MONTH = 2;
-	private final int CALENDAR_DAY = 5;
+
+	private static final int CALENDAR_YEAR = 1;
+	private static final int CALENDAR_MONTH = 2;
+	private static final int CALENDAR_DAY = 5;
 
 	// Variables
 
@@ -128,7 +128,15 @@ public class ArtemisCalendar extends GregorianCalendar {
 	 * Displays current game date
 	 */
 	public static void displayDate() {
-		System.out.printf("\nDate: %s, %s.\n", getMonthName(getCalendar().get(2)), getCalendar().get(1));
+		System.out.printf("\nDate: %s, %s.\n", getMonthName(getCalendar().get(CALENDAR_MONTH)),
+				getCalendar().get(CALENDAR_YEAR));
+	}
+
+	/**
+	 * @return the endDate
+	 */
+	public static ArtemisCalendar getEndDate() {
+		return END_DATE;
 	}
 
 }
