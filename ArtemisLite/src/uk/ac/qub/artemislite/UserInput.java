@@ -32,7 +32,7 @@ public class UserInput {
 		int input;
 
 		while (!scanner.hasNextInt()) {
-			System.out.println("That is not a valid number!");
+			System.out.println("That is not a valid number! please try again");
 			scanner.nextLine();
 		}
 

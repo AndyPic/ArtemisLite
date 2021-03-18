@@ -728,18 +728,21 @@ public class TurnLauncher {
 		turnOver = false;
 		while (!turnOver) {
 
-			GameLauncher.mainHeadder();
+			int menuNum, userInput;
+			boolean validUserInput;
+			MenuOption userMenuSelection;
+			ArrayList<MenuOption> keysList = new ArrayList<MenuOption>();
+			;
 
-			System.out.println("\nPlease select one of the below options");
+			GameLauncher.mainHeadder();
 
 			checkPossibleMenuOptions(board);
 
-			GameLauncher.getMenuHeader();
+			menuNum = 1;
+			validUserInput = false;
 
-			int menuNum = 1;
-			MenuOption userMenuSelection;
-			ArrayList<MenuOption> keysList = new ArrayList<MenuOption>();
-
+			System.out.print(GameLauncher.getMenuHeader());
+			
 			for (Entry<MenuOption, Boolean> option : menu.entrySet()) {
 				if (option.getValue()) {
 					System.out.printf("%s. %s\n", menuNum++, option.getKey().getMenuOption());
@@ -748,7 +751,18 @@ public class TurnLauncher {
 
 			}
 
-			userMenuSelection = keysList.get(UserInput.getUserInputInt() - 1);
+			do {
+				userInput = UserInput.getUserInputInt();
+
+				if (userInput > 0 && userInput < keysList.size()) {
+					validUserInput = true;
+				} else {
+					System.out.println("Invalid option - try again");
+				}
+
+			} while (!validUserInput);
+
+			userMenuSelection = keysList.get(userInput);
 
 			// surround with try / catch to catch BankruptcyException when modifying player
 			// resources would result in a negative balance
@@ -763,23 +777,24 @@ public class TurnLauncher {
 				} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
 					// TODO also check if they have enough money to develop
 					// Increase development level
-					// this should really be its own method, but I couldn't fix the static/non-static thing-JSM
+					// this should really be its own method, but I couldn't fix the
+					// static/non-static thing-JSM
 					boolean developing = true;
-					
-					while(developing = true) {
+
+					while (developing = true) {
 						// ask which square to develop
 						System.out.println("Which element would you like to develop?");
 						// maybe display squares owned by active player here
-						
+
 						String chosenSq = null;
 						chosenSq.equals(UserInput.getUserInputString());
 						StandardSquare ssq = new StandardSquare();
-						
+
 						// check if player owns square
-						if(ssq.getOwnedBy().equals(activePlayer)) {
+						if (ssq.getOwnedBy().equals(activePlayer)) {
 							// check if player can afford to increase development
 							// include some way of switching between major and minor devs
-							if(activePlayer.getBalanceOfResources() >= ssq.getMinorDevCost()) {
+							if (activePlayer.getBalanceOfResources() >= ssq.getMinorDevCost()) {
 								try {
 									// increase development level
 									ssq.increaseDev();
@@ -787,14 +802,14 @@ public class TurnLauncher {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-								
+
 							} else {
 								System.out.println("You cannot afford this");
 							}
 						} else {
 							System.out.println("You do not own this square");
 						}
-						
+
 						// ask if they want to develop another square
 						System.out.println("Would you like to develop another square?");
 						switch (GUI.yesNoMenu()) {
@@ -807,14 +822,12 @@ public class TurnLauncher {
 						default:
 							System.out.println("That shouldn't happen");
 						}
-						
+
 					}
 				} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
 					endTurn(board);
 				} else if (userMenuSelection.equals(MenuOption.END_GAME)) {
 					endGame();
-				} else {
-					System.out.println("Invalid option - try again");
 				}
 
 			} catch (BankruptException bankruptExc) {
