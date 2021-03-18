@@ -125,10 +125,10 @@ public class ArtemisCalendar extends GregorianCalendar {
 	}
 
 	/**
-	 * @return the endDate
+	 * Displays current game date
 	 */
-	public static ArtemisCalendar getEndDate() {
-		return END_DATE;
+	public static void displayDate() {
+		System.out.printf("\nDate: %s, %s.\n", getMonthName(getCalendar().get(2)), getCalendar().get(1));
 	}
 
 }

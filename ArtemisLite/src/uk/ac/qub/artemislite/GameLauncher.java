@@ -12,30 +12,63 @@ import java.util.ArrayList;
  */
 public class GameLauncher {
 
-	private final int MIN_PLAYERS = 2;
-	private final int MAX_PLAYERS = 4;
+	private static TurnLauncher turnLauncher = new TurnLauncher();
+	private static Board board = new Board();
+
+	private final static int MIN_PLAYERS = 2;
+	private final static int MAX_PLAYERS = 4;
+	private final static String MENU_HEADER = "\n=====| MENU |=====\n";
 
 	// Sets game-over, main game loop
 	private static boolean gameOver = false;
 
 	/**
+	 * displays game intro message to screen
+	 */
+	public static void introMessage() {
+		// Intro message
+		// TODO: can this be made static?
+		GUI introMessage = new GUI();
+		BufferedInterrupter buffInter = new BufferedInterrupter();
+		Thread introThread = new Thread(introMessage);
+		Thread inputThread = new Thread(buffInter);
+
+		System.out.println("== Hit enter to skip intro ==\n");
+
+		introThread.start();
+
+		inputThread.start();
+
+		// interrupt introThread if still running on input
+		while (introThread.isAlive()) {
+			if (!inputThread.isAlive()) {
+				introThread.interrupt();
+			}
+		}
+		// Stops the input thread after intro message finished
+		inputThread.interrupt();
+
+		GUI.clearConsole(1);
+
+	}
+
+	/**
 	 * Game starting Menu
 	 */
-	public void startMenu() {
-		boolean validOption = false;
+	public static void startMenu() {
 
-		System.out.println("Welcome to Artemis Lite");
+		boolean gameBegin = false;
 
 		do {
 
-			System.out.println("\n=====| MENU |=====\nHint: you can select a menu option by entering a number: (e.g. 1)"
+			System.out.println(MENU_HEADER + "Hint: you can select a menu option by entering a number: (e.g. 1)"
 					+ "\n1.Start Game" + "\n2.Show Game Rules" + "\n3.Quit Game");
 
 			// TODO: Should we change this so all menus accept a String as valid also? JD
 			// (e.g.'Start game')
 			switch (UserInput.getUserInputInt()) {
 			case 1:
-				validOption = true;
+				gameBegin = true;
 				break;
 			case 2:
 				// TODO: Game rules method needed JD
@@ -44,16 +77,22 @@ public class GameLauncher {
 			case 3:
 				System.out.println("Are you sure you want to quit the game?");
 				if (GUI.yesNoMenu() == 1) {
-					gameOver = true;
-					validOption = true;
+					declareGameOver();
+					gameBegin = true;
 				}
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 			}
 
-		} while (!validOption);
-		GUI.clearConsole(8);
+		} while (!gameBegin);
+
+		GUI.clearConsole(20);
+
+		if (!gameOver) {
+			GameLauncher.startGame();
+		}
+
 	}
 
 	/**
@@ -61,68 +100,16 @@ public class GameLauncher {
 	 * 
 	 * @param turnLauncher
 	 */
-	public void startGame(TurnLauncher turnLauncher) {
-
-		boolean start = false;
+	public static void startGame() {
 
 		System.out.println("Now its time to add players. This game supports between " + MIN_PLAYERS + " and "
 				+ MAX_PLAYERS + " players.");
 
-		do {
-			ArrayList<Player> players = TurnLauncher.getPlayers();
-
-			if (players.size() > 0) {
-				System.out.println("\n=====| PLAYERS |=====");
-				turnLauncher.displayPlayers();
-			}
-
-			System.out.printf("\n=====| MENU |=====\n");
-
-			if (players.size() < MAX_PLAYERS) {
-				System.out.printf("1. Add New Player\n");
-			}
-			if (players.size() >= 1 && players.size() < MAX_PLAYERS) {
-				System.out.printf("2. Modify Existing Player\n");
-			}
-			if (players.size() >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
-				System.out.printf("3. Begin Game\n");
-			}
-			if (players.size() == MAX_PLAYERS) {
-				System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Player\n");
-			}
-
-			switch (UserInput.getUserInputInt()) {
-			case 1:
-				if (players.size() < MAX_PLAYERS) {
-					turnLauncher.addPlayer();
-				} else {
-					start = true;
-				}
-				break;
-			case 2:
-				if (players.size() >= 1) {
-					turnLauncher.modifyPlayer();
-					// break inside if, so fall through to default !if
-					break;
-				}
-			case 3:
-				if (players.size() >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
-					start = true;
-					break;
-				}
-			default:
-				System.out.println("Invalid Menu Option, please try again");
-			}
-
-		} while (!start);
-
-		// Allow option to play a long game with greater initial resources
-		// or a short game with default resources
-		GUI.clearConsole(8);
+		createPlayers();
 
 		int gameLengthInput;
 		do {
-			System.out.println("\n=====| MENU |=====\n1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
+			System.out.println(MENU_HEADER + "1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
 			gameLengthInput = UserInput.getUserInputInt();
 			switch (gameLengthInput) {
 			case 1:
@@ -133,31 +120,131 @@ public class GameLauncher {
 			case 3:
 				// TODO update info with new balance changes
 				System.out.println("Some details about the different modes...");
-				GUI.clearConsole(8);
+				GUI.clearConsole(20);
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 			}
 		} while (gameLengthInput != 1 && gameLengthInput != 2);
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
 
-		// GUI.displayIntroMessage();
+		// Game Loop
+		GameLauncher.gameLoop();
 
 	}
 
 	/**
-	 * @return the gameOver
+	 * runs menu to setup new players / modify existing
 	 */
-	public static boolean isGameOver() {
-		return gameOver;
+	public static void createPlayers() {
+		ArrayList<Player> players;
+		boolean start = false;
+		int numOfPlayers;
+
+		while (!start) {
+
+			players = turnLauncher.getPlayers();
+			numOfPlayers = players.size();
+
+			if (numOfPlayers > 0) {
+				System.out.print(MENU_HEADER);
+				turnLauncher.displayPlayers();
+			}
+
+			System.out.print(MENU_HEADER);
+
+			if (numOfPlayers < MAX_PLAYERS) {
+				System.out.printf("1. Add New Player\n");
+			}
+			if (numOfPlayers >= 1 && players.size() < MAX_PLAYERS) {
+				System.out.printf("2. Modify Existing Player\n");
+			}
+			if (numOfPlayers >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
+				System.out.printf("3. Begin Game\n");
+			}
+			if (numOfPlayers == MAX_PLAYERS) {
+				System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Player\n");
+			}
+
+			switch (UserInput.getUserInputInt()) {
+			case 1:
+				if (numOfPlayers < MAX_PLAYERS) {
+					turnLauncher.addPlayer();
+				} else {
+					start = true;
+				}
+				break;
+			case 2:
+				if (numOfPlayers >= 1) {
+					turnLauncher.modifyPlayer();
+					// break inside if, so fall through to default !if
+					break;
+				}
+			case 3:
+				if (numOfPlayers >= MIN_PLAYERS && numOfPlayers < MAX_PLAYERS) {
+					start = true;
+					break;
+				}
+			default:
+				System.out.println("Invalid Menu Option, please try again");
+			}
+
+		}
+
+		GUI.clearConsole(20);
 	}
 
 	/**
-	 * allow gameOver to be declared externally from
+	 * main game loop
+	 */
+	public static void gameLoop() {
+
+		while (!gameOver) {
+
+			mainHeadder();
+
+			ArtemisCalendar.displayDate();
+
+			System.out.printf("\nIt's " + turnLauncher.getActivePlayer().getName() + "'s turn.\n");
+
+			turnLauncher.moveMethod(board);
+			turnLauncher.checkElement(board);
+			turnLauncher.playerTurnMenu(board);
+			
+		}
+
+	}
+
+	/**
+	 * Runs correct game-over sequence depending on win or loss
+	 * 
+	 * @param board
+	 */
+	public static void gameOverSequence() {
+
+		if (board.allSystemComplete()) {
+			GUI.displayGameWonMessage();
+		} else {
+			GUI.displayGameLossMessage(board);
+		}
+
+		// TODO:bug, message is being displayed even when there is no game history to
+		// show
+		// on completion, show a history of game moves
+		turnLauncher.gameHistoryStorage.displayMoveHistory();
+
+		if (turnLauncher.players.size() > 0) {
+			turnLauncher.endingPlayerScore(board);
+		}
+
+	}
+
+	/**
+	 * sets the game over state
 	 */
 	public static void declareGameOver() {
 		gameOver = true;
@@ -231,18 +318,23 @@ public class GameLauncher {
 	}
 
 	/**
-	 * 
-	 * @param turnLauncher
-	 * @param board
+	 * main UI display headder
 	 */
-	public void endGame() {
+	public static void mainHeadder() {
 
-		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
+		Player activePlayer = turnLauncher.getActivePlayer();
 
-		if (GUI.yesNoMenu() == 1) {
-			gameOver = true;
-		}
+		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
+				activePlayer.getName(), activePlayer.getBalanceOfResources(),
+				board.getSquares().get(activePlayer.getCurrentPosition()).getSquareName());
 
+	}
+
+	/**
+	 * @return the menuHeader
+	 */
+	public static String getMenuHeader() {
+		return MENU_HEADER;
 	}
 
 }

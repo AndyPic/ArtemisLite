@@ -78,7 +78,7 @@ public class TurnLauncher {
 
 		players.add(player);
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 
 	}
 
@@ -104,7 +104,7 @@ public class TurnLauncher {
 
 		firstToPlay = allPlayersRoll(players);
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 
 		// Rearranges the player array so that the correct player is first
 		while (firstToPlay != players.get(0)) {
@@ -115,7 +115,7 @@ public class TurnLauncher {
 		}
 
 		activePlayer = firstToPlay;
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 	}
 
 	/**
@@ -206,6 +206,22 @@ public class TurnLauncher {
 		player.setName(name);
 
 	}
+	
+	
+	/**
+	 * end game warning
+	 */
+	public void endGame() {
+		
+		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
+		
+		if (GUI.yesNoMenu() == 1) {
+			GameLauncher.declareGameOver();
+			//Set player bankrupt
+			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -activePlayer.getBalanceOfResources());
+		}
+		
+	}
 
 	/**
 	 * Modify or delete a player
@@ -238,7 +254,7 @@ public class TurnLauncher {
 		playerName = player.getName();
 		valid = true;
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 
 		do {
 			System.out.println("=====| PLAYER OPTIONS |=====" + "?\n1. Modify " + playerName + "\n2. Delete "
@@ -260,7 +276,7 @@ public class TurnLauncher {
 			}
 		} while (!valid);
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 	}
 
 	/**
@@ -403,10 +419,7 @@ public class TurnLauncher {
 		// Update player position
 		activePlayer.setCurrentPosition(newPos);
 
-		// TODO: method calls need cleaned up + this is duplicated code JD
-		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
-				getActivePlayer().getName(), getActivePlayer().getBalanceOfResources(),
-				board.getSquares().get(getActivePlayer().getCurrentPosition()).getSquareName());
+		GameLauncher.mainHeadder();
 
 		System.out.printf("\nYou %s\n", roll);
 
@@ -606,7 +619,7 @@ public class TurnLauncher {
 			highestRoll = 0;
 
 			UserInput.getUserInputString();
-			GUI.clearConsole(8);
+			GUI.clearConsole(20);
 			for (Player player : playersToRoll) {
 				roll = rollDice();
 				playerRoll = getRollValue(roll);
@@ -633,7 +646,7 @@ public class TurnLauncher {
 		System.out.printf("\n=====| WINNER: %s |=====\n-----> CONTINUE <-----\n", highestRollPlayer.getName());
 		UserInput.getUserInputString();
 
-		GUI.clearConsole(8);
+		GUI.clearConsole(20);
 		return highestRollPlayer;
 
 	}
@@ -677,7 +690,7 @@ public class TurnLauncher {
 	 */
 	public void endTurn(Board board) {
 
-		int activePlayerIndex = players.indexOf(getActivePlayer());
+		int activePlayerIndex = players.indexOf(activePlayer);
 
 		if (activePlayerIndex != players.size() - 1) {
 			setActivePlayer(players.get(activePlayerIndex + 1));
@@ -702,5 +715,95 @@ public class TurnLauncher {
 	public static void setTurnOver(boolean turnOver) {
 		TurnLauncher.turnOver = turnOver;
 	}
+	
+	public void playerTurnMenu(Board board) {
+		TurnLauncher.setTurnOver(false);
+		while (!TurnLauncher.isEndTurn()) {
+
+			// Check if player owns any squares
+			boolean owner = Player.isOwner(board, getActivePlayer());
+
+			GameLauncher.mainHeadder();
+
+			System.out.println("\nPlease select one of the below options");
+
+			// TODO also check if they have enough money to develop
+			if (owner) {
+				System.out.print(GameLauncher.getMenuHeader()
+						+ "1. View all element ownership \n2. View my elements \n3. Get current square details \n4. Increase Development level \n5. End turn \n6. End game\n");
+			} else {
+				System.out.print(GameLauncher.getMenuHeader()
+						+ "1. View all element ownership \n2. Get current square details \n3. End turn \n4. End game\n");
+
+			}
+
+			// surround with try / catch to catch BankruptcyException when modifying player
+			// resources would result in a negative balance
+			try {
+
+				// TODO clean up a bit, code duplication, own method?
+				switch (UserInput.getUserInputInt()) {
+
+				case 1:
+					board.viewElementOwnership();
+					break;
+				case 2:
+
+					if (owner) {
+						board.viewMyElements(getActivePlayer());
+					} else {
+						getActivePlayer().getCurrentPositionDetails(board);
+					}
+
+					break;
+				case 3:
+					if (owner) {
+						getActivePlayer().getCurrentPositionDetails(board);
+					} else {
+						endTurn(board);
+					}
+					break;
+				case 4:
+					if (owner) {
+						// Increase development level
+						System.out.println("Increase development level - Not yet implemented");
+					} else {
+						endGame();
+						endTurn(board);
+					}
+					break;
+				case 5:
+					if (owner) {
+						endTurn(board);
+						GUI.clearConsole(20);
+						break;
+					}
+
+				case 6:
+					if (owner) {
+						endGame();
+						endTurn(board);
+						break;
+					}
+
+				default:
+					System.out.println("Invalid option - try again");
+
+				}
+
+			} catch (BankruptException bankruptExc) {
+				// declare the game over at a BankruptException
+				bankruptExc.getLocalizedMessage();
+				GameLauncher.declareGameOver();
+			}
+		}
+
+		GUI.clearConsole(2);
+
+	}
+	
+	
+	
+	
 
 }
