@@ -17,7 +17,6 @@ public class GUI implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// TODO fix input fall-through
 
 		// Keep track of what messages have been printed
 		int progress = 0;

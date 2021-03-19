@@ -32,7 +32,6 @@ public class GameLauncher {
 	 */
 	public static void introMessage() {
 		// Intro message
-		// TODO: can this be made static?
 		GUI introMessage = new GUI();
 		BufferedInterrupter buffInter = new BufferedInterrupter();
 		Thread introThread = new Thread(introMessage);
@@ -51,8 +50,11 @@ public class GameLauncher {
 			}
 		}
 		// Stops the input thread after intro message finished
-		inputThread.interrupt();
-
+		if(inputThread.isAlive()) {
+			inputThread.interrupt();
+		}
+		
+		
 		GUI.clearConsole(1);
 
 	}
