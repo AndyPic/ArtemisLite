@@ -30,6 +30,7 @@ public class ModifyPlayerResources {
 			throw new BankruptException("Player: " + player.getName() + " is bankrupt");
 		} else {
 			player.setBalanceOfResources(newBalance);
+			System.out.println("Player "+player.getName()+" has "+newBalance);
 		}
 		
 		

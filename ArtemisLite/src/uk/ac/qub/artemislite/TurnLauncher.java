@@ -805,29 +805,34 @@ public class TurnLauncher {
 						// ask which square to develop
 						System.out.println("Which element would you like to develop?");
 						// maybe display squares owned by active player here
-
+						
 						String chosenSq = null;
-						chosenSq.equals(UserInput.getUserInputString());
-						StandardSquare ssq = new StandardSquare();
+						chosenSq = UserInput.getUserInputString();
+						ArrayList<Square> sqs = board.getSquares();
+						for(Square sq:sqs) {
+							if(sq.getSquareName().equalsIgnoreCase(chosenSq) && sq instanceof StandardSquare) {
+								StandardSquare ssq = (StandardSquare) sq;
+								// check if player owns square
+								if (ssq.getOwnedBy().equals(activePlayer)) {
+									// check if player can afford to increase development
+									// include some way of switching between major and minor devs
+									if (activePlayer.getBalanceOfResources() >= ssq.getMinorDevCost()) {
+										try {
+											// increase development level
+											ssq.increaseDev();
+											ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -ssq.getMinorDevCost());
+										} catch (Exception e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
 
-						// check if player owns square
-						if (ssq.getOwnedBy().equals(activePlayer)) {
-							// check if player can afford to increase development
-							// include some way of switching between major and minor devs
-							if (activePlayer.getBalanceOfResources() >= ssq.getMinorDevCost()) {
-								try {
-									// increase development level
-									ssq.increaseDev();
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
+									} else {
+										System.out.println("You cannot afford this");
+									}
+								} else {
+									System.out.println("You do not own this square");
 								}
-
-							} else {
-								System.out.println("You cannot afford this");
 							}
-						} else {
-							System.out.println("You do not own this square");
 						}
 
 						// ask if they want to develop another square

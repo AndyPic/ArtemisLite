@@ -12,9 +12,10 @@ package uk.ac.qub.artemislite;
 public class Player {
 
 	// Instance Vars
+	// increases starting resources for testing - JSM
 
 	private String name;
-	private int balanceOfResources = 201; // Set starting resources
+	private int balanceOfResources = 100000; // Set starting resources 
 	private int currentPosition = 0; // Set starting position
 
 	// Constructors
