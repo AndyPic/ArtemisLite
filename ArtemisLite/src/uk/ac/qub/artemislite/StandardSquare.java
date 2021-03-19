@@ -77,7 +77,7 @@ public class StandardSquare extends Square {
 	 * 
 	 * @throws Exception
 	 */
-	public void increaseDev() throws Exception {
+	public void increaseDev() {
 
 		if (this.currentMinorDevLevel < this.MAX_MINOR_DEV) {
 
@@ -91,9 +91,13 @@ public class StandardSquare extends Square {
 			System.out.println(
 					"Major dev increased from " + (this.currentMajorDevLevel - 1) + " to " + this.currentMajorDevLevel);
 
+		} else if(this.currentMajorDevLevel == MAX_MAJOR_DEV) {
+			
+			System.out.println("Element is already fully developed");
+			
 		} else {
 
-			throw new Exception("Already at max dev level");
+			System.out.println("Invalid dev increase");
 
 		}
 

@@ -721,7 +721,8 @@ public class TurnLauncher {
 			turnOver = true;
 		}
 	}
-
+	
+	
 	/**
 	 * @return the endTurn
 	 */
@@ -795,60 +796,9 @@ public class TurnLauncher {
 					activePlayer.getCurrentPositionDetails(board);
 				} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
 					GameLauncher.mainHeadder();
-					// TODO also check if they have enough money to develop
-					// Increase development level
-					// TODO: this should really be its own method, but I couldn't fix the
-					// static/non-static thing-JSM
-					boolean developing = true;
-
-					while (developing = true) {
-						// ask which square to develop
-						System.out.println("Which element would you like to develop?");
-						// maybe display squares owned by active player here
-						
-						String chosenSq = null;
-						chosenSq = UserInput.getUserInputString();
-						ArrayList<Square> sqs = board.getSquares();
-						for(Square sq:sqs) {
-							if(sq.getSquareName().equalsIgnoreCase(chosenSq) && sq instanceof StandardSquare) {
-								StandardSquare ssq = (StandardSquare) sq;
-								// check if player owns square
-								if (ssq.getOwnedBy().equals(activePlayer)) {
-									// check if player can afford to increase development
-									// include some way of switching between major and minor devs
-									if (activePlayer.getBalanceOfResources() >= ssq.getMinorDevCost()) {
-										try {
-											// increase development level
-											ssq.increaseDev();
-											ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -ssq.getMinorDevCost());
-										} catch (Exception e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-
-									} else {
-										System.out.println("You cannot afford this");
-									}
-								} else {
-									System.out.println("You do not own this square");
-								}
-							}
-						}
-
-						// ask if they want to develop another square
-						System.out.println("Would you like to develop another square?");
-						switch (GUI.yesNoMenu()) {
-						case 1:
-							developing = true;
-							break;
-						case 2:
-							developing = false;
-							break;
-						default:
-							System.out.println("That shouldn't happen");
-						}
-
-					}
+					IncreaseSquareDev id = new IncreaseSquareDev();
+					id.increaseSquareDev(board, activePlayer);
+					
 				} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
 					endTurn(board);
 				} else if (userMenuSelection.equals(MenuOption.END_GAME)) {

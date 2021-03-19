@@ -3,6 +3,8 @@
  */
 package uk.ac.qub.artemislite;
 
+import java.util.ArrayList;
+
 /**
  * @author Jordan Davis
  * @author David Finlay
@@ -55,6 +57,36 @@ public class Player {
 					return true;
 				}
 			}
+		}
+		return false;
+	}
+	
+	/**
+	 * checks if player owns all elements in a system
+	 * @param board
+	 * @param reqSq
+	 * @param activePlayer
+	 * @return
+	 */
+	public boolean systemFullyOwned(Board board, Square reqSq, Player activePlayer){
+		ArrayList<Square> sqs = board.getSquares();
+		ArrayList<StandardSquare> elementSquares = new ArrayList<StandardSquare>();
+		ArrayList<StandardSquare> ownedElementSquares = new ArrayList<StandardSquare>();
+		for (Square sq : sqs) {
+			if(sq instanceof StandardSquare) {
+				StandardSquare strdSq = (StandardSquare) sq;
+				if(strdSq.getSquareSystem()==reqSq.getSquareSystem() && strdSq.getOwnedBy()!=activePlayer) {
+					elementSquares.add(strdSq);
+				} else if(strdSq.getSquareSystem()==reqSq.getSquareSystem() && strdSq.getOwnedBy()==activePlayer) {
+					ownedElementSquares.add(strdSq);
+					elementSquares.add(strdSq);
+				}
+			}
+		}
+		System.out.println(ownedElementSquares.size());
+		System.out.println(elementSquares.size());
+		if(ownedElementSquares.size()==elementSquares.size()) {
+			return true;
 		}
 		return false;
 	}
