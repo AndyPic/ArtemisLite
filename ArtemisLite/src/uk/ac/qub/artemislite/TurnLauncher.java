@@ -335,7 +335,7 @@ public class TurnLauncher {
 				// Check if player has enough resources to buy property
 				if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
 					// Ask player what they want to do
-					System.out.printf("\n%s: you currently have %d RESOURCES, would you like to buy %s for %d\n",
+					System.out.printf("\n%s: you currently have %d RESOURCES, would you like to begin research on %s for %d\n",
 							players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
 							squareName, purchaseCost);
 
@@ -343,15 +343,15 @@ public class TurnLauncher {
 					switch (GUI.yesNoMenu()) {
 					case 1:
 						playersWant.add(players.get(loop));
-						System.out.printf("\n%s DOES want to buy %s\n", players.get(loop).getName(), squareName);
+						System.out.printf("\n%s DOES want to begin researching %s\n", players.get(loop).getName(), squareName);
 						break;
 					case 2:
-						System.out.printf("\n%s DOES NOT want to buy %s\n", players.get(loop).getName(), squareName);
+						System.out.printf("\n%s DOES NOT want to begin researching %s\n", players.get(loop).getName(), squareName);
 						break;
 					}
 
 				} else {
-					System.out.printf("\n%s doesn't have enough RECOURCES to buy %s\n", players.get(loop).getName(),
+					System.out.printf("\n%s doesn't have enough RECOURCES to begin researching %s\n", players.get(loop).getName(),
 							squareName);
 				}
 			}
@@ -360,7 +360,7 @@ public class TurnLauncher {
 		// Check that at least 1 player wanted to buy the property
 		if (playersWant.isEmpty()) {
 			// No one wanted it
-			System.out.printf("\nNobody purchased %s.\n", squareName);
+			System.out.printf("\nNobody started the research on %s.\n", squareName);
 
 		} else if (playersWant.size() == 1) {
 			// If only 1 players wants it, then they are index 0
@@ -368,7 +368,7 @@ public class TurnLauncher {
 
 		} else {
 			// else roll dice to see who wins the property
-			System.out.printf("\n%d players want to buy %s\n\n", playersWant.size(), squareName);
+			System.out.printf("\n%d players want to research %s\n\n", playersWant.size(), squareName);
 
 			System.out.printf("\nThe players who want to buy will now roll to see who wins %s.\n", squareName);
 
@@ -391,7 +391,7 @@ public class TurnLauncher {
 			standardSquare.setOwnedBy(highRollPlayer);
 
 			// Tell players what happened
-			System.out.printf("\n%s now owns %s, and has £%d remaining.\n", highRollPlayer.getName(), squareName,
+			System.out.printf("\n%s is nor responsible for %s, and has £%d remaining.\n", highRollPlayer.getName(), squareName,
 					highRollPlayer.getBalanceOfResources());
 		}
 
@@ -455,9 +455,9 @@ public class TurnLauncher {
 		if (newSquare instanceof StandardSquare) {
 			StandardSquare stdSrquare = (StandardSquare) newSquare;
 			if (stdSrquare.getOwnedBy() != null) {
-				System.out.printf(" It is owned by %s.\n", stdSrquare.getOwnedBy().getName());
+				System.out.printf(" It is already being researched by %s.\n", stdSrquare.getOwnedBy().getName());
 			} else {
-				System.out.printf(" It is not owned and costs £%d to purchase\n", stdSrquare.getPurchaseCost());
+				System.out.printf(" There is no team researching this element, it would costs £%d to start\n", stdSrquare.getPurchaseCost());
 			}
 		}
 
@@ -495,10 +495,10 @@ public class TurnLauncher {
 				// Only start auction if there is a player that can afford it
 				for (int loop = 0; loop < players.size(); loop++) {
 					if (players.get(loop).getBalanceOfResources() >= standardSquare.getPurchaseCost()) {
-						auctionSquare("doesn't have enough RESOURCES to buy it.", standardSquare);
+						auctionSquare("doesn't have enough RESOURCES to begin research.", standardSquare);
 						break;
 					} else if (loop == (players.size() - 1)) {
-						System.out.printf("%s and no other player have enough RESOURCES to buy %s.\n",
+						System.out.printf("%s and no other player have enough RESOURCES to begin research %s.\n",
 								activePlayer.getName(), standardSquare.getSquareName());
 						// add a non-action move to gameHistory
 						gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
@@ -533,7 +533,7 @@ public class TurnLauncher {
 		squareOwnerName = squareOwner.getName();
 
 		if (squareOwner == activePlayer) {
-			System.out.printf("%s, you already own this square.\n", activePlayerName);
+			System.out.printf("%s, you have already started to research this element.\n", activePlayerName);
 			return;
 		}
 
@@ -587,7 +587,7 @@ public class TurnLauncher {
 		// Offer player the square
 		System.out.printf(
 				// TODO rename resources to whatever we decide to call it
-				"You currently have %d RESOURCES, would you like to buy it?\n", activePlayer.getBalanceOfResources());
+				"You currently have %d RESOURCES, would you like to begin researching the element?\n", activePlayer.getBalanceOfResources());
 
 		switch (GUI.yesNoMenu()) {
 		case 1:

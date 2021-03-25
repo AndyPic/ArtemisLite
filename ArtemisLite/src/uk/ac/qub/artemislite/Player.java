@@ -17,7 +17,7 @@ public class Player {
 	// increases starting resources for testing - JSM
 
 	private String name;
-	private int balanceOfResources = 100000; // Set starting resources 
+	private int balanceOfResources = 200; // Set starting resources 
 	private int currentPosition = 0; // Set starting position
 
 	// Constructors
