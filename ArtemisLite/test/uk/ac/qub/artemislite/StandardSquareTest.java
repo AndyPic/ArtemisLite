@@ -43,8 +43,8 @@ class StandardSquareTest {
 		
 		nameValid = "SquareX";
 		nameInvalid = "";
-		squareSystemValid = SystemType.SYSTEM1;
-		squareSystemInvalid = SystemType.SYSTEM3;
+		squareSystemValid = SystemType.ORION;
+		squareSystemInvalid = SystemType.EGS;
 		
 		ssq1 = new StandardSquare();
 		

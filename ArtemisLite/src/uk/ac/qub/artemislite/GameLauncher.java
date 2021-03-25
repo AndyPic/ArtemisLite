@@ -181,27 +181,33 @@ public class GameLauncher {
 		ArrayList<Player> players;
 		boolean start = false;
 		int numOfPlayers;
-
+		
+		//Force the first two players to be added
+		System.out.println("Lets add the first player");
+		turnLauncher.addPlayer();
+		System.out.println("And the second player");
+		turnLauncher.addPlayer();
+		
 		while (!start) {
 
 			players = TurnLauncher.getPlayers();
 			numOfPlayers = players.size();
 
 			if (numOfPlayers > 0) {
-				System.out.print(MENU_HEADER);
+				System.out.print("\n=====| PLAYERS |=====\n");
 				turnLauncher.displayPlayers();
 			}
 
 			System.out.print(MENU_HEADER);
 
 			if (numOfPlayers < MAX_PLAYERS) {
-				System.out.printf("1. Add New Player\n");
+				System.out.printf("1. Add a New Player\n");
 			}
 			if (numOfPlayers >= 1 && players.size() < MAX_PLAYERS) {
-				System.out.printf("2. Modify Existing Player\n");
+				System.out.printf("2. Modify an Existing Player\n");
 			}
 			if (numOfPlayers >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
-				System.out.printf("3. Begin Game\n");
+				System.out.printf("3. Begin the Game\n");
 			}
 			if (numOfPlayers == MAX_PLAYERS) {
 				System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Player\n");

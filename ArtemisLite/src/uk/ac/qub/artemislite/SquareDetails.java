@@ -16,17 +16,17 @@ public enum SquareDetails {
 	// rentMinor1, rentMinor2, rentMinor3, rentMajor1
 	// TODO still need to decide values and names for these sqaures
 	SQUARERESOURCE(1, "Resource Square", SystemType.RESOURCE),
-	SQUAREX(2, "SquareX", SystemType.SYSTEM1, 100, 200, 400, 10, 20, 30, 40, 80),
-	SQUAREY(3, "SquareY", SystemType.SYSTEM1, 100, 200, 400, 10, 20, 30, 40, 80),
-	SQUAREA(4, "SquareA", SystemType.SYSTEM2, 200, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREB(5, "SquareB", SystemType.SYSTEM2, 200, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREC(6, "SquareC", SystemType.SYSTEM2, 200, 400, 800, 30, 40, 50, 60, 120),
+	SQUAREX(2, "Crew Module", SystemType.ORION, 100, 200, 400, 10, 20, 30, 40, 80),
+	SQUAREY(3, "Launch Abort System", SystemType.ORION, 100, 200, 400, 10, 20, 30, 40, 80),
+	SQUAREA(4, "Solid Rocket Boosters", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
+	SQUAREB(5, "RS-25 Engines", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
+	SQUAREC(6, "SLS Avionics", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
 	SQUAREBLANK(7, "Blank Square", SystemType.BLANK),
-	SQUARE1(8, "Square1", SystemType.SYSTEM3, 300, 600, 1200, 60, 70, 80, 90, 180),
-	SQUARE2(9, "Square2", SystemType.SYSTEM3, 300, 600, 1200, 60, 70, 80, 90, 180),
-	SQUARE3(10, "Square3", SystemType.SYSTEM3, 300, 600, 1200, 60, 70, 80, 90, 180),
-	SQUAREi(11, "Squarei", SystemType.SYSTEM4, 400, 800, 1600, 90, 100, 110, 120, 240),
-	SQUAREii(12, "Squareii", SystemType.SYSTEM4, 400, 800, 1600, 90, 100, 110, 120, 240);
+	SQUARE1(8, "Crawlers", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
+	SQUARE2(9, "Mobile Launchers", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
+	SQUARE3(10, "Launch Pad 39B", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
+	SQUAREi(11, "Power and Propulsion", SystemType.GATEWAY, 400, 800, 1600, 90, 100, 110, 120, 240),
+	SQUAREii(12, "Habitation and Logistics Outpost", SystemType.GATEWAY, 400, 800, 1600, 90, 100, 110, 120, 240);
 
 	private final int squarePos;
 	private final String name;
