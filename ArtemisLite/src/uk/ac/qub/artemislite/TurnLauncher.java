@@ -116,7 +116,7 @@ public class TurnLauncher {
 
 		Player firstToPlay;
 		System.out.println(
-				"Lets roll the dice to find out who goes first...\n\nHint: when you see --> <-- just press enter!\n");
+				"Lets roll the dice to find out who plays first...\n\nHint: when you see --> <-- just press enter!\n");
 
 		firstToPlay = allPlayersRoll(players);
 
@@ -192,7 +192,7 @@ public class TurnLauncher {
 		String name;
 		boolean valid;
 
-		System.out.println("Please enter your name:");
+		System.out.println("Please enter your company name:");
 
 		do {
 			valid = true;
@@ -210,7 +210,7 @@ public class TurnLauncher {
 						if (user.getName().equalsIgnoreCase(name.trim())) {
 							valid = false;
 							System.out.println(
-									"That name has already been used by a player, please enter something different");
+									"A company with that name already exists, please enter something different");
 						}
 					}
 				}
@@ -227,7 +227,7 @@ public class TurnLauncher {
 	 * end game warning
 	 */
 	public void endGame() {
-
+		//TODO: need to think of better text for here
 		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
 
 		if (GUI.yesNoMenu() == 1) {
@@ -251,7 +251,7 @@ public class TurnLauncher {
 
 		if (players.size() > 1) {
 			do {
-				System.out.println("=====| MODIFY PLAYER |=====");
+				System.out.println("=====| MODIFY COMPANY |=====");
 				displayPlayers();
 				userInput = UserInput.getUserInputInt() - 1;
 
@@ -273,7 +273,7 @@ public class TurnLauncher {
 		GUI.clearConsole();
 
 		do {
-			System.out.println("=====| PLAYER OPTIONS |=====" + "?\n1. Modify " + playerName + "\n2. Delete "
+			System.out.println("=====| COMPANY OPTIONS |=====" + "?\n1. Modify " + playerName + "\n2. Delete "
 					+ playerName + "\n3. Go back");
 
 			switch (UserInput.getUserInputInt()) {
@@ -326,7 +326,7 @@ public class TurnLauncher {
 		activePlayerName = activePlayer.getName();
 		playersWant = new ArrayList<Player>();
 		GUI.clearConsole();
-		System.out.printf("=====| AUCTION BEGINS |=====\n%s is being auctioned because %s %s\n", squareName,
+		System.out.printf("=====| AUCTION BEGINS |=====\nNASA has an obligation to get the element underday to ensure sucess of Artemis. They have begun to look for new companies for %s because %s %s\n", squareName,
 				activePlayerName, reasonToAuction);
 
 		for (int loop = 0; loop < players.size(); loop++) {
@@ -335,7 +335,7 @@ public class TurnLauncher {
 				// Check if player has enough resources to buy property
 				if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
 					// Ask player what they want to do
-					System.out.printf("\n%s: you currently have %d RESOURCES, would you like to begin research on %s for %d\n",
+					System.out.printf("\n%s: you currently have %d staff-hours remaining, you would need to allocate %d hours to begin research on %s. Would you like to proceed?\n",
 							players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
 							squareName, purchaseCost);
 
@@ -343,15 +343,15 @@ public class TurnLauncher {
 					switch (GUI.yesNoMenu()) {
 					case 1:
 						playersWant.add(players.get(loop));
-						System.out.printf("\n%s DOES want to begin researching %s\n", players.get(loop).getName(), squareName);
+						System.out.printf("\n%s DOES want to be invloved in the researching of %s\n", players.get(loop).getName(), squareName);
 						break;
 					case 2:
-						System.out.printf("\n%s DOES NOT want to begin researching %s\n", players.get(loop).getName(), squareName);
+						System.out.printf("\n%s DOES NOT want to be invloved in the researching of %s\n", players.get(loop).getName(), squareName);
 						break;
 					}
 
 				} else {
-					System.out.printf("\n%s doesn't have enough RECOURCES to begin researching %s\n", players.get(loop).getName(),
+					System.out.printf("\n%s doesn't have enough staff-hours remaining to take on the %s project\n", players.get(loop).getName(),
 							squareName);
 				}
 			}
@@ -360,7 +360,7 @@ public class TurnLauncher {
 		// Check that at least 1 player wanted to buy the property
 		if (playersWant.isEmpty()) {
 			// No one wanted it
-			System.out.printf("\nNobody started the research on %s.\n", squareName);
+			System.out.printf("\nNASA failed to secure a company to begin research on %s.\n", squareName);
 
 		} else if (playersWant.size() == 1) {
 			// If only 1 players wants it, then they are index 0
@@ -368,9 +368,9 @@ public class TurnLauncher {
 
 		} else {
 			// else roll dice to see who wins the property
-			System.out.printf("\n%d players want to research %s\n\n", playersWant.size(), squareName);
+			System.out.printf("\n%d companies have shown thier intrest in %s\n\n", playersWant.size(), squareName);
 
-			System.out.printf("\nThe players who want to buy will now roll to see who wins %s.\n", squareName);
+			System.out.printf("\nNASA have requrested a pitch from each company on why they should win the %s contract. Roll the dice to see how the pitch went!.\n", squareName);
 
 			highRollPlayer = allPlayersRoll(playersWant);
 
@@ -391,7 +391,7 @@ public class TurnLauncher {
 			standardSquare.setOwnedBy(highRollPlayer);
 
 			// Tell players what happened
-			System.out.printf("\n%s is nor responsible for %s, and has £%d remaining.\n", highRollPlayer.getName(), squareName,
+			System.out.printf("\n%s is now responsible for the research and development of %s, and has %d free staff-hours remaining.\n", highRollPlayer.getName(), squareName,
 					highRollPlayer.getBalanceOfResources());
 		}
 
@@ -414,7 +414,7 @@ public class TurnLauncher {
 		currentPos = activePlayer.getCurrentPosition();
 		completedLap = false;
 
-		System.out.printf("\nYou are currently on %s\n", board.getSquares().get(currentPos).getSquareName());
+		System.out.printf("\nYou are currently visiting %s\n", board.getSquares().get(currentPos).getSquareName());
 		// TODO: we somehow need to workout how to show the player more info about what
 		// squares are ahead so they feel like they are actually playing a game and not
 		// just hitting roll dice JD
@@ -450,14 +450,14 @@ public class TurnLauncher {
 		newSquare = board.getSquares().get(newPos);
 		newSquareName = newSquare.getSquareName();
 
-		System.out.printf("\nYou have landed on %s.", newSquareName);
+		System.out.printf("\nYou have arrived at %s.", newSquareName);
 
 		if (newSquare instanceof StandardSquare) {
 			StandardSquare stdSrquare = (StandardSquare) newSquare;
 			if (stdSrquare.getOwnedBy() != null) {
-				System.out.printf(" It is already being researched by %s.\n", stdSrquare.getOwnedBy().getName());
+				System.out.printf("Research on this element is already underway  researched by %s.\n", stdSrquare.getOwnedBy().getName());
 			} else {
-				System.out.printf(" There is no team researching this element, it would costs £%d to start\n", stdSrquare.getPurchaseCost());
+				System.out.printf("There is no team researching this element, it would costs £%d to start\n", stdSrquare.getPurchaseCost());
 			}
 		}
 
