@@ -62,13 +62,15 @@ public class StandardElement extends Element {
 	@Override
 	public String toString() {
 		if (ownedBy == null)
-			return super.toString() + String.format("%15s\t%d\nHours for research milestone:\t%d\nHours for construction:\t%d\n%15s\t%d\n",
-					"Hours requred to begin research:", purchaseCost, minorDevCost, majorDevCost, "Hours for help request:", rentCost);
+			return super.toString() + String.format(
+					"%15s\t%d\nHours for research milestone:\t%d\nHours for construction:\t%d\n%15s\t%d\n",
+					"Hours requred to begin research:", purchaseCost, minorDevCost, majorDevCost,
+					"Hours for help request:", rentCost);
 
 		return super.toString() + String.format(
 				"%15s\t%s\nCurrent research stage:\t%d\nHours for research milestone:\t%d\nCurrent construction level:\t%d\nHours for construction:\t%d\n%15s\t%d\n",
-				"Research started by:", ownedBy.getName(), currentMinorDevLevel, minorDevCost, currentMajorDevLevel, majorDevCost,
-				"Hours for help request:", rentCost);
+				"Research started by:", ownedBy.getName(), currentMinorDevLevel, minorDevCost, currentMajorDevLevel,
+				majorDevCost, "Hours for help request:", rentCost);
 
 	}
 
@@ -82,18 +84,20 @@ public class StandardElement extends Element {
 		if (currentMinorDevLevel < MAX_MINOR_DEV) {
 
 			currentMinorDevLevel++;
-			System.out.println(
-					"You have complete research stage " + (currentMinorDevLevel - 1) + ". It's now time to begin stage " + currentMinorDevLevel);
+			System.out.println("You have complete research stage " + (currentMinorDevLevel - 1)
+					+ ". It's now time to begin stage " + currentMinorDevLevel);
 
 		} else if (currentMajorDevLevel < MAX_MAJOR_DEV) {
 
 			currentMajorDevLevel++;
-			System.out.println("You have completed all research on this element! its now time to start the construction");
+			System.out
+					.println("You have completed all research on this element! its now time to start the construction");
 
-		} else if(currentMajorDevLevel == MAX_MAJOR_DEV) {
-			
-			System.out.println("There is nothing left for you to do on this element, construction is already underway!");
-			
+		} else if (currentMajorDevLevel == MAX_MAJOR_DEV) {
+
+			System.out
+					.println("There is nothing left for you to do on this element, construction is already underway!");
+
 		} else {
 
 			System.out.println("Invalid dev increase");
@@ -149,51 +153,53 @@ public class StandardElement extends Element {
 	 * displays current details to screen
 	 */
 	public void displayDetails() {
-		System.out.println("Cost:" + this.purchaseCost);
-		System.out.println("Hours for Help Request:" + this.rentCost);
+		System.out.printf("%35s: %d\n", "Cost", this.purchaseCost);
+		System.out.printf("%35s: %d\n", "Hours for Help Request", this.rentCost);
 		if (this.currentMajorDevLevel == MAX_MAJOR_DEV) {
 			System.out.println("Fully researched and construction underway");
 		} else {
-			System.out.println("Current Research Stage:" + this.currentMinorDevLevel);
-			System.out.println("Research Cost:" + this.minorDevCost);
+			System.out.printf("%35s: %d\n", "Current Research Stage", this.currentMinorDevLevel);
+			System.out.printf("%35s: %d\n", "Research Cost", this.minorDevCost);
 		}
 		if (ownedBy != null) {
-			System.out.println("Research underway by: " + this.ownedBy);
+			System.out.printf("%35s: %s\n", "Research underway by " + this.ownedBy);
 		} else {
 			System.out.println("Research has not started on this element");
 		}
 
 	}
-	
+
 	/**
 	 * checks if element has reached max development
+	 * 
 	 * @return true if development is maxed
 	 */
 	public boolean isMaxDevelopment() {
 		boolean isMax = false;
-		
-		if(MAX_MAJOR_DEV == currentMajorDevLevel) {
+
+		if (MAX_MAJOR_DEV == currentMajorDevLevel) {
 			isMax = true;
-		} 
-		
+		}
+
 		return isMax;
-		
+
 	}
-	
+
 	/**
 	 * checks if element is owned by specified player
+	 * 
 	 * @param player to check
 	 * @return true if element is owned by player
 	 */
 	public boolean isOwnedBy(Player player) {
 		boolean isOwnedByPlayer = false;
 
-		if(ownedBy!=null && ownedBy.equals(player)) {
+		if (ownedBy != null && ownedBy.equals(player)) {
 			isOwnedByPlayer = true;
 		}
-		
+
 		return isOwnedByPlayer;
-		
+
 	}
 
 	/**

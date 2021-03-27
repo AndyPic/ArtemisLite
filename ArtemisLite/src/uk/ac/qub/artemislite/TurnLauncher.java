@@ -28,7 +28,8 @@ public class TurnLauncher {
 	private Player activePlayer;
 	private Die die;
 	private int turnNumber = 0;
-	// view all element, view my element, get element detail, increase dev level, end
+	// view all element, view my element, get element detail, increase dev level,
+	// end
 	// turn, end game
 	private LinkedHashMap<MenuOption, Boolean> menu;
 	private final static String CONTINUE_HEADER = "\n-----> CONTINUE <-----\n";
@@ -227,7 +228,7 @@ public class TurnLauncher {
 	 * end game warning
 	 */
 	public void endGame() {
-		//TODO: need to think of better text for here
+		// TODO: need to think of better text for here
 		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
 
 		if (UserInterface.yesNoMenu() == 1) {
@@ -310,7 +311,7 @@ public class TurnLauncher {
 	 * Method to auction a element to all players, except the player auctioning it
 	 * 
 	 * @param reasonToAuction - eg. "not enough resources"
-	 * @param standardElement  - The element being auctioned
+	 * @param standardElement - The element being auctioned
 	 */
 	public void auctionElement(String reasonToAuction, StandardElement standardElement) {
 
@@ -327,8 +328,9 @@ public class TurnLauncher {
 		activePlayerName = activePlayer.getName();
 		playersWant = new ArrayList<Player>();
 		UserInterface.clearConsole();
-		System.out.printf("=====| AUCTION BEGINS |=====\nNASA has an obligation to get the element underday to ensure sucess of Artemis. They have begun to look for new companies for %s because %s %s\n", elementName,
-				activePlayerName, reasonToAuction);
+		System.out.printf(
+				"=====| AUCTION BEGINS |=====\nNASA has an obligation to get the element underday to ensure sucess of Artemis. They have begun to look for new companies for %s because %s %s\n",
+				elementName, activePlayerName, reasonToAuction);
 
 		for (int loop = 0; loop < players.size(); loop++) {
 			// Do nothing if player is active player
@@ -336,24 +338,27 @@ public class TurnLauncher {
 				// Check if player has enough resources to buy property
 				if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
 					// Ask player what they want to do
-					System.out.printf("\n%s: you currently have %d staff-hours remaining, you would need to allocate %d hours to begin research on %s. Would you like to proceed?\n",
+					System.out.printf(
+							"\n%s: you currently have %d staff-hours remaining, you would need to allocate %d hours to begin research on %s. Would you like to proceed?\n",
 							players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
-							elementName, purchaseCost);
+							purchaseCost, elementName);
 
 					// Add player responses to arraylist
 					switch (UserInterface.yesNoMenu()) {
 					case 1:
 						playersWant.add(players.get(loop));
-						System.out.printf("\n%s DOES want to be invloved in the researching of %s\n", players.get(loop).getName(), elementName);
+						System.out.printf("\n%s DOES want to be invloved in the researching of %s\n",
+								players.get(loop).getName(), elementName);
 						break;
 					case 2:
-						System.out.printf("\n%s DOES NOT want to be invloved in the researching of %s\n", players.get(loop).getName(), elementName);
+						System.out.printf("\n%s DOES NOT want to be invloved in the researching of %s\n",
+								players.get(loop).getName(), elementName);
 						break;
 					}
 
 				} else {
-					System.out.printf("\n%s doesn't have enough staff-hours remaining to take on the %s project\n", players.get(loop).getName(),
-							elementName);
+					System.out.printf("\n%s doesn't have enough staff-hours remaining to take on the %s project\n",
+							players.get(loop).getName(), elementName);
 				}
 			}
 		}
@@ -371,7 +376,9 @@ public class TurnLauncher {
 			// else roll dice to see who wins the property
 			System.out.printf("\n%d companies have shown thier intrest in %s\n\n", playersWant.size(), elementName);
 
-			System.out.printf("\nNASA have requrested a pitch from each company on why they should win the %s contract. Roll the dice to see how the pitch went!.\n", elementName);
+			System.out.printf(
+					"\nNASA have requrested a pitch from each company on why they should win the %s contract. Roll the dice to see how the pitch went!.\n",
+					elementName);
 
 			highRollPlayer = allPlayersRoll(playersWant);
 
@@ -392,8 +399,9 @@ public class TurnLauncher {
 			standardElement.setOwnedBy(highRollPlayer);
 
 			// Tell players what happened
-			System.out.printf("\n%s is now responsible for the research and development of %s, and has %d free staff-hours remaining.\n", highRollPlayer.getName(), elementName,
-					highRollPlayer.getBalanceOfResources());
+			System.out.printf(
+					"\n%s is now responsible for the research and development of %s, and has %d free staff-hours remaining.\n",
+					highRollPlayer.getName(), elementName, highRollPlayer.getBalanceOfResources());
 		}
 
 		// TODO: update UI for auction winner
@@ -456,9 +464,12 @@ public class TurnLauncher {
 		if (newElement instanceof StandardElement) {
 			StandardElement stdSrquare = (StandardElement) newElement;
 			if (stdSrquare.getOwnedBy() != null) {
-				System.out.printf(" Research & construction on this element is already underway by %s.\n", stdSrquare.getOwnedBy().getName());
+				System.out.printf(" Research & construction on this element is already underway by %s.\n",
+						stdSrquare.getOwnedBy().getName());
 			} else {
-				System.out.printf(" No teams have started researching this element yet. NASA have predicted it would take %d to start initial research\n", stdSrquare.getPurchaseCost());
+				System.out.printf(
+						" No teams have started researching this element yet. NASA have predicted it would take %d to start initial research\n",
+						stdSrquare.getPurchaseCost());
 			}
 		}
 
@@ -466,7 +477,8 @@ public class TurnLauncher {
 		// TODO: we need the details shown to the player to be dynamic, currently all
 		// details are shown. No point showing dev costs of a element if it is already
 		// owned by another player JD
-		// TODO: should find some way to display all rent costs for a element rather than
+		// TODO: should find some way to display all rent costs for a element rather
+		// than
 		// just the current one JD
 		System.out.println(newElement.toString());
 
@@ -562,8 +574,8 @@ public class TurnLauncher {
 			// Give rent to element owner
 			ModifyPlayerResources.modifyResourcesSinglePlayer(elementOwner, rentCost);
 			System.out.printf("%s charged %s rent of [%d].\n%s now has [%d].\n%s now has [%d].\n", elementOwnerName,
-					activePlayerName, rentCost, elementOwnerName, elementOwner.getBalanceOfResources(), activePlayerName,
-					activePlayer.getBalanceOfResources());
+					activePlayerName, rentCost, elementOwnerName, elementOwner.getBalanceOfResources(),
+					activePlayerName, activePlayer.getBalanceOfResources());
 			break;
 		case 2:
 			System.out.printf("%s chose to not charge %s rent.\n", elementOwnerName, activePlayerName);
@@ -588,7 +600,8 @@ public class TurnLauncher {
 		// Offer player the element
 		System.out.printf(
 				// TODO rename resources to whatever we decide to call it
-				"You currently have %d RESOURCES, would you like to begin researching the element?\n", activePlayer.getBalanceOfResources());
+				"You currently have %d RESOURCES, would you like to begin researching the element?\n",
+				activePlayer.getBalanceOfResources());
 
 		switch (UserInterface.yesNoMenu()) {
 		case 1:
@@ -709,17 +722,16 @@ public class TurnLauncher {
 
 		int activePlayerIndex = players.indexOf(activePlayer);
 
-			if (activePlayerIndex != players.size() - 1) {
-				setActivePlayer(players.get(activePlayerIndex + 1));
-			} else {
-				setActivePlayer(players.get(0));
-				roundEnd(board);
-			}
-			turnOver = true;
-		
+		if (activePlayerIndex != players.size() - 1) {
+			setActivePlayer(players.get(activePlayerIndex + 1));
+		} else {
+			setActivePlayer(players.get(0));
+			roundEnd(board);
+		}
+		turnOver = true;
+
 	}
-	
-	
+
 	/**
 	 * @return the endTurn
 	 */
@@ -795,7 +807,7 @@ public class TurnLauncher {
 					GameLauncher.mainHeadder();
 					IncreaseElementDev id = new IncreaseElementDev();
 					id.increaseElementDev(board, activePlayer);
-					
+
 				} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
 					endTurn(board);
 				} else if (userMenuSelection.equals(MenuOption.END_GAME)) {

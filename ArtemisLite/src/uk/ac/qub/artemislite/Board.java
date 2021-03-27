@@ -91,17 +91,18 @@ public class Board {
 	 * 
 	 */
 	public void viewElementOwnership() {
-		for (Element sq : this.elements) {
+		for (Element element : this.elements) {
 
-			if (sq instanceof StandardElement) {
-				StandardElement stdSq = (StandardElement) sq;
+			if (element instanceof StandardElement) {
+				StandardElement stdElement = (StandardElement) element;
 
-				if (stdSq.getOwnedBy() != null) {
-					System.out.printf("[%02d][%s][%s]: Owned by %s.\n", stdSq.getBoardPosition(), stdSq.getElementName(),
-							stdSq.getElementSystem().getName(), stdSq.getOwnedBy().getName());
+				if (stdElement.getOwnedBy() != null) {
+					System.out.printf("[%s] - [%s]: Research started by %s.\n",
+							stdElement.getElementSystem().getName(), stdElement.getElementName(),
+							stdElement.getOwnedBy().getName());
 				} else {
-					System.out.printf("[%02d][%s][%s]: Not owned.\n", stdSq.getBoardPosition(), stdSq.getElementName(),
-							stdSq.getElementSystem().getName());
+					System.out.printf("%s - [%s]: Research has not begun.\n", stdElement.getElementSystem().getName(),
+							stdElement.getElementName(), stdElement.getElementSystem().getName());
 				}
 			}
 		}
