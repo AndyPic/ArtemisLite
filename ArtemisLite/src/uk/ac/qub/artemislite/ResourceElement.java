@@ -9,7 +9,7 @@ package uk.ac.qub.artemislite;
  * @author Joseph Mawhinney
  * @author Andrew Pickard
  */
-public class ResourceSquare extends Square {
+public class ResourceElement extends Element {
 
 	// Constants
 
@@ -17,7 +17,7 @@ public class ResourceSquare extends Square {
 
 	// Constructors
 
-	public ResourceSquare() {
+	public ResourceElement() {
 
 	}
 
@@ -28,7 +28,7 @@ public class ResourceSquare extends Square {
 	 * @param squareName
 	 * @param resourcesToAllocate
 	 */
-	public ResourceSquare(int boardPosition, String squareName, SystemType squareSystem) {
+	public ResourceElement(int boardPosition, String squareName, SystemType squareSystem) {
 		super(boardPosition, squareName, squareSystem);
 	}
 

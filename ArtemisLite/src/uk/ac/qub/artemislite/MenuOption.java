@@ -9,7 +9,7 @@ public enum MenuOption {
 
 	VIEW_ALL_ELEMENTS ("View all elements"),
 	VIEW_PLAYER_ELEMENTS ("View elements you own"),
-	GET_SQUARE_DETAILS ("Get current element details"),
+	GET_ELEMENT_DETAILS ("Get current element details"),
 	INCREASE_DEVELOPMENT ("Increase element development"),
 	END_TURN ("End your turn"),
 	END_GAME ("End the game");

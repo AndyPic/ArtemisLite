@@ -12,7 +12,7 @@ public class Board {
 
 	// Instance Vars
 
-	private ArrayList<Square> squares = new ArrayList<Square>();
+	private ArrayList<Element> elements = new ArrayList<Element>();
 
 	// Constructors
 
@@ -20,27 +20,27 @@ public class Board {
 	 * Default constructor, builds the game board
 	 */
 	public Board() {
-		for (SquareDetails squareDetails : SquareDetails.values()) {
-			SystemType systemType = squareDetails.getSystem();
+		for (ElementDetails elementDetails : ElementDetails.values()) {
+			SystemType systemType = elementDetails.getSystem();
 			switch (systemType) {
 
 			case RESOURCE:
-				ResourceSquare resourceSquare = new ResourceSquare(squareDetails.getSquarePos(),
-						squareDetails.getName(), squareDetails.getSystem());
-				squares.add(resourceSquare);
+				ResourceElement resourceElement = new ResourceElement(elementDetails.getElementPos(),
+						elementDetails.getName(), elementDetails.getSystem());
+				elements.add(resourceElement);
 				break;
 
 			case BLANK:
-				Square blankSquare = new Square(squareDetails.getSquarePos(), squareDetails.getName(),
-						squareDetails.getSystem());
-				squares.add(blankSquare);
+				Element blankElement = new Element(elementDetails.getElementPos(), elementDetails.getName(),
+						elementDetails.getSystem());
+				elements.add(blankElement);
 				break;
 
 			default:
-				StandardSquare standardSquare = new StandardSquare(squareDetails.getSquarePos(),
-						squareDetails.getName(), squareDetails.getSystem(), squareDetails.getCost(),
-						squareDetails.getMinorCost(), squareDetails.getMajorCost(), squareDetails.getRent());
-				squares.add(standardSquare);
+				StandardElement standardElement = new StandardElement(elementDetails.getElementPos(),
+						elementDetails.getName(), elementDetails.getSystem(), elementDetails.getCost(),
+						elementDetails.getMinorCost(), elementDetails.getMajorCost(), elementDetails.getRent());
+				elements.add(standardElement);
 			}
 
 		}
@@ -49,10 +49,10 @@ public class Board {
 	// Methods
 
 	/**
-	 * @return the squares
+	 * @return the elements
 	 */
-	public ArrayList<Square> getSquares() {
-		return squares;
+	public ArrayList<Element> getElements() {
+		return elements;
 	}
 
 	/**
@@ -63,17 +63,17 @@ public class Board {
 	public boolean allSystemComplete() {
 
 		boolean complete;
-		StandardSquare stdSquare;
+		StandardElement stdElement;
 
 		complete = true;
 
-		for (Square square : this.squares) {
+		for (Element element : this.elements) {
 
-			if (square instanceof StandardSquare) {
+			if (element instanceof StandardElement) {
 
-				stdSquare = (StandardSquare) square;
+				stdElement = (StandardElement) element;
 
-				if (stdSquare.getCurrentMajorDevLevel() != stdSquare.getMAX_MAJOR_DEV()) {
+				if (stdElement.getCurrentMajorDevLevel() != stdElement.getMAX_MAJOR_DEV()) {
 
 					complete = false;
 					break;
@@ -91,17 +91,17 @@ public class Board {
 	 * 
 	 */
 	public void viewElementOwnership() {
-		for (Square sq : this.squares) {
+		for (Element sq : this.elements) {
 
-			if (sq instanceof StandardSquare) {
-				StandardSquare stdSq = (StandardSquare) sq;
+			if (sq instanceof StandardElement) {
+				StandardElement stdSq = (StandardElement) sq;
 
 				if (stdSq.getOwnedBy() != null) {
-					System.out.printf("[%02d][%s][%s]: Owned by %s.\n", stdSq.getBoardPosition(), stdSq.getSquareName(),
-							stdSq.getSquareSystem().getName(), stdSq.getOwnedBy().getName());
+					System.out.printf("[%02d][%s][%s]: Owned by %s.\n", stdSq.getBoardPosition(), stdSq.getElementName(),
+							stdSq.getElementSystem().getName(), stdSq.getOwnedBy().getName());
 				} else {
-					System.out.printf("[%02d][%s][%s]: Not owned.\n", stdSq.getBoardPosition(), stdSq.getSquareName(),
-							stdSq.getSquareSystem().getName());
+					System.out.printf("[%02d][%s][%s]: Not owned.\n", stdSq.getBoardPosition(), stdSq.getElementName(),
+							stdSq.getElementSystem().getName());
 				}
 			}
 		}
@@ -116,10 +116,10 @@ public class Board {
 	public void viewMyElements(Player activePlayer) {
 		System.out.println("You own the following elements: ");
 
-		for (Square sq : this.squares) {
+		for (Element sq : this.elements) {
 
-			if (sq instanceof StandardSquare) {
-				StandardSquare stdSq = (StandardSquare) sq;
+			if (sq instanceof StandardElement) {
+				StandardElement stdSq = (StandardElement) sq;
 
 				if (stdSq.getOwnedBy() == activePlayer) {
 					System.out.println(stdSq.toString());

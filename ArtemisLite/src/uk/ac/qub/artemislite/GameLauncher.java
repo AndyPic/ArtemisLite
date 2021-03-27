@@ -32,7 +32,7 @@ public class GameLauncher {
 	 */
 	public static void introMessage() {
 		// Intro message
-		GUI introMessage = new GUI();
+		UserInterface introMessage = new UserInterface();
 		BufferedInterrupter buffInter = new BufferedInterrupter();
 		Thread introThread = new Thread(introMessage);
 		Thread inputThread = new Thread(buffInter);
@@ -50,12 +50,11 @@ public class GameLauncher {
 			}
 		}
 		// Stops the input thread after intro message finished
-		if(inputThread.isAlive()) {
+		if (inputThread.isAlive()) {
 			inputThread.interrupt();
 		}
-		
-		
-		GUI.clearConsole(1);
+
+		UserInterface.clearConsole(1);
 
 	}
 
@@ -82,7 +81,7 @@ public class GameLauncher {
 				break;
 			case 3:
 				System.out.println("Are you sure you want to quit the game?");
-				if (GUI.yesNoMenu() == 1) {
+				if (UserInterface.yesNoMenu() == 1) {
 					declareGameOver();
 					gameBegin = true;
 				}
@@ -93,7 +92,7 @@ public class GameLauncher {
 
 		} while (!gameBegin);
 
-		GUI.clearConsole();
+		UserInterface.clearConsole();
 
 		if (!gameOver) {
 			startGame();
@@ -105,7 +104,7 @@ public class GameLauncher {
 		File file = new File("GameRules.txt");
 		String line;
 
-		GUI.clearConsole();
+		UserInterface.clearConsole();
 
 		try {
 			FileReader fileReader = new FileReader(file);
@@ -157,15 +156,19 @@ public class GameLauncher {
 				break;
 			case 3:
 				// TODO update info with new balance changes
+				// TODO: thoughts on updating this to remove 'game length details'. Instead
+				// rename the options to be something like 'Short game (start with 200
+				// resources)' & 'Long game (start with 100 resources)'. I think the games feels
+				// like it has too many menu options
 				System.out.println("Some details about the different modes...");
-				GUI.clearConsole();
+				UserInterface.clearConsole();
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 			}
 		} while (gameLengthInput != 1 && gameLengthInput != 2);
 
-		GUI.clearConsole();
+		UserInterface.clearConsole();
 
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
@@ -181,36 +184,36 @@ public class GameLauncher {
 		ArrayList<Player> players;
 		boolean start = false;
 		int numOfPlayers;
-		
-		//Force the first two players to be added
+
+		// Force the first two players to be added
 		System.out.println("Lets add the first player");
 		turnLauncher.addPlayer();
-		System.out.println("And the second player");
+		System.out.println("Now its time for player two");
 		turnLauncher.addPlayer();
-		
+
 		while (!start) {
 
 			players = TurnLauncher.getPlayers();
 			numOfPlayers = players.size();
 
 			if (numOfPlayers > 0) {
-				System.out.print("\n=====| PLAYERS |=====\n");
+				System.out.print("\n=====| REGISTERED COMPANIES |=====\n");
 				turnLauncher.displayPlayers();
 			}
 
 			System.out.print(MENU_HEADER);
 
 			if (numOfPlayers < MAX_PLAYERS) {
-				System.out.printf("1. Add a New Player\n");
+				System.out.printf("1. Add a New Company\n");
 			}
 			if (numOfPlayers >= 1 && players.size() < MAX_PLAYERS) {
-				System.out.printf("2. Modify an Existing Player\n");
+				System.out.printf("2. Modify an Existing Company\n");
 			}
 			if (numOfPlayers >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
 				System.out.printf("3. Begin the Game\n");
 			}
 			if (numOfPlayers == MAX_PLAYERS) {
-				System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Player\n");
+				System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Company\n");
 			}
 
 			switch (UserInput.getUserInputInt()) {
@@ -238,7 +241,7 @@ public class GameLauncher {
 
 		}
 
-		GUI.clearConsole();
+		UserInterface.clearConsole();
 	}
 
 	/**
@@ -252,7 +255,7 @@ public class GameLauncher {
 
 			ArtemisCalendar.displayDate();
 
-			System.out.printf("\nIt's " + turnLauncher.getActivePlayer().getName() + "'s turn.\n");
+			System.out.printf("\nIt's time for " + turnLauncher.getActivePlayer().getName() + "to take a turn.\n");
 
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
@@ -313,7 +316,7 @@ public class GameLauncher {
 		int userInput;
 		do {
 			System.out.printf("%s \n1. View score board\n2. View full move history\n3. Exit game", MENU_HEADER);
-			GUI.clearConsole(1);
+			UserInterface.clearConsole(1);
 			userInput = UserInput.getUserInputInt();
 			switch (userInput) {
 			case 1:
@@ -325,7 +328,7 @@ public class GameLauncher {
 				TurnLauncher.getGameHistoryStorage().displayMoveHistory();
 				break;
 			case 3:
-				GUI.clearConsole(2);
+				UserInterface.clearConsole(2);
 				System.out.println("====| Thank you for playing Artemis Lite |====");
 				break;
 			default:
@@ -342,9 +345,9 @@ public class GameLauncher {
 
 		Player activePlayer = turnLauncher.getActivePlayer();
 
-		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
+		System.out.printf("=====| PLAYER: %s |=====| STAFF-HOURS: %d |=====| LOCATION: %s |=====\n",
 				activePlayer.getName(), activePlayer.getBalanceOfResources(),
-				board.getSquares().get(activePlayer.getCurrentPosition()).getSquareName());
+				board.getElements().get(activePlayer.getCurrentPosition()).getElementName());
 
 	}
 

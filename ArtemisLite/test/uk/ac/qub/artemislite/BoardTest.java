@@ -16,7 +16,7 @@ class BoardTest {
 	@BeforeEach
 	void setUp() throws Exception {
 
-		expectedCostSquarei = SquareDetails.SQUAREi.getCost();
+		expectedCostSquarei = ElementDetails.SQUAREi.getCost();
 
 	}
 
@@ -25,14 +25,14 @@ class BoardTest {
 
 		board = new Board();
 
-		ArrayList<Square> squares = board.getSquares();
+		ArrayList<Element> elements = board.getElements();
 
-		for (Square square : squares) {
-			System.out.println(square);
+		for (Element element : elements) {
+			System.out.println(element);
 			System.out.println();
 		}
 
-		StandardSquare s = (StandardSquare) board.getSquares().get(10);
+		StandardElement s = (StandardElement) board.getElements().get(10);
 
 		assertEquals(expectedCostSquarei, s.getPurchaseCost());
 

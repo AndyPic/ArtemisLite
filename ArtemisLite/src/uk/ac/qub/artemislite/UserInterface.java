@@ -9,7 +9,7 @@ package uk.ac.qub.artemislite;
  * @author Joseph Mawhinney
  * @author Andrew Pickard
  */
-public class GUI implements Runnable {
+public class UserInterface implements Runnable {
 
 	/**
 	 * Loops through the start-up message with a delay, print the rest of the

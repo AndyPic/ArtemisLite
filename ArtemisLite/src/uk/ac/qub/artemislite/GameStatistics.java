@@ -17,7 +17,7 @@ public class GameStatistics {
 		// Get resource amount for completion
 		double totalCost = 0;
 
-		for (SquareDetails square : SquareDetails.values()) {
+		for (ElementDetails square : ElementDetails.values()) {
 			totalCost += square.getCost();
 			totalCost += square.getMajorCost();
 			totalCost += (square.getMinorCost() * 3);
@@ -37,10 +37,10 @@ public class GameStatistics {
 		// Get resource amount currently invested
 		double currentProgress = 0;
 
-		for (Square b : board.getSquares()) {
+		for (Element b : board.getElements()) {
 
-			if (b instanceof StandardSquare) {
-				StandardSquare stdSq = (StandardSquare) b;
+			if (b instanceof StandardElement) {
+				StandardElement stdSq = (StandardElement) b;
 
 				if (stdSq.getOwnedBy() != null) {
 					currentProgress += stdSq.getPurchaseCost();
@@ -66,10 +66,10 @@ public class GameStatistics {
 
 		int playerInvestment = 0;
 
-		for (Square b : board.getSquares()) {
+		for (Element b : board.getElements()) {
 
-			if (b instanceof StandardSquare) {
-				StandardSquare stdSq = (StandardSquare) b;
+			if (b instanceof StandardElement) {
+				StandardElement stdSq = (StandardElement) b;
 
 				if (stdSq.getOwnedBy() == player) {
 					playerInvestment += stdSq.getPurchaseCost();

@@ -50,9 +50,9 @@ public class Player {
 	 */
 	public boolean isOwner(Board board) {
 
-		for (int loop = 0; loop < board.getSquares().size(); loop++) {
-			if (board.getSquares().get(loop) instanceof StandardSquare) {
-				StandardSquare stSq = (StandardSquare) board.getSquares().get(loop);
+		for (int loop = 0; loop < board.getElements().size(); loop++) {
+			if (board.getElements().get(loop) instanceof StandardElement) {
+				StandardElement stSq = (StandardElement) board.getElements().get(loop);
 				if (stSq.getOwnedBy() == this) {
 					return true;
 				}
@@ -68,16 +68,16 @@ public class Player {
 	 * @param activePlayer
 	 * @return
 	 */
-	public boolean systemFullyOwned(Board board, Square reqSq, Player activePlayer){
-		ArrayList<Square> sqs = board.getSquares();
-		ArrayList<StandardSquare> elementSquares = new ArrayList<StandardSquare>();
-		ArrayList<StandardSquare> ownedElementSquares = new ArrayList<StandardSquare>();
-		for (Square sq : sqs) {
-			if(sq instanceof StandardSquare) {
-				StandardSquare strdSq = (StandardSquare) sq;
-				if(strdSq.getSquareSystem()==reqSq.getSquareSystem() && strdSq.getOwnedBy()!=activePlayer) {
+	public boolean systemFullyOwned(Board board, Element reqSq, Player activePlayer){
+		ArrayList<Element> sqs = board.getElements();
+		ArrayList<StandardElement> elementSquares = new ArrayList<StandardElement>();
+		ArrayList<StandardElement> ownedElementSquares = new ArrayList<StandardElement>();
+		for (Element sq : sqs) {
+			if(sq instanceof StandardElement) {
+				StandardElement strdSq = (StandardElement) sq;
+				if(strdSq.getElementSystem()==reqSq.getElementSystem() && strdSq.getOwnedBy()!=activePlayer) {
 					elementSquares.add(strdSq);
-				} else if(strdSq.getSquareSystem()==reqSq.getSquareSystem() && strdSq.getOwnedBy()==activePlayer) {
+				} else if(strdSq.getElementSystem()==reqSq.getElementSystem() && strdSq.getOwnedBy()==activePlayer) {
 					ownedElementSquares.add(strdSq);
 					elementSquares.add(strdSq);
 				}
@@ -95,14 +95,14 @@ public class Player {
 	 * Method that returns details about the players currently occupied square
 	 */
 	public void getCurrentPositionDetails(Board board) {
-		if (board.getSquares().get(currentPosition) instanceof StandardSquare) {
-			StandardSquare ssq = (StandardSquare) board.getSquares().get(currentPosition);
+		if (board.getElements().get(currentPosition) instanceof StandardElement) {
+			StandardElement ssq = (StandardElement) board.getElements().get(currentPosition);
 			System.out.println(ssq.toString());
-		} else if (board.getSquares().get(currentPosition) instanceof ResourceSquare) {
-			ResourceSquare rsq = (ResourceSquare) board.getSquares().get(currentPosition);
+		} else if (board.getElements().get(currentPosition) instanceof ResourceElement) {
+			ResourceElement rsq = (ResourceElement) board.getElements().get(currentPosition);
 			System.out.println(rsq.toString());
 		} else {
-			System.out.println(board.getSquares().get(currentPosition).toString());
+			System.out.println(board.getElements().get(currentPosition).toString());
 		}
 	}
 

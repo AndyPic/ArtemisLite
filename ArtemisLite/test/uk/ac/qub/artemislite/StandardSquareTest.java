@@ -16,7 +16,7 @@ class StandardSquareTest {
 	String nameValid, nameInvalid;
 	SystemType squareSystemValid, squareSystemInvalid;
 	boolean isOwned;
-	StandardSquare ssq1;
+	StandardElement ssq1;
 	
 	
 	
@@ -46,17 +46,17 @@ class StandardSquareTest {
 		squareSystemValid = SystemType.ORION;
 		squareSystemInvalid = SystemType.EGS;
 		
-		ssq1 = new StandardSquare();
+		ssq1 = new StandardElement();
 		
 	}
 	
 	@Test
 	void testConstructorValid() {
-		StandardSquare ssq2 = new StandardSquare(boardPositionValid, nameValid, squareSystemValid, purchaseCostValid, minorDevCostValid, majorDevCostValid, rentCostValid);
+		StandardElement ssq2 = new StandardElement(boardPositionValid, nameValid, squareSystemValid, purchaseCostValid, minorDevCostValid, majorDevCostValid, rentCostValid);
 		
 		assertEquals(boardPositionValid, ssq2.getBoardPosition());
-		assertEquals(nameValid, ssq2.getSquareName());
-		assertEquals(squareSystemValid, ssq2.getSquareSystem());
+		assertEquals(nameValid, ssq2.getElementName());
+		assertEquals(squareSystemValid, ssq2.getElementSystem());
 		assertEquals(purchaseCostValid, ssq2.getPurchaseCost());
 		assertEquals(minorDevCostValid, ssq2.getMinorDevCost());
 		assertEquals(majorDevCostValid, ssq2.getMajorDevCost());

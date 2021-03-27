@@ -12,10 +12,10 @@ import java.util.ArrayList;
  * @author Joseph Mawhinney
  * @author Andrew Pickard
  */
-public class IncreaseSquareDev {
+public class IncreaseElementDev {
 	
 
-	public void increaseSquareDev(Board board, Player activePlayer){
+	public void increaseElementDev(Board board, Player activePlayer){
 
 		// TODO also check if they have enough money to develop
 		// Increase development level
@@ -29,10 +29,10 @@ public class IncreaseSquareDev {
 
 			String chosenSq = null;
 			chosenSq = UserInput.getUserInputString();
-			ArrayList<Square> sqs = board.getSquares();
-			for (Square sq : sqs) {
-				if (sq.getSquareName().equalsIgnoreCase(chosenSq) && sq instanceof StandardSquare) {
-					StandardSquare strdSq = (StandardSquare) sq;
+			ArrayList<Element> sqs = board.getElements();
+			for (Element sq : sqs) {
+				if (sq.getElementName().equalsIgnoreCase(chosenSq) && sq instanceof StandardElement) {
+					StandardElement strdSq = (StandardElement) sq;
 					
 					// check if system is fully owned
 					if (activePlayer.systemFullyOwned(board, strdSq, activePlayer)) {
@@ -55,7 +55,7 @@ public class IncreaseSquareDev {
 
 			// ask if they want to develop another square
 			System.out.println("Would you like to develop another square?");
-			switch (GUI.yesNoMenu()) {
+			switch (UserInterface.yesNoMenu()) {
 			case 1:
 				finishedDeveloping = false;
 				break;

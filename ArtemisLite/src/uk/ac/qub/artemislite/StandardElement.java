@@ -9,7 +9,7 @@ package uk.ac.qub.artemislite;
  * @author Joseph Mawhinney
  * @author Andrew Pickard
  */
-public class StandardSquare extends Square {
+public class StandardElement extends Element {
 
 	// Constants
 
@@ -27,7 +27,7 @@ public class StandardSquare extends Square {
 	/**
 	 * Default constructor
 	 */
-	public StandardSquare() {
+	public StandardElement() {
 
 	}
 
@@ -35,7 +35,7 @@ public class StandardSquare extends Square {
 	 * Constructor with args
 	 * 
 	 * @param boardPosition
-	 * @param squareName
+	 * @param elementName
 	 * @param purchaseCost
 	 * @param minorDevCost
 	 * @param majorDevCost
@@ -43,9 +43,9 @@ public class StandardSquare extends Square {
 	 * @param maxMinorDev
 	 * @param rentCost
 	 */
-	public StandardSquare(int boardPosition, String squareName, SystemType squareSystem, int purchaseCost,
+	public StandardElement(int boardPosition, String elementName, SystemType elementSystem, int purchaseCost,
 			int minorDevCost, int majorDevCost, int rentCost) {
-		super(boardPosition, squareName, squareSystem);
+		super(boardPosition, elementName, elementSystem);
 		this.purchaseCost = purchaseCost;
 		this.minorDevCost = minorDevCost;
 		this.majorDevCost = majorDevCost;
@@ -73,7 +73,7 @@ public class StandardSquare extends Square {
 	}
 
 	/**
-	 * Increases dev level of square
+	 * Increases dev level of element
 	 * 
 	 * @throws Exception
 	 */
@@ -115,32 +115,32 @@ public class StandardSquare extends Square {
 		int totalDevLevel = this.currentMinorDevLevel + this.currentMajorDevLevel;
 
 		// finds the details from the ENUM
-		SquareDetails currentSquareDetails = null;
-		for (SquareDetails squareDetails : SquareDetails.values()) {
-			if (getSquareName().equals(squareDetails.getName())) {
-				currentSquareDetails = squareDetails;
+		ElementDetails currentElementDetails = null;
+		for (ElementDetails elementDetails : ElementDetails.values()) {
+			if (getElementName().equals(elementDetails.getName())) {
+				currentElementDetails = elementDetails;
 				break;
 			}
 		}
 
 		// Confirms that the ENUM was found
-		if (currentSquareDetails == null) {
+		if (currentElementDetails == null) {
 			throw new NullPointerException("ENUM details not found");
 		}
 
 		// increases rent cost
 		switch (totalDevLevel) {
 		case 1:
-			this.setRentCost(currentSquareDetails.getRentMinor1());
+			this.setRentCost(currentElementDetails.getRentMinor1());
 			break;
 		case 2:
-			this.setRentCost(currentSquareDetails.getRentMinor2());
+			this.setRentCost(currentElementDetails.getRentMinor2());
 			break;
 		case 3:
-			this.setRentCost(currentSquareDetails.getRentMinor3());
+			this.setRentCost(currentElementDetails.getRentMinor3());
 			break;
 		case 4:
-			this.setRentCost(currentSquareDetails.getRentMajor1());
+			this.setRentCost(currentElementDetails.getRentMajor1());
 			break;
 		}
 
@@ -161,9 +161,9 @@ public class StandardSquare extends Square {
 			System.out.println("Development Cost:" + this.minorDevCost);
 		}
 		if (ownedBy != null) {
-			System.out.println("Square is currently owned by: " + this.ownedBy);
+			System.out.println("Element is currently owned by: " + this.ownedBy);
 		} else {
-			System.out.println("Square is unowned");
+			System.out.println("Element is unowned");
 		}
 
 	}
