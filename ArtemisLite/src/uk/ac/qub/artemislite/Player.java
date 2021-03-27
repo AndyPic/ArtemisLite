@@ -3,8 +3,6 @@
  */
 package uk.ac.qub.artemislite;
 
-import java.util.ArrayList;
-
 /**
  * @author Jordan Davis
  * @author David Finlay
@@ -14,10 +12,9 @@ import java.util.ArrayList;
 public class Player {
 
 	// Instance Vars
-	// increases starting resources for testing - JSM
 
 	private String name;
-	private int balanceOfResources = 200; // Set starting resources 
+	private int balanceOfResources; // Set starting resources 
 	private int currentPosition = 0; // Set starting position
 
 	// Constructors

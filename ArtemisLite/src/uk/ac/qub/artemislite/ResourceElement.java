@@ -13,7 +13,7 @@ public class ResourceElement extends Element {
 
 	// Constants
 
-	private final int RESOURCES_TO_ALLOCATE = 200;
+	private int resourceToAllocate;
 
 	// Constructors
 
@@ -41,7 +41,7 @@ public class ResourceElement extends Element {
 	 */
 	public void giveInvestment(Player player) {
 
-		player.setBalanceOfResources(player.getBalanceOfResources() + this.RESOURCES_TO_ALLOCATE);
+		player.setBalanceOfResources(player.getBalanceOfResources() + this.resourceToAllocate);
 
 	}
 
@@ -50,7 +50,23 @@ public class ResourceElement extends Element {
 	 */
 	@Override
 	public String toString() {
-		return super.toString() + String.format("%15s\t+%d", "Hours:", RESOURCES_TO_ALLOCATE);
+		return super.toString() + String.format("%15s\t+%d", "Hours:", resourceToAllocate);
 	}
+
+	/**
+	 * @return the resourceToAllocate
+	 */
+	public int getResourceToAllocate() {
+		return resourceToAllocate;
+	}
+
+	/**
+	 * @param resourceToAllocate the resourceToAllocate to set
+	 */
+	public void setResourceToAllocate(int resourceToAllocate) {
+		this.resourceToAllocate = resourceToAllocate;
+	}
+
+	
 
 }

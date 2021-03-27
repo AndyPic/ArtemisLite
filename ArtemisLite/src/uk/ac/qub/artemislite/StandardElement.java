@@ -73,7 +73,7 @@ public class StandardElement extends Element {
 		} else {
 			string.append(String.format(intFormat, "Initial research hours", purchaseCost));
 		}
-
+		
 		string.append(String.format(intFormat, "Hours per reseach stage", minorDevCost));
 
 		if (ownedBy != null) {

@@ -70,7 +70,8 @@ public class Board {
 		for (Element element : elements) {
 			if (element instanceof StandardElement) {
 				stdElement = (StandardElement) element;
-				if (stdElement.getElementSystem() == reqElement.getElementSystem() && stdElement.getOwnedBy() != player) {
+				if (stdElement.getElementSystem() == reqElement.getElementSystem()
+						&& stdElement.getOwnedBy() != player) {
 					fullyOwned = false;
 					break;
 				}
@@ -138,16 +139,49 @@ public class Board {
 	 */
 	public void viewMyElements(Player player) {
 		int count = 1;
-		System.out.println("You own the following elements: ");
+		StandardElement stdElement;
+		boolean hasElement = false;
+		
+		
+
 		for (Element element : this.elements) {
 			if (element instanceof StandardElement) {
-				StandardElement stdElement = (StandardElement) element;
+				stdElement = (StandardElement) element;
 				if (stdElement.getOwnedBy() == player) {
-					System.out.printf("%d. %s (%s)\n", count++, stdElement.getElementName(), stdElement.getElementSystem().getName());
+					if(!hasElement) {
+						System.out.println("You own the following elements: ");
+						hasElement = true;
+					}
+					System.out.printf("%d. %s [%s - %s]\n", count++, stdElement.getElementName(),
+							stdElement.getElementSystem().getName(),checkNumberOwned(stdElement, player));
 				}
 			}
 		}
 
+	}
+
+	public String checkNumberOwned(StandardElement element, Player player) {
+
+		int total, owned;
+		StandardElement stdElement;
+
+		total = 0;
+		owned = 0;
+
+		for (Element checkElement : elements) {
+			if (checkElement instanceof StandardElement) {
+				stdElement = (StandardElement) checkElement;
+
+				if (stdElement.getElementSystem() == element.getElementSystem()) {
+					total++;
+					if (stdElement.isOwnedBy(player)) {
+						owned++;
+					}
+				}
+
+			}
+		}
+		return owned + " of " + total;
 	}
 
 	/**

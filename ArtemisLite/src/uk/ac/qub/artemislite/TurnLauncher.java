@@ -18,7 +18,6 @@ public class TurnLauncher {
 	// Constants
 
 	private final int NUM_OF_DICE = 2;
-	private final int RESOURCE_VALUE_LONG_GAME = -100;
 
 	// Variables
 
@@ -193,7 +192,7 @@ public class TurnLauncher {
 		String name;
 		boolean valid;
 
-		System.out.println("Please enter your company name:");
+		System.out.println("Please pick a name for your new company:");
 
 		do {
 			valid = true;
@@ -300,11 +299,11 @@ public class TurnLauncher {
 	/**
 	 * Decreases the initial value of resources for all players for a longer game
 	 */
-	public void setupLongGame() {
+//	public void setupLongGame() {
 		// TODO: this should also reduce the resources gained on each lap of the board?
 		// JD
-		ModifyPlayerResources.modifyResourcesAllPlayers(players, this.RESOURCE_VALUE_LONG_GAME);
-	}
+//		ModifyPlayerResources.modifyResourcesAllPlayers(players, this.RESOURCE_VALUE_LONG_GAME);
+//	}
 
 	/**
 	 * 
@@ -339,7 +338,7 @@ public class TurnLauncher {
 				if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
 					// Ask player what they want to do
 					System.out.printf(
-							"\n%s: you currently have %d staff-hours remaining, you would need to allocate %d hours to begin research off %s. Would you like to proceed?\n",
+							"\n%s: you currently have %d staff-hours remaining, you would need to allocate %d hours to begin research off %s. \nWould you like to proceed?\n",
 							players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
 							purchaseCost, elementName);
 
@@ -448,16 +447,16 @@ public class TurnLauncher {
 
 		GameLauncher.mainHeadder();
 
-		System.out.printf("\nYou%s\n", roll);
-
-		if (completedLap) {
-			// TODO Resources for passing GO - needs doing properly!
-			System.out.println("\nYou passed GO +200 resources woooop!\n");
-			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
-		}
+		System.out.printf("You%s\n", roll);
 
 		newElement = board.getElements().get(newPos);
 		newElementName = newElement.getElementName();
+
+		if (completedLap) {
+			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
+			ResourceElement resourceElement = (ResourceElement) board.getElements().get(0);
+			System.out.println("\nAfter stopping by the recruitment office you are able to hire more talented engineers (+"+resourceElement.getResourceToAllocate()+" staff-hours)\n");
+		}
 
 		System.out.printf("\nYou have arrived at %s.", newElementName);
 
@@ -474,12 +473,8 @@ public class TurnLauncher {
 		}
 
 		System.out.println("\n=====| ELEMENT DETAILS |=====");
-		// TODO: we need the details shown to the player to be dynamic, currently all
-		// details are shown. No point showing dev costs of a element if it is already
-		// owned by another player JD
 		// TODO: should find some way to display all rent costs for a element rather
-		// than
-		// just the current one JD
+		// than just the current one JD
 		System.out.println(newElement.toString());
 
 	} // END
@@ -511,7 +506,7 @@ public class TurnLauncher {
 						auctionElement("doesn't have enough staff-hours available to begin research.", standardElement);
 						break;
 					} else if (loop == (players.size() - 1)) {
-						System.out.printf("%s and no other player have enough RESOURCES to begin research %s.\n",
+						System.out.printf("%s and no other companies have enough free hours to begin research %s.\n",
 								activePlayer.getName(), standardElement.getElementName());
 						// add a non-action move to gameHistory
 						gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
@@ -576,9 +571,10 @@ public class TurnLauncher {
 
 			// Give rent to element owner
 			ModifyPlayerResources.modifyResourcesSinglePlayer(elementOwner, rentCost);
-			System.out.printf("%s took engineers from %s giving them an additional [%d hours].\n%s now has a total of [%d hours].\n%s now has a total of [%d hours].\n", elementOwnerName,
-					activePlayerName, rentCost, elementOwnerName, elementOwner.getBalanceOfResources(),
-					activePlayerName, activePlayer.getBalanceOfResources());
+			System.out.printf(
+					"%s took engineers from %s giving them an additional [%d hours].\n%s now has a total of [%d hours].\n%s now has a total of [%d hours].\n",
+					elementOwnerName, activePlayerName, rentCost, elementOwnerName,
+					elementOwner.getBalanceOfResources(), activePlayerName, activePlayer.getBalanceOfResources());
 			break;
 		case 2:
 			System.out.printf("%s chose to not take any engineers from %s.\n", elementOwnerName, activePlayerName);
@@ -587,7 +583,7 @@ public class TurnLauncher {
 					GameHistoryAction.NO_ACTION);
 			break;
 		}
-		
+
 		System.out.printf("PASS CONTROL BACK TO %s\n", activePlayerName);
 
 	}
@@ -844,7 +840,7 @@ public class TurnLauncher {
 				}
 
 				if (stdElement.isOwnedBy(activePlayer) && !stdElement.isMaxDevelopment()) {
-					if(board.systemFullyOwned(stdElement, activePlayer)) {
+					if (board.systemFullyOwned(stdElement, activePlayer)) {
 						canDevelop = true;
 					}
 				}

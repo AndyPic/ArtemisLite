@@ -67,7 +67,7 @@ public class ArtemisCalendar extends GregorianCalendar {
 			currentMonth = 0;
 			currentYear += 1;
 			currentDay = 1;
-
+			
 			calendar.set(CALENDAR_YEAR, currentYear);
 
 		} else {

@@ -23,6 +23,8 @@ public class GameLauncher {
 	private final static int MIN_PLAYERS = 2;
 	private final static int MAX_PLAYERS = 4;
 	private final static String MENU_HEADER = "\n=====| MENU |=====\n";
+	private final static int RESOURCE_VALUE_SHORT_GAME = 200;
+	private final static int RESOURCE_VALUE_LONG_GAME = 100;
 
 	// Sets game-over, main game loop
 	private static boolean gameOver = false;
@@ -145,23 +147,17 @@ public class GameLauncher {
 		createPlayers();
 
 		int gameLengthInput;
+
 		do {
-			System.out.println(MENU_HEADER + "1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
+			System.out.printf("%s1. Short Game (%d staff-hours per lap of board)\n2. Long Game (%d staff-hours per lap of board)\n",MENU_HEADER, RESOURCE_VALUE_SHORT_GAME, RESOURCE_VALUE_LONG_GAME);
 			gameLengthInput = UserInput.getUserInputInt();
+			
 			switch (gameLengthInput) {
 			case 1:
+				setGameResources(RESOURCE_VALUE_SHORT_GAME);
 				break;
 			case 2:
-				turnLauncher.setupLongGame();
-				break;
-			case 3:
-				// TODO update info with new balance changes
-				// TODO: thoughts on updating this to remove 'game length details'. Instead
-				// rename the options to be something like 'Short game (start with 200
-				// resources)' & 'Long game (start with 100 resources)'. I think the games feels
-				// like it has too many menu options
-				System.out.println("Some details about the different modes...");
-				UserInterface.clearConsole();
+				setGameResources(RESOURCE_VALUE_LONG_GAME);
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
@@ -175,6 +171,24 @@ public class GameLauncher {
 
 		gameLoop();
 
+	}
+	
+	/**
+	 * sets the starting resources & resources per lap of board & player
+	 * @param resourceValue to set
+	 */
+	public static void setGameResources(int resourceValue) {
+		//updates all resourceElements
+		for(Element element: board.getElements()) {
+			if(element instanceof ResourceElement) {
+				ResourceElement resourceElement = (ResourceElement) element;
+				resourceElement.setResourceToAllocate(resourceValue);
+			}
+		}
+		//updates all player starting resource
+		for(Player player : TurnLauncher.getPlayers()) {
+			player.setBalanceOfResources(resourceValue);
+		}
 	}
 
 	/**
@@ -306,8 +320,11 @@ public class GameLauncher {
 		} else {
 			displayGameLossMessage(board);
 		}
-
-		postGameMenu();
+		
+		if(turnLauncher.getTurnNumber()!=0) {
+			postGameMenu();
+		}
+		
 
 	}
 
@@ -345,7 +362,7 @@ public class GameLauncher {
 
 		Player activePlayer = turnLauncher.getActivePlayer();
 
-		System.out.printf("=====| PLAYER: %s |=====| STAFF-HOURS: %d |=====| LOCATION: %s |=====\n",
+		System.out.printf("=====| PLAYER: %s |=====| STAFF-HOURS: %d |=====| LOCATION: %s |=====\n\n",
 				activePlayer.getName(), activePlayer.getBalanceOfResources(),
 				board.getElements().get(activePlayer.getCurrentPosition()).getElementName());
 
