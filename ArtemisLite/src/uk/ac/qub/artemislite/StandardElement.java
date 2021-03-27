@@ -62,13 +62,13 @@ public class StandardElement extends Element {
 	@Override
 	public String toString() {
 		if (ownedBy == null)
-			return super.toString() + String.format("%15s\t%d\nMinor dev cost:\t%d\nMajor dev cost:\t%d\n%15s\t%d\n",
-					"Cost to buy:", purchaseCost, minorDevCost, majorDevCost, "Rent cost:", rentCost);
+			return super.toString() + String.format("%15s\t%d\nHours for research milestone:\t%d\nHours for construction:\t%d\n%15s\t%d\n",
+					"Hours requred to begin research:", purchaseCost, minorDevCost, majorDevCost, "Hours for help request:", rentCost);
 
 		return super.toString() + String.format(
-				"%15s\t%s\nMinor dev levl:\t%d\nMinor dev cost:\t%d\nMajor dev levl:\t%d\nMajor dev cost:\t%d\n%15s\t%d\n",
-				"Owned by:", ownedBy.getName(), currentMinorDevLevel, minorDevCost, currentMajorDevLevel, majorDevCost,
-				"Rent cost:", rentCost);
+				"%15s\t%s\nCurrent research stage:\t%d\nHours for research milestone:\t%d\nCurrent construction level:\t%d\nHours for construction:\t%d\n%15s\t%d\n",
+				"Research started by:", ownedBy.getName(), currentMinorDevLevel, minorDevCost, currentMajorDevLevel, majorDevCost,
+				"Hours for help request:", rentCost);
 
 	}
 
@@ -79,21 +79,20 @@ public class StandardElement extends Element {
 	 */
 	public void increaseDev() {
 
-		if (this.currentMinorDevLevel < this.MAX_MINOR_DEV) {
+		if (currentMinorDevLevel < MAX_MINOR_DEV) {
 
-			this.currentMinorDevLevel++;
+			currentMinorDevLevel++;
 			System.out.println(
-					"Minor dev increased from " + (this.currentMinorDevLevel - 1) + " to " + this.currentMinorDevLevel);
+					"You have complete research stage " + (currentMinorDevLevel - 1) + ". It's now time to begin stage " + currentMinorDevLevel);
 
-		} else if (this.currentMajorDevLevel < this.MAX_MAJOR_DEV) {
+		} else if (currentMajorDevLevel < MAX_MAJOR_DEV) {
 
-			this.currentMajorDevLevel++;
-			System.out.println(
-					"Major dev increased from " + (this.currentMajorDevLevel - 1) + " to " + this.currentMajorDevLevel);
+			currentMajorDevLevel++;
+			System.out.println("You have completed all research on this element! its now time to start the construction");
 
-		} else if(this.currentMajorDevLevel == MAX_MAJOR_DEV) {
+		} else if(currentMajorDevLevel == MAX_MAJOR_DEV) {
 			
-			System.out.println("Element is already fully developed");
+			System.out.println("There is nothing left for you to do on this element, construction is already underway!");
 			
 		} else {
 
@@ -151,19 +150,17 @@ public class StandardElement extends Element {
 	 */
 	public void displayDetails() {
 		System.out.println("Cost:" + this.purchaseCost);
-		System.out.println("Current Rent:" + this.rentCost);
-		if (this.currentMajorDevLevel != 0) {
-			// outputs fully developed if major dev is greater than 0. May change if we
-			// decide to have more than one major development
-			System.out.println("Fully Developed");
+		System.out.println("Hours for Help Request:" + this.rentCost);
+		if (this.currentMajorDevLevel == MAX_MAJOR_DEV) {
+			System.out.println("Fully researched and construction underway");
 		} else {
-			System.out.println("Current Development level:" + this.currentMinorDevLevel);
-			System.out.println("Development Cost:" + this.minorDevCost);
+			System.out.println("Current Research Stage:" + this.currentMinorDevLevel);
+			System.out.println("Research Cost:" + this.minorDevCost);
 		}
 		if (ownedBy != null) {
-			System.out.println("Element is currently owned by: " + this.ownedBy);
+			System.out.println("Research underway by: " + this.ownedBy);
 		} else {
-			System.out.println("Element is unowned");
+			System.out.println("Research has not started on this element");
 		}
 
 	}

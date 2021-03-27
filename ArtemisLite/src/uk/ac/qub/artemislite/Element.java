@@ -46,7 +46,7 @@ public class Element {
 	 */
 	@Override
 	public String toString() {
-		return String.format("[%02d][%s][%s]:\n\n", boardPosition, elementName, elementSystem.getName());
+		return String.format("[%s][%s]:\n\n", elementName, elementSystem.getName());
 	}
 
 	/**

@@ -16,7 +16,7 @@ class BoardTest {
 	@BeforeEach
 	void setUp() throws Exception {
 
-		expectedCostSquarei = ElementDetails.SQUAREi.getCost();
+		expectedCostSquarei = ElementDetails.PP.getCost();
 
 	}
 

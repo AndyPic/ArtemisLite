@@ -23,9 +23,9 @@ public class IncreaseElementDev {
 		boolean finishedDeveloping = false;
 
 		do {
-			// ask which square to develop
+			// ask which element to develop
 			System.out.println("Which element would you like to develop?");
-			// maybe display squares owned by active player here
+			// maybe display elements owned by active player here
 
 			String chosenSq = null;
 			chosenSq = UserInput.getUserInputString();
@@ -53,8 +53,8 @@ public class IncreaseElementDev {
 				}
 			}
 
-			// ask if they want to develop another square
-			System.out.println("Would you like to develop another square?");
+			// ask if they want to develop another elements
+			System.out.println("Would you like to develop another element?");
 			switch (UserInterface.yesNoMenu()) {
 			case 1:
 				finishedDeveloping = false;

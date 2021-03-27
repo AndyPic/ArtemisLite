@@ -380,7 +380,7 @@ public class TurnLauncher {
 		// If someone wanted the element, do some maths
 		if (highRollPlayer != null) {
 			// Announce winner of auction
-			System.out.printf("\n=====| FIRST TO PLAY: %s |=====\n", highRollPlayer.getName());
+			System.out.printf("\n=====| WINNER: %s |=====\n", highRollPlayer.getName());
 
 			// Update player currency
 			ModifyPlayerResources.modifyResourcesSinglePlayer(highRollPlayer, -purchaseCost);
@@ -458,11 +458,11 @@ public class TurnLauncher {
 			if (stdSrquare.getOwnedBy() != null) {
 				System.out.printf(" Research & construction on this element is already underway by %s.\n", stdSrquare.getOwnedBy().getName());
 			} else {
-				System.out.printf(" There is no team researching this element. NASA have predicted it would take %d to start initial research\n", stdSrquare.getPurchaseCost());
+				System.out.printf(" No teams have started researching this element yet. NASA have predicted it would take %d to start initial research\n", stdSrquare.getPurchaseCost());
 			}
 		}
 
-		System.out.println("\n=====| Element DETAILS |=====");
+		System.out.println("\n=====| ELEMENT DETAILS |=====");
 		// TODO: we need the details shown to the player to be dynamic, currently all
 		// details are shown. No point showing dev costs of a element if it is already
 		// owned by another player JD
@@ -709,10 +709,6 @@ public class TurnLauncher {
 
 		int activePlayerIndex = players.indexOf(activePlayer);
 
-		System.out.println("Are you sure you want to end your turn?");
-
-		if (UserInterface.yesNoMenu() == 1) {
-
 			if (activePlayerIndex != players.size() - 1) {
 				setActivePlayer(players.get(activePlayerIndex + 1));
 			} else {
@@ -720,7 +716,7 @@ public class TurnLauncher {
 				roundEnd(board);
 			}
 			turnOver = true;
-		}
+		
 	}
 	
 	

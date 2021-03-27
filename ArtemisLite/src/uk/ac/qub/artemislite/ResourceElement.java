@@ -25,11 +25,11 @@ public class ResourceElement extends Element {
 	 * Constructor with args
 	 * 
 	 * @param boardPosition
-	 * @param squareName
+	 * @param elementName
 	 * @param resourcesToAllocate
 	 */
-	public ResourceElement(int boardPosition, String squareName, SystemType squareSystem) {
-		super(boardPosition, squareName, squareSystem);
+	public ResourceElement(int boardPosition, String elementName, SystemType elementSystem) {
+		super(boardPosition, elementName, elementSystem);
 	}
 
 	// Methods
@@ -50,7 +50,7 @@ public class ResourceElement extends Element {
 	 */
 	@Override
 	public String toString() {
-		return super.toString() + String.format("%15s\t+%d", "Resources:", RESOURCES_TO_ALLOCATE);
+		return super.toString() + String.format("%15s\t+%d", "Hours:", RESOURCES_TO_ALLOCATE);
 	}
 
 }

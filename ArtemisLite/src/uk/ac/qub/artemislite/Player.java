@@ -42,7 +42,7 @@ public class Player {
 	// Methods
 
 	/**
-	 * Method to check if the player owns any squares
+	 * Method to check if the player owns any elements
 	 * 
 	 * @param board
 	 * @param player
@@ -69,30 +69,30 @@ public class Player {
 	 * @return
 	 */
 	public boolean systemFullyOwned(Board board, Element reqSq, Player activePlayer){
-		ArrayList<Element> sqs = board.getElements();
-		ArrayList<StandardElement> elementSquares = new ArrayList<StandardElement>();
-		ArrayList<StandardElement> ownedElementSquares = new ArrayList<StandardElement>();
-		for (Element sq : sqs) {
-			if(sq instanceof StandardElement) {
-				StandardElement strdSq = (StandardElement) sq;
+		ArrayList<Element> allElements = board.getElements();
+		ArrayList<StandardElement> elementList = new ArrayList<StandardElement>();
+		ArrayList<StandardElement> ownedElements = new ArrayList<StandardElement>();
+		for (Element element : allElements) {
+			if(element instanceof StandardElement) {
+				StandardElement strdSq = (StandardElement) element;
 				if(strdSq.getElementSystem()==reqSq.getElementSystem() && strdSq.getOwnedBy()!=activePlayer) {
-					elementSquares.add(strdSq);
+					elementList.add(strdSq);
 				} else if(strdSq.getElementSystem()==reqSq.getElementSystem() && strdSq.getOwnedBy()==activePlayer) {
-					ownedElementSquares.add(strdSq);
-					elementSquares.add(strdSq);
+					ownedElements.add(strdSq);
+					elementList.add(strdSq);
 				}
 			}
 		}
-		System.out.println(ownedElementSquares.size());
-		System.out.println(elementSquares.size());
-		if(ownedElementSquares.size()==elementSquares.size()) {
+		System.out.println(ownedElements.size());
+		System.out.println(elementList.size());
+		if(ownedElements.size()==elementList.size()) {
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Method that returns details about the players currently occupied square
+	 * Method that returns details about the players currently occupied element
 	 */
 	public void getCurrentPositionDetails(Board board) {
 		if (board.getElements().get(currentPosition) instanceof StandardElement) {

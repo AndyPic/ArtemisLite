@@ -17,10 +17,10 @@ public class GameStatistics {
 		// Get resource amount for completion
 		double totalCost = 0;
 
-		for (ElementDetails square : ElementDetails.values()) {
-			totalCost += square.getCost();
-			totalCost += square.getMajorCost();
-			totalCost += (square.getMinorCost() * 3);
+		for (ElementDetails element : ElementDetails.values()) {
+			totalCost += element.getCost();
+			totalCost += element.getMajorCost();
+			totalCost += (element.getMinorCost() * 3);
 		}
 
 		return totalCost;

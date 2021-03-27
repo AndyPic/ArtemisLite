@@ -24,7 +24,7 @@ public class GameHistoryItem {
 	private int boardLandingPosition;
 
 	/**
-	 * the action taken on this square
+	 * the action taken on this element
 	 */
 	private GameHistoryAction gameHistoryAction;
 
