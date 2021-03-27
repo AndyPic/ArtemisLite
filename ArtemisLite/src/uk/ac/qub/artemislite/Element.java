@@ -42,11 +42,11 @@ public class Element {
 	// Methods
 
 	/**
-	 * 
+	 * return basic element details
 	 */
 	@Override
 	public String toString() {
-		return String.format("[%s][%s]:\n\n", elementName, elementSystem.getName());
+		return String.format("%s[%s]\n", elementName, elementSystem.getName());
 	}
 
 	/**

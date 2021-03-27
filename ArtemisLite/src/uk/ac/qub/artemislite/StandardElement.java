@@ -61,17 +61,28 @@ public class StandardElement extends Element {
 	 */
 	@Override
 	public String toString() {
-		if (ownedBy == null)
-			return super.toString() + String.format(
-					"%15s\t%d\nHours for research milestone:\t%d\nHours for construction:\t%d\n%15s\t%d\n",
-					"Hours requred to begin research:", purchaseCost, minorDevCost, majorDevCost,
-					"Hours for help request:", rentCost);
+		StringBuilder string = new StringBuilder();
+		String strFormat = "%-30s: %s\n";
+		String intFormat = "%-30s: %d\n";
 
-		return super.toString() + String.format(
-				"%15s\t%s\nCurrent research stage:\t%d\nHours for research milestone:\t%d\nCurrent construction level:\t%d\nHours for construction:\t%d\n%15s\t%d\n",
-				"Research started by:", ownedBy.getName(), currentMinorDevLevel, minorDevCost, currentMajorDevLevel,
-				majorDevCost, "Hours for help request:", rentCost);
+		string.append(super.toString());
 
+		if (ownedBy != null) {
+			string.append(String.format(strFormat, "Element Owner", ownedBy.getName()));
+			string.append(String.format(intFormat, "Current Research Stage", currentMinorDevLevel));
+		} else {
+			string.append(String.format(intFormat, "Initial research hours", purchaseCost));
+		}
+
+		string.append(String.format(intFormat, "Hours per reseach stage", minorDevCost));
+
+		if (ownedBy != null) {
+			string.append(String.format(intFormat, "Current construction stage", currentMajorDevLevel));
+		}
+		string.append(String.format(intFormat, "Hours per construction stage", majorDevCost));
+		string.append(String.format(intFormat, "Hours per help request", majorDevCost));
+
+		return string.toString();
 	}
 
 	/**
@@ -79,29 +90,18 @@ public class StandardElement extends Element {
 	 * 
 	 * @throws Exception
 	 */
-	public void increaseDev() {
+	public void increaseDev() throws IllegalArgumentException {
 
 		if (currentMinorDevLevel < MAX_MINOR_DEV) {
-
 			currentMinorDevLevel++;
 			System.out.println("You have complete research stage " + (currentMinorDevLevel - 1)
 					+ ". It's now time to begin stage " + currentMinorDevLevel);
-
 		} else if (currentMajorDevLevel < MAX_MAJOR_DEV) {
-
 			currentMajorDevLevel++;
 			System.out
 					.println("You have completed all research on this element! its now time to start the construction");
-
 		} else if (currentMajorDevLevel == MAX_MAJOR_DEV) {
-
-			System.out
-					.println("There is nothing left for you to do on this element, construction is already underway!");
-
-		} else {
-
-			System.out.println("Invalid dev increase");
-
+			throw new IllegalArgumentException("Invalid dev increase");
 		}
 
 		increaseRent();
@@ -115,7 +115,7 @@ public class StandardElement extends Element {
 	 */
 	public void increaseRent() throws NullPointerException {
 
-		int totalDevLevel = this.currentMinorDevLevel + this.currentMajorDevLevel;
+		int totalDevLevel = currentMinorDevLevel + currentMajorDevLevel;
 
 		// finds the details from the ENUM
 		ElementDetails currentElementDetails = null;
@@ -145,26 +145,6 @@ public class StandardElement extends Element {
 		case 4:
 			this.setRentCost(currentElementDetails.getRentMajor1());
 			break;
-		}
-
-	}
-
-	/**
-	 * displays current details to screen
-	 */
-	public void displayDetails() {
-		System.out.printf("%35s: %d\n", "Cost", this.purchaseCost);
-		System.out.printf("%35s: %d\n", "Hours for Help Request", this.rentCost);
-		if (this.currentMajorDevLevel == MAX_MAJOR_DEV) {
-			System.out.println("Fully researched and construction underway");
-		} else {
-			System.out.printf("%35s: %d\n", "Current Research Stage", this.currentMinorDevLevel);
-			System.out.printf("%35s: %d\n", "Research Cost", this.minorDevCost);
-		}
-		if (ownedBy != null) {
-			System.out.printf("%35s: %s\n", "Research underway by " + this.ownedBy);
-		} else {
-			System.out.println("Research has not started on this element");
 		}
 
 	}
@@ -210,13 +190,6 @@ public class StandardElement extends Element {
 	}
 
 	/**
-	 * @param purchaseCost the purchaseCost to set
-	 */
-	public void setPurchaseCost(int purchaseCost) {
-		this.purchaseCost = purchaseCost;
-	}
-
-	/**
 	 * @return the minorDevCost
 	 */
 	public int getMinorDevCost() {
@@ -224,24 +197,10 @@ public class StandardElement extends Element {
 	}
 
 	/**
-	 * @param minorDevCost the minorDevCost to set
-	 */
-	public void setMinorDevCost(int minorDevCost) {
-		this.minorDevCost = minorDevCost;
-	}
-
-	/**
 	 * @return the majorDevCost
 	 */
 	public int getMajorDevCost() {
 		return majorDevCost;
-	}
-
-	/**
-	 * @param majorDevCost the majorDevCost to set
-	 */
-	public void setMajorDevCost(int majorDevCost) {
-		this.majorDevCost = majorDevCost;
 	}
 
 	/**
@@ -254,8 +213,12 @@ public class StandardElement extends Element {
 	/**
 	 * @param currentMinorDevLevel the currentMinorDevLevel to set
 	 */
-	public void setCurrentMinorDevLevel(int currentMinorDevLevel) {
-		this.currentMinorDevLevel = currentMinorDevLevel;
+	public void setCurrentMinorDevLevel(int currentMinorDevLevel) throws IllegalArgumentException {
+		if (currentMinorDevLevel < MAX_MINOR_DEV) {
+			currentMinorDevLevel++;
+		} else {
+			throw new IllegalArgumentException("Already max minor dev level");
+		}
 	}
 
 	/**
@@ -268,8 +231,12 @@ public class StandardElement extends Element {
 	/**
 	 * @param currentMajorDevLevel the currentMajorDevLevel to set
 	 */
-	public void setCurrentMajorDevLevel(int currentMajorDevLevel) {
-		this.currentMajorDevLevel = currentMajorDevLevel;
+	public void setCurrentMajorDevLevel() throws IllegalArgumentException {
+		if (currentMajorDevLevel < MAX_MAJOR_DEV) {
+			currentMajorDevLevel++;
+		} else {
+			throw new IllegalArgumentException("Already max major dev level");
+		}
 	}
 
 	/**

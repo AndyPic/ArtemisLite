@@ -329,7 +329,7 @@ public class TurnLauncher {
 		playersWant = new ArrayList<Player>();
 		UserInterface.clearConsole();
 		System.out.printf(
-				"=====| AUCTION BEGINS |=====\nNASA has an obligation to get the element underday to ensure sucess of Artemis. They have begun to look for new companies for %s because %s %s\n",
+				"=====| AUCTION BEGINS |=====\nNASA has an obligation to get the element underday to ensure sucess of Artemis. \nThey have begun to look for new companies for %s research because %s %s\n",
 				elementName, activePlayerName, reasonToAuction);
 
 		for (int loop = 0; loop < players.size(); loop++) {
@@ -339,7 +339,7 @@ public class TurnLauncher {
 				if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
 					// Ask player what they want to do
 					System.out.printf(
-							"\n%s: you currently have %d staff-hours remaining, you would need to allocate %d hours to begin research on %s. Would you like to proceed?\n",
+							"\n%s: you currently have %d staff-hours remaining, you would need to allocate %d hours to begin research off %s. Would you like to proceed?\n",
 							players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
 							purchaseCost, elementName);
 
@@ -550,17 +550,20 @@ public class TurnLauncher {
 			return;
 		}
 
+		System.out.printf("PASS CONTROL TO [%s]\n\n", elementOwnerName.toUpperCase());
+
 		if (activePlayer.getBalanceOfResources() <= rentCost) {
 			// TODO Better message here, implement game end?
 			System.out.printf(
-					"%s does not have enough RESOURCES to pay, they will go bankrupt and the game will end. %s Would you like to charge rent anyway?\n",
-					activePlayerName, elementOwnerName.toUpperCase());
+					"You have the option to headhunt some engineers (+%d hours) from %s.\nYou have %d staff hours remaining but they only have %d hours. \nIf you hire these staff %s will fail to complete thier own projects on time and ultimately the Artemis program will end. \n%s Are you prepared to let the mission fail for personal gain?\n",
+					rentCost, activePlayerName, elementOwner.getBalanceOfResources(),
+					activePlayer.getBalanceOfResources(), activePlayerName, elementOwnerName.toUpperCase());
 
 		} else {
 			System.out.printf(
-					"\nThis element is currently owned by %s.\nYou currently have %d resources, and the rent is %d.\n%s would you like to charge them rent of %d?\n",
-					elementOwnerName, activePlayer.getBalanceOfResources(), rentCost, elementOwnerName.toUpperCase(),
-					rentCost);
+					"You have the option to headhunt some engineers (+%d hours) from %s\nYou currently have %d hours remaining and %s has %d.\n would you like to hire thier engineers?\n",
+					rentCost, activePlayerName, elementOwner.getBalanceOfResources(), activePlayerName,
+					activePlayer.getBalanceOfResources());
 		}
 
 		switch (UserInterface.yesNoMenu()) {
@@ -573,21 +576,19 @@ public class TurnLauncher {
 
 			// Give rent to element owner
 			ModifyPlayerResources.modifyResourcesSinglePlayer(elementOwner, rentCost);
-			System.out.printf("%s charged %s rent of [%d].\n%s now has [%d].\n%s now has [%d].\n", elementOwnerName,
+			System.out.printf("%s took engineers from %s giving them an additional [%d hours].\n%s now has a total of [%d hours].\n%s now has a total of [%d hours].\n", elementOwnerName,
 					activePlayerName, rentCost, elementOwnerName, elementOwner.getBalanceOfResources(),
 					activePlayerName, activePlayer.getBalanceOfResources());
 			break;
 		case 2:
-			System.out.printf("%s chose to not charge %s rent.\n", elementOwnerName, activePlayerName);
+			System.out.printf("%s chose to not take any engineers from %s.\n", elementOwnerName, activePlayerName);
 			// add a non-action move to game history
 			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 					GameHistoryAction.NO_ACTION);
 			break;
-		default:
-			System.out.println("Welp... that's not supposed to happen");
 		}
-		// TODO better message here?
-		System.out.println(activePlayerName + " has control again.");
+		
+		System.out.printf("PASS CONTROL BACK TO %s\n", activePlayerName);
 
 	}
 
@@ -600,7 +601,7 @@ public class TurnLauncher {
 		// Offer player the element
 		System.out.printf(
 				// TODO rename resources to whatever we decide to call it
-				"You currently have %d RESOURCES, would you like to begin researching the element?\n",
+				"You currently have %d hours remaining, would you like to begin researching the element?\n",
 				activePlayer.getBalanceOfResources());
 
 		switch (UserInterface.yesNoMenu()) {
@@ -614,12 +615,12 @@ public class TurnLauncher {
 			// Update element owner
 			standardElement.setOwnedBy(activePlayer);
 			// TODO resources name
-			System.out.printf("%s now owns %s, and has %d RESOURCES.\n", activePlayer.getName(),
+			System.out.printf("%s has now begun R&D on %s, and has %d free hours remaining.\n", activePlayer.getName(),
 					standardElement.getElementName(), activePlayer.getBalanceOfResources());
 			break;
 		case 2:
 			// Auction the element, doesn't want to buy
-			auctionElement("doesn't want to buy it.", standardElement);
+			auctionElement("decided not to invest time in the project.", standardElement);
 			// add a non-action move to game history
 			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 					GameHistoryAction.NO_ACTION);
@@ -756,6 +757,7 @@ public class TurnLauncher {
 
 			if (firstMenuOfTurn) {
 				GameLauncher.mainHeadder();
+				board.viewMyElements(activePlayer);
 			}
 
 			checkPossibleMenuOptions(board);
@@ -798,13 +800,14 @@ public class TurnLauncher {
 					board.viewElementOwnership();
 				} else if (userMenuSelection.equals(MenuOption.VIEW_PLAYER_ELEMENTS)) {
 					GameLauncher.mainHeadder();
-					board.viewMyElements(activePlayer);
+					board.viewMyElementsDetails(activePlayer);
 				} else if (userMenuSelection.equals(MenuOption.GET_ELEMENT_DETAILS)) {
 					GameLauncher.mainHeadder();
 					System.out.printf("\nYou are currently on : ");
 					activePlayer.getCurrentPositionDetails(board);
 				} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
 					GameLauncher.mainHeadder();
+					board.viewMyElements(activePlayer);
 					IncreaseElementDev id = new IncreaseElementDev();
 					id.increaseElementDev(board, activePlayer);
 
@@ -841,7 +844,9 @@ public class TurnLauncher {
 				}
 
 				if (stdElement.isOwnedBy(activePlayer) && !stdElement.isMaxDevelopment()) {
-					canDevelop = true;
+					if(board.systemFullyOwned(stdElement, activePlayer)) {
+						canDevelop = true;
+					}
 				}
 
 			}

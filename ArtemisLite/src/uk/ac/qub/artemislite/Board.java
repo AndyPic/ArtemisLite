@@ -56,6 +56,30 @@ public class Board {
 	}
 
 	/**
+	 * checks if player owns all elements in a system
+	 * 
+	 * @param board
+	 * @param reqElement
+	 * @param player
+	 * @return
+	 */
+	public boolean systemFullyOwned(Element reqElement, Player player) {
+		boolean fullyOwned = true;
+		StandardElement stdElement;
+
+		for (Element element : elements) {
+			if (element instanceof StandardElement) {
+				stdElement = (StandardElement) element;
+				if (stdElement.getElementSystem() == reqElement.getElementSystem() && stdElement.getOwnedBy() != player) {
+					fullyOwned = false;
+					break;
+				}
+			}
+		}
+		return fullyOwned;
+	}
+
+	/**
 	 * Method to check whether all systems have been fully developed
 	 * 
 	 * @return
@@ -97,9 +121,8 @@ public class Board {
 				StandardElement stdElement = (StandardElement) element;
 
 				if (stdElement.getOwnedBy() != null) {
-					System.out.printf("[%s] - [%s]: Research started by %s.\n",
-							stdElement.getElementSystem().getName(), stdElement.getElementName(),
-							stdElement.getOwnedBy().getName());
+					System.out.printf("[%s] - [%s]: Research started by %s.\n", stdElement.getElementSystem().getName(),
+							stdElement.getElementName(), stdElement.getOwnedBy().getName());
 				} else {
 					System.out.printf("%s - [%s]: Research has not begun.\n", stdElement.getElementSystem().getName(),
 							stdElement.getElementName(), stdElement.getElementSystem().getName());
@@ -109,21 +132,40 @@ public class Board {
 	}// END
 
 	/**
-	 * Method to display the elements owned by a player
+	 * displays titles of elements owned by a specified player
+	 * 
+	 * @param player
+	 */
+	public void viewMyElements(Player player) {
+		int count = 1;
+		System.out.println("You own the following elements: ");
+		for (Element element : this.elements) {
+			if (element instanceof StandardElement) {
+				StandardElement stdElement = (StandardElement) element;
+				if (stdElement.getOwnedBy() == player) {
+					System.out.printf("%d. %s (%s)\n", count++, stdElement.getElementName(), stdElement.getElementSystem().getName());
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * displays all details of elements owned by a specified player
 	 * 
 	 * @param board
-	 * @param activePlayer
+	 * @param player
 	 */
-	public void viewMyElements(Player activePlayer) {
+	public void viewMyElementsDetails(Player player) {
 		System.out.println("You own the following elements: ");
 
-		for (Element sq : this.elements) {
+		for (Element element : this.elements) {
 
-			if (sq instanceof StandardElement) {
-				StandardElement stdSq = (StandardElement) sq;
+			if (element instanceof StandardElement) {
+				StandardElement stdElement = (StandardElement) element;
 
-				if (stdSq.getOwnedBy() == activePlayer) {
-					System.out.println(stdSq.toString());
+				if (stdElement.getOwnedBy() == player) {
+					System.out.println(stdElement.toString());
 				}
 			}
 		}

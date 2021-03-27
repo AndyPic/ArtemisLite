@@ -35,19 +35,18 @@ public class IncreaseElementDev {
 					StandardElement strdSq = (StandardElement) sq;
 					
 					// check if system is fully owned
-					if (activePlayer.systemFullyOwned(board, strdSq, activePlayer)) {
+					if (board.systemFullyOwned(strdSq, activePlayer)) {
 						
+						strdSq.increaseDev();
 						
 						if(strdSq.getCurrentMinorDevLevel() < strdSq.getMAX_MINOR_DEV()){
-							strdSq.increaseDev();
 							ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -strdSq.getMinorDevCost());
 						} else if(strdSq.getCurrentMajorDevLevel() < strdSq.getMAX_MAJOR_DEV()) {
-							strdSq.increaseDev();
 							ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -strdSq.getMajorDevCost());
-						} else if(strdSq.getCurrentMajorDevLevel() == strdSq.getMAX_MAJOR_DEV()) {
-							strdSq.increaseDev();
 						}
+						
 					} else {
+						
 						System.out.println("You do not yet own all elements in this system");
 					}
 				}
