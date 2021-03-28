@@ -27,11 +27,12 @@ public class IncreaseElementDev {
 			System.out.println("Which element would you like to develop?");
 			// maybe display elements owned by active player here
 
-			String chosenSq = null;
-			chosenSq = UserInput.getUserInputString();
+			int chosenSq = 0;
+			chosenSq = UserInput.getUserInputInt();
 			ArrayList<Element> sqs = board.getElements();
 			for (Element sq : sqs) {
-				if (sq.getElementName().equalsIgnoreCase(chosenSq) && sq instanceof StandardElement) {
+							
+				if (sq.getBoardPosition() == chosenSq && sq instanceof StandardElement) {
 					StandardElement strdSq = (StandardElement) sq;
 					
 					// check if system is fully owned

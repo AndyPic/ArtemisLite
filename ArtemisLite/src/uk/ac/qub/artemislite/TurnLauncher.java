@@ -373,7 +373,7 @@ public class TurnLauncher {
 
 		} else {
 			// else roll dice to see who wins the property
-			System.out.printf("\n%d companies have shown thier intrest in %s\n\n", playersWant.size(), elementName);
+			System.out.printf("\n%d companies have shown their intrest in %s\n\n", playersWant.size(), elementName);
 
 			System.out.printf(
 					"\nNASA have requrested a pitch from each company on why they should win the %s contract. Roll the dice to see how the pitch went!.\n",
@@ -550,13 +550,13 @@ public class TurnLauncher {
 		if (activePlayer.getBalanceOfResources() <= rentCost) {
 			// TODO Better message here, implement game end?
 			System.out.printf(
-					"You have the option to headhunt some engineers (+%d hours) from %s.\nYou have %d staff hours remaining but they only have %d hours. \nIf you hire these staff %s will fail to complete thier own projects on time and ultimately the Artemis program will end. \n%s Are you prepared to let the mission fail for personal gain?\n",
+					"You have the option to headhunt some engineers (+%d hours) from %s.\nYou have %d staff hours remaining but they only have %d hours. \nIf you hire these staff %s will fail to complete their own projects on time and ultimately the Artemis program will end. \n%s Are you prepared to let the mission fail for personal gain?\n",
 					rentCost, activePlayerName, elementOwner.getBalanceOfResources(),
 					activePlayer.getBalanceOfResources(), activePlayerName, elementOwnerName.toUpperCase());
 
 		} else {
 			System.out.printf(
-					"You have the option to headhunt some engineers (+%d hours) from %s\nYou currently have %d hours remaining and %s has %d.\n would you like to hire thier engineers?\n",
+					"You have the option to headhunt some engineers (+%d hours) from %s\nYou currently have %d hours remaining and %s has %d.\n would you like to hire their engineers?\n",
 					rentCost, activePlayerName, elementOwner.getBalanceOfResources(), activePlayerName,
 					activePlayer.getBalanceOfResources());
 		}
