@@ -149,7 +149,7 @@ public class Board {
 				stdElement = (StandardElement) element;
 				if (stdElement.getOwnedBy() == player) {
 					if(!hasElement) {
-						System.out.println("You own the following elements: ");
+						System.out.println("\nYou own the following elements: ");
 						hasElement = true;
 					}
 					System.out.printf("%d. %s [%s - %s]\n", count++, stdElement.getElementName(),
@@ -210,5 +210,39 @@ public class Board {
 			}
 		}
 	}// END
+	
+
+
+	/**
+	 * Method to check if any other player has started to research in the same system.
+	 * 
+	 * @param board
+	 * @param player
+	 * @return
+	 */
+	public void isSystemStarted(Player player, Element checkElement) {
+
+		boolean hasOwners = false;
+		Player purchasedPlayer = player;
+		StandardElement stdElement; 
+		
+		for(Element element : elements) {
+			if(element instanceof StandardElement) {
+				stdElement = (StandardElement) element;
+				if(stdElement.getOwnedBy()!=null && stdElement.getOwnedBy()!= player) {
+					hasOwners = true;
+					purchasedPlayer = stdElement.getOwnedBy();
+					break;
+				}
+			}
+		}
+		
+		if(hasOwners) {
+			System.out.println("Hint: "+purchasedPlayer.getName().toUpperCase()+" has started research in this system already.\nOnce you begin research there is no way out and will mean the mission can never be complete.\nAre you in it for personal gain or to see the mission succeed?\n");
+		} else {
+			System.out.println("Hint: No other companies have started to research this system yet, its a good investment!\n");
+		}
+
+	}
 
 }

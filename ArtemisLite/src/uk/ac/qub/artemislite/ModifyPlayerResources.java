@@ -30,7 +30,6 @@ public class ModifyPlayerResources {
 			GameLauncher.declareGameOver();
 		} else {
 			player.setBalanceOfResources(newBalance);
-			System.out.println(player.getName()+" has "+newBalance);
 		}
 		
 		

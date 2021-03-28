@@ -38,27 +38,6 @@ public class Player {
 
 	// Methods
 
-	// TODO: what is this metod used for? can it be removed?
-//	/**
-//	 * Method to check if the player owns any elements
-//	 * 
-//	 * @param board
-//	 * @param player
-//	 * @return
-//	 */
-//	public boolean isOwner(Board board) {
-//
-//		for (int loop = 0; loop < board.getElements().size(); loop++) {
-//			if (board.getElements().get(loop) instanceof StandardElement) {
-//				StandardElement stSq = (StandardElement) board.getElements().get(loop);
-//				if (stSq.getOwnedBy() == this) {
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
-//	}
-
 	/**
 	 * Method that returns details about the players currently occupied element
 	 */

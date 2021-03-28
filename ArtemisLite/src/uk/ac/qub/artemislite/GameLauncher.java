@@ -270,7 +270,7 @@ public class GameLauncher {
 			ArtemisCalendar.displayDate();
 
 			System.out.printf("\nIt's time for " + turnLauncher.getActivePlayer().getName() + " to take a turn.\n");
-
+			
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
 			turnLauncher.playerTurnMenu(board);
