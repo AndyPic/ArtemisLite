@@ -84,7 +84,7 @@ public class GameLauncher {
 			case 3:
 				System.out.println("Are you sure you want to quit the game?");
 				if (UserInterface.yesNoMenu() == 1) {
-					declareGameOver();
+					gameOver = true;
 					gameBegin = true;
 				}
 				break;

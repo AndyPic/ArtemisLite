@@ -160,6 +160,12 @@ public class Board {
 
 	}
 
+	/**
+	 * checks how many elements in a system is owned by a player
+	 * @param element
+	 * @param player
+	 * @return
+	 */
 	public String checkNumberOwned(StandardElement element, Player player) {
 
 		int total, owned;
