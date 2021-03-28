@@ -38,6 +38,7 @@ public class IncreaseElementDev {
 					if (board.systemFullyOwned(strdSq, activePlayer)) {
 						
 						strdSq.increaseDev();
+						strdSq.increaseRent();
 						
 						if(strdSq.getCurrentMinorDevLevel() < strdSq.getMAX_MINOR_DEV()){
 							ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -strdSq.getMinorDevCost());

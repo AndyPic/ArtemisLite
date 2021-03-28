@@ -93,18 +93,17 @@ public class StandardElement extends Element {
 	public void increaseDev() throws IllegalArgumentException {
 
 		if (currentMinorDevLevel < MAX_MINOR_DEV) {
-			currentMinorDevLevel++;
+			incrementCurrentMinorDevLevel();
 			System.out.println("You have complete research stage " + (currentMinorDevLevel - 1)
 					+ ". It's now time to begin stage " + currentMinorDevLevel);
 		} else if (currentMajorDevLevel < MAX_MAJOR_DEV) {
-			currentMajorDevLevel++;
+			incrementCurrentMajorDevLevel();
 			System.out
 					.println("You have completed all research on this element! its now time to start the construction");
 		} else if (currentMajorDevLevel == MAX_MAJOR_DEV) {
+			//TODO: is there a better exception for this? 
 			throw new IllegalArgumentException("Invalid dev increase");
 		}
-
-		increaseRent();
 
 	}
 
@@ -211,9 +210,10 @@ public class StandardElement extends Element {
 	}
 
 	/**
+	 * increase minor dev level by 1
 	 * @param currentMinorDevLevel the currentMinorDevLevel to set
 	 */
-	public void setCurrentMinorDevLevel(int currentMinorDevLevel) throws IllegalArgumentException {
+	public void incrementCurrentMinorDevLevel() throws IllegalArgumentException {
 		if (currentMinorDevLevel < MAX_MINOR_DEV) {
 			currentMinorDevLevel++;
 		} else {
@@ -229,9 +229,10 @@ public class StandardElement extends Element {
 	}
 
 	/**
+	 * increase minor dev level by 1
 	 * @param currentMajorDevLevel the currentMajorDevLevel to set
 	 */
-	public void setCurrentMajorDevLevel() throws IllegalArgumentException {
+	public void incrementCurrentMajorDevLevel() throws IllegalArgumentException {
 		if (currentMajorDevLevel < MAX_MAJOR_DEV) {
 			currentMajorDevLevel++;
 		} else {

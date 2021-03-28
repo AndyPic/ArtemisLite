@@ -11,16 +11,7 @@ import java.util.Scanner;
  */
 public class UserInput {
 
-	static Scanner scanner = new Scanner(System.in);
-
-	/**
-	 * 
-	 */
-	public static void clearScanner() {
-
-		scanner.nextLine();
-
-	}
+	private static Scanner scanner = new Scanner(System.in);
 
 	/**
 	 * Return int value for user input
@@ -37,9 +28,7 @@ public class UserInput {
 		}
 
 		input = scanner.nextInt();
-
-		// Do i need to clear scanner here? or can input var just be removed and
-		// replaced with "return scanner.nextInt();"
+		//clear for next input
 		scanner.nextLine();
 
 		return input;
@@ -56,8 +45,7 @@ public class UserInput {
 		return scanner.nextLine();
 
 	}
-	
-	//TODO: was this method removed previously on error?
+
 	/**
 	 * Method to close the scanner
 	 */
