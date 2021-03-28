@@ -9,6 +9,8 @@ package uk.ac.qub.artemislite;
  */
 public enum GameHistoryAction {
 
+	DID_NOT_INVEST("decided not to invest"),								// when refusing the opportunity to take on an element
+	PASSED_RESOURCES_ELEMENT("acquired resources"),							// when landing on the resources element
 	PURCHASE_THIS_ELEMENT("purchased this element"), 						// when landing on an unowned element
 	PURCHASE_THIS_ELEMENT_AT_AUCTION("purchased this element at auction"), 	// when purchasing element at auction
 	DEVELOP_THIS_ELEMENT("developed this element"),							// develop this element 

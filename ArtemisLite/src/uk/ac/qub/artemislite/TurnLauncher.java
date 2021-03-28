@@ -343,7 +343,7 @@ public class TurnLauncher {
 
 				System.out.println("\n=====| ELEMENT DETAILS |=====");
 				System.out.println(standardElement.toString());
-				
+
 				board.isSystemStarted(activePlayer, standardElement);
 
 				// Ask player what they want to do
@@ -465,6 +465,7 @@ public class TurnLauncher {
 
 		if (completedLap) {
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), 1, GameHistoryAction.PASSED_RESOURCES_ELEMENT);
 			ResourceElement resourceElement = (ResourceElement) board.getElements().get(0);
 			System.out.println(
 					"\nAfter stopping by the recruitment office you are able to hire more talented engineers (+"
@@ -633,7 +634,7 @@ public class TurnLauncher {
 			auctionElement("decided not to invest time in the project.", standardElement, board);
 			// add a non-action move to game history
 			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
-					GameHistoryAction.NO_ACTION);
+					GameHistoryAction.DID_NOT_INVEST);
 			break;
 		}
 
@@ -699,7 +700,7 @@ public class TurnLauncher {
 	 * end of round message to players.
 	 */
 	public void roundEnd(Board board) {
-		
+
 		turnNumber++;
 
 		double progress = GameStatistics.missionProgress(board);
@@ -712,14 +713,20 @@ public class TurnLauncher {
 				ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)),
 				ArtemisCalendar.getCalendar().get(1));
 		if (progress > 75) {
-			System.out.printf("Artemis Project Update: %.1f%s complete. You are getting close to completion!\n", progress, "%");
+			System.out.printf("Artemis Project Update: %.1f%s complete. You are getting close to completion!\n",
+					progress, "%");
 		} else if (progress > 50) {
-			System.out.printf("Artemis Project Update: %.1f%s complete. We are over half way, keep up the good work\n", progress, "%");
+			System.out.printf("Artemis Project Update: %.1f%s complete. We are over half way, keep up the good work\n",
+					progress, "%");
 		} else if (progress > 25) {
-			System.out.printf("Artemis Project Update: %.1f%s complete. Progress has been made but there is still a long way to go!\n", progress, "%");
+			System.out.printf(
+					"Artemis Project Update: %.1f%s complete. Progress has been made but there is still a long way to go!\n",
+					progress, "%");
 		} else {
-			System.out.printf("Artemis Project Update: %.1f%s complete. You are still in the early stages, lets make this mission a success\n", progress, "%");
-		} 
+			System.out.printf(
+					"Artemis Project Update: %.1f%s complete. You are still in the early stages, lets make this mission a success\n",
+					progress, "%");
+		}
 
 		UserInterface.clearConsole(1);
 

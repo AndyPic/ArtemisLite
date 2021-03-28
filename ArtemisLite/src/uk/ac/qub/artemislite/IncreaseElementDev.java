@@ -47,6 +47,10 @@ public class IncreaseElementDev {
 							ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -strdSq.getMajorDevCost());
 						}
 						
+						// add an item to to the game history
+						TurnLauncher.gameHistoryStorage.addMoveToHistory(activePlayer.getName(), chosenSq, GameHistoryAction.DEVELOP_PORTFOLIO);
+						
+						
 					} else {
 						
 						System.out.println("You do not yet own all elements in this system");
