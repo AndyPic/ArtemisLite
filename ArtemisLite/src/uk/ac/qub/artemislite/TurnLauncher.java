@@ -300,8 +300,8 @@ public class TurnLauncher {
 	 * Decreases the initial value of resources for all players for a longer game
 	 */
 //	public void setupLongGame() {
-		// TODO: this should also reduce the resources gained on each lap of the board?
-		// JD
+	// TODO: this should also reduce the resources gained on each lap of the board?
+	// JD
 //		ModifyPlayerResources.modifyResourcesAllPlayers(players, this.RESOURCE_VALUE_LONG_GAME);
 //	}
 
@@ -455,7 +455,9 @@ public class TurnLauncher {
 		if (completedLap) {
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
 			ResourceElement resourceElement = (ResourceElement) board.getElements().get(0);
-			System.out.println("\nAfter stopping by the recruitment office you are able to hire more talented engineers (+"+resourceElement.getResourceToAllocate()+" staff-hours)\n");
+			System.out.println(
+					"\nAfter stopping by the recruitment office you are able to hire more talented engineers (+"
+							+ resourceElement.getResourceToAllocate() + " staff-hours)\n");
 		}
 
 		System.out.printf("\nYou have arrived at %s.", newElementName);
@@ -526,11 +528,9 @@ public class TurnLauncher {
 	 * Give player the option to charge rent from the active player
 	 *
 	 * @param standardElement
-	 * @throws BankruptException whenever the deduction of resources causes the
-	 *                           player balance to become negative. Exception caught
-	 *                           in Admin
+	 * 
 	 */
-	public void chargeRent(StandardElement standardElement) throws BankruptException {
+	public void chargeRent(StandardElement standardElement) {
 		String activePlayerName, elementOwnerName;
 		int rentCost;
 		Player elementOwner;
@@ -787,36 +787,27 @@ public class TurnLauncher {
 
 			UserInterface.clearConsole();
 
-			// surround with try / catch to catch BankruptcyException when modifying player
-			// resources would result in a negative balance
-			try {
-				if (userMenuSelection.equals(MenuOption.VIEW_ALL_ELEMENTS)) {
-					GameLauncher.mainHeadder();
-					System.out.printf("\nAll game elements:\n\n");
-					board.viewElementOwnership();
-				} else if (userMenuSelection.equals(MenuOption.VIEW_PLAYER_ELEMENTS)) {
-					GameLauncher.mainHeadder();
-					board.viewMyElementsDetails(activePlayer);
-				} else if (userMenuSelection.equals(MenuOption.GET_ELEMENT_DETAILS)) {
-					GameLauncher.mainHeadder();
-					System.out.printf("\nYou are currently on : ");
-					activePlayer.getCurrentPositionDetails(board);
-				} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
-					GameLauncher.mainHeadder();
-					board.viewMyElements(activePlayer);
-					IncreaseElementDev id = new IncreaseElementDev();
-					id.increaseElementDev(board, activePlayer);
+			if (userMenuSelection.equals(MenuOption.VIEW_ALL_ELEMENTS)) {
+				GameLauncher.mainHeadder();
+				System.out.printf("\nAll game elements:\n\n");
+				board.viewElementOwnership();
+			} else if (userMenuSelection.equals(MenuOption.VIEW_PLAYER_ELEMENTS)) {
+				GameLauncher.mainHeadder();
+				board.viewMyElementsDetails(activePlayer);
+			} else if (userMenuSelection.equals(MenuOption.GET_ELEMENT_DETAILS)) {
+				GameLauncher.mainHeadder();
+				System.out.printf("\nYou are currently on : ");
+				activePlayer.getCurrentPositionDetails(board);
+			} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
+				GameLauncher.mainHeadder();
+				board.viewMyElements(activePlayer);
+				IncreaseElementDev id = new IncreaseElementDev();
+				id.increaseElementDev(board, activePlayer);
 
-				} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
-					endTurn(board);
-				} else if (userMenuSelection.equals(MenuOption.END_GAME)) {
-					endGame();
-				}
-
-			} catch (BankruptException bankruptExc) {
-				// declare the game over at a BankruptException
-				bankruptExc.getLocalizedMessage();
-				GameLauncher.declareGameOver();
+			} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
+				endTurn(board);
+			} else if (userMenuSelection.equals(MenuOption.END_GAME)) {
+				endGame();
 			}
 
 			firstMenuOfTurn = false;

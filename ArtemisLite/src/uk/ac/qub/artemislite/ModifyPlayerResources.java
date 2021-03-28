@@ -17,17 +17,17 @@ public class ModifyPlayerResources {
 	ArrayList<Player> players;
 	
 	/**
-	 * Modifies the resources of a single player
+	 * Modifies the resources of a single player. Calls declareGameOver if a player's resources fall below zero
 	 * @param player
 	 * @param resourceValue the resource value, positive or negative
-	 * @throws BankruptException if player's resources fall below zero as a result of this action
+	 * 
 	 */
-	public static void modifyResourcesSinglePlayer (Player player, int resourceValue) throws BankruptException {
+	public static void modifyResourcesSinglePlayer (Player player, int resourceValue) {
 		int newBalance = player.getBalanceOfResources() + resourceValue;
 		if (newBalance < 0) {
-			// this is a game-over state! - need way of reaching Admin.GAME_OVER to set its state as true
-			// throw new exception as reminder!!
-			throw new BankruptException(player.getName() + " is bankrupt");
+			// this is a game-over state!
+			System.out.printf("%s is bankrupt!");
+			GameLauncher.declareGameOver();
 		} else {
 			player.setBalanceOfResources(newBalance);
 			System.out.println(player.getName()+" has "+newBalance);
@@ -37,19 +37,19 @@ public class ModifyPlayerResources {
 	}
 	
 	/**
-	 * Modifies the resources of all players at once
+	 * Modifies the resources of all players at once. Calls declareGameOver if a player's resources fall below zero
 	 * @param players
 	 * @param resourceValue - the value of the resources
-	 * @throws BankruptException if player's resources fall below zero as a result of this action
+	 * 
 	 */
-	public static void modifyResourcesAllPlayers(ArrayList<Player> players, int resourceValue) throws BankruptException {
+	public static void modifyResourcesAllPlayers(ArrayList<Player> players, int resourceValue) {
 		int newBalance = 0;
 		for(Player player: players) {
 			newBalance = player.getBalanceOfResources() + resourceValue;
 			if (newBalance < 0) {
-				// this is a game-over state! need way of reaching Admin.GAME_OVER to set its state as true
-				// throw new exception as reminder!!
-				throw new BankruptException(player.getName() + " is bankrupt");
+				// this is a game-over state!
+				System.out.printf("%s is bankrupt!");
+				GameLauncher.declareGameOver();
 			} else {
 				player.setBalanceOfResources(newBalance);
 			}
