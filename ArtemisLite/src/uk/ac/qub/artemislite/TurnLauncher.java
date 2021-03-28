@@ -454,7 +454,7 @@ public class TurnLauncher {
 
 		if (completedLap) {
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
-			TurnLauncher.gameHistoryStorage.addMoveToHistory(activePlayer.getName(), 1, GameHistoryAction.PASSED_RESOURCES_ELEMENT);
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), 1, GameHistoryAction.PASSED_RESOURCES_ELEMENT);
 			ResourceElement resourceElement = (ResourceElement) board.getElements().get(0);
 			System.out.println(
 					"\nAfter stopping by the recruitment office you are able to hire more talented engineers (+"
@@ -693,7 +693,7 @@ public class TurnLauncher {
 
 		UserInterface.clearConsole(2);
 
-		System.out.printf("Round %d has ended. The date is now %s, %d.\n", turnNumber,
+		System.out.printf("Round %d has ended. The date is now %s, %d.\n", turnNumber++,
 				ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)),
 				ArtemisCalendar.getCalendar().get(1));
 		if (progress > 0) {
