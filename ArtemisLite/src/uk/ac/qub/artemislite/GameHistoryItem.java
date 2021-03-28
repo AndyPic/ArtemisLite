@@ -56,11 +56,30 @@ public class GameHistoryItem {
 		this.boardLandingPosition = boardLandingPosition;
 		this.gameHistoryAction = gameHistoryAction;
 	}
+	
+	
+	/**
+	 * Converts a board landing position (as an <code>ing</code>) into the equivalent name
+	 * @param boardLandingPosition is the position on the board
+	 * @return the name from the ElementDetails class
+	 */
+	public String getElementNameFromPosition (int boardLandingPosition) {
+		String elementName = "";
+		// finds the details from the ENUM
+		for (ElementDetails elementDetails : ElementDetails.values()) {
+			if (boardLandingPosition == elementDetails.getElementPos()) {
+				elementName = elementDetails.getName();
+			}
+		}
+		return elementName;
+	}
 
+	/**
+	 * Displays a standardised output for a game history item
+	 */
 	public void displayAll() {
-
-		System.out.printf("Action number %3s. Location: element %2s. Player %s %s\n", this.gameCounter,
-				this.boardLandingPosition, this.playerName, this.gameHistoryAction.label);
+		System.out.printf("Action number %3s. Location: %32s. Player %s %s\n", this.gameCounter,
+				this.getElementNameFromPosition(this.boardLandingPosition), this.playerName, this.gameHistoryAction.label);
 	}
 
 }

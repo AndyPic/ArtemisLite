@@ -47,6 +47,7 @@ public class IncreaseElementDev {
 							ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -strdSq.getMajorDevCost());
 						}
 						
+						
 					} else {
 						
 						System.out.println("You do not yet own all elements in this system");

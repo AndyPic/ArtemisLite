@@ -454,6 +454,7 @@ public class TurnLauncher {
 
 		if (completedLap) {
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
+			TurnLauncher.gameHistoryStorage.addMoveToHistory(activePlayer.getName(), 1, GameHistoryAction.PASSED_RESOURCES_ELEMENT);
 			ResourceElement resourceElement = (ResourceElement) board.getElements().get(0);
 			System.out.println(
 					"\nAfter stopping by the recruitment office you are able to hire more talented engineers (+"
@@ -619,7 +620,7 @@ public class TurnLauncher {
 			auctionElement("decided not to invest time in the project.", standardElement);
 			// add a non-action move to game history
 			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
-					GameHistoryAction.NO_ACTION);
+					GameHistoryAction.DID_NOT_INVEST);
 			break;
 		}
 

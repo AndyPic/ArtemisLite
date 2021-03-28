@@ -317,6 +317,7 @@ public class GameLauncher {
 
 		if (board.allSystemComplete()) {
 			displayGameWonMessage();
+			
 		} else {
 			displayGameLossMessage(board);
 		}
