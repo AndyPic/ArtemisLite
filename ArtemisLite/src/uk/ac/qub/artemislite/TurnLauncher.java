@@ -313,7 +313,7 @@ public class TurnLauncher {
 	 * @param reasonToAuction - eg. "not enough resources"
 	 * @param standardElement - The element being auctioned
 	 */
-	public void auctionElement(String reasonToAuction, StandardElement standardElement) {
+	public void auctionElement(String reasonToAuction, StandardElement standardElement, Board board) {
 
 		int purchaseCost;
 		String elementName, activePlayerName;
@@ -334,38 +334,49 @@ public class TurnLauncher {
 
 		for (int loop = 0; loop < players.size(); loop++) {
 			// Do nothing if player is active player
-			if (players.get(loop) != activePlayer) {
-				// Check if player has enough resources to buy property
-				if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
-					// Ask player what they want to do
-					System.out.printf(
-							"\n%s: you currently have %d staff-hours remaining, you would need to allocate %d hours to begin research off %s. \nWould you like to proceed?\n",
-							players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
-							purchaseCost, elementName);
-
-					// Add player responses to arraylist
-					switch (UserInterface.yesNoMenu()) {
-					case 1:
-						playersWant.add(players.get(loop));
-						System.out.printf("\n%s DOES want to be invloved in the researching of %s\n",
-								players.get(loop).getName(), elementName);
-						break;
-					case 2:
-						System.out.printf("\n%s DOES NOT want to be invloved in the researching of %s\n",
-								players.get(loop).getName(), elementName);
-						break;
-					}
-
-				} else {
-					System.out.printf("\n%s doesn't have enough staff-hours remaining to take on the %s project\n",
-							players.get(loop).getName(), elementName);
-				}
+			if (players.get(loop) == activePlayer) {
+				continue;
 			}
+			// Check if player has enough resources to buy property
+			if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
+
+				board.viewMyElements(activePlayer);
+
+				System.out.println("\n=====| ELEMENT DETAILS |=====");
+				System.out.println(standardElement.toString());
+
+				board.isSystemStarted(activePlayer, standardElement);
+
+				// Ask player what they want to do
+				System.out.printf(
+						"\n%s: you currently have %d staff-hours remaining, you would need to allocate %d hours to begin research off %s. \nWould you like to proceed?\n",
+						players.get(loop).getName().toUpperCase(), players.get(loop).getBalanceOfResources(),
+						purchaseCost, elementName);
+
+				// Add player responses to arraylist
+				switch (UserInterface.yesNoMenu()) {
+				case 1:
+					playersWant.add(players.get(loop));
+					UserInterface.clearConsole();
+					System.out.printf("\n%s DOES want to be invloved in the researching of %s\n",
+							players.get(loop).getName(), elementName);
+					break;
+				case 2:
+					UserInterface.clearConsole();
+					System.out.printf("\n%s DOES NOT want to be invloved in the researching of %s\n",
+							players.get(loop).getName(), elementName);
+					break;
+				}
+
+			} else {
+				System.out.printf("\n%s doesn't have enough staff-hours remaining to take on the %s project\n",
+						players.get(loop).getName(), elementName);
+			}
+
 		}
 
 		// Check that at least 1 player wanted to buy the property
 		if (playersWant.isEmpty()) {
-			// No one wanted it
 			System.out.printf("\nNASA failed to secure a company to begin research on %s.\n", elementName);
 
 		} else if (playersWant.size() == 1) {
@@ -462,6 +473,8 @@ public class TurnLauncher {
 							+ resourceElement.getResourceToAllocate() + " staff-hours)\n");
 		}
 
+		board.viewMyElements(activePlayer);
+
 		System.out.printf("\nYou have arrived at %s.", newElementName);
 
 		if (newElement instanceof StandardElement) {
@@ -477,8 +490,6 @@ public class TurnLauncher {
 		}
 
 		System.out.println("\n=====| ELEMENT DETAILS |=====");
-		// TODO: should find some way to display all rent costs for a element rather
-		// than just the current one JD
 		System.out.println(newElement.toString());
 
 	} // END
@@ -502,12 +513,13 @@ public class TurnLauncher {
 			if (standardElement.getOwnedBy() != null) {
 				chargeRent(standardElement);
 			} else if (activePlayer.getBalanceOfResources() >= standardElement.getPurchaseCost()) {
-				offerElement(standardElement);
+				offerElement(standardElement, board);
 			} else {
 				// Only start auction if there is a player that can afford it
 				for (int loop = 0; loop < players.size(); loop++) {
 					if (players.get(loop).getBalanceOfResources() >= standardElement.getPurchaseCost()) {
-						auctionElement("doesn't have enough staff-hours available to begin research.", standardElement);
+						auctionElement("doesn't have enough staff-hours available to begin research.", standardElement,
+								board);
 						break;
 					} else if (loop == (players.size() - 1)) {
 						System.out.printf("%s and no other companies have enough free hours to begin research %s.\n",
@@ -595,7 +607,9 @@ public class TurnLauncher {
 	 * 
 	 * @param StandardElement to be offered
 	 */
-	public void offerElement(StandardElement standardElement) {
+	public void offerElement(StandardElement standardElement, Board board) {
+
+		board.isSystemStarted(activePlayer, standardElement);
 		// Offer player the element
 		System.out.printf(
 				// TODO rename resources to whatever we decide to call it
@@ -618,7 +632,7 @@ public class TurnLauncher {
 			break;
 		case 2:
 			// Auction the element, doesn't want to buy
-			auctionElement("decided not to invest time in the project.", standardElement);
+			auctionElement("decided not to invest time in the project.", standardElement, board);
 			// add a non-action move to game history
 			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 					GameHistoryAction.DID_NOT_INVEST);
@@ -688,17 +702,31 @@ public class TurnLauncher {
 	 */
 	public void roundEnd(Board board) {
 
+		turnNumber++;
+
 		double progress = GameStatistics.missionProgress(board);
 
 		ArtemisCalendar.getCalendar().incrementDate();
 
 		UserInterface.clearConsole(2);
 
-		System.out.printf("Round %d has ended. The date is now %s, %d.\n", turnNumber++,
+		System.out.printf("Month %d has ended. The date is now %s, %d.\n", turnNumber,
 				ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)),
 				ArtemisCalendar.getCalendar().get(1));
-		if (progress > 0) {
-			System.out.printf("The Artemis Project is %.1f%s complete.\n", progress, "%");
+		if (progress > 75) {
+			System.out.printf("Artemis Project Update: %.1f%s complete. You are getting close to completion!\n",
+					progress, "%");
+		} else if (progress > 50) {
+			System.out.printf("Artemis Project Update: %.1f%s complete. We are over half way, keep up the good work\n",
+					progress, "%");
+		} else if (progress > 25) {
+			System.out.printf(
+					"Artemis Project Update: %.1f%s complete. Progress has been made but there is still a long way to go!\n",
+					progress, "%");
+		} else {
+			System.out.printf(
+					"Artemis Project Update: %.1f%s complete. You are still in the early stages, lets make this mission a success\n",
+					progress, "%");
 		}
 
 		UserInterface.clearConsole(1);
@@ -726,6 +754,8 @@ public class TurnLauncher {
 		} else {
 			setActivePlayer(players.get(0));
 			roundEnd(board);
+			System.out.println(CONTINUE_HEADER);
+			UserInput.getUserInputString();
 		}
 		turnOver = true;
 

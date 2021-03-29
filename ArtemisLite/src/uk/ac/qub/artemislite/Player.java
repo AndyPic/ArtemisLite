@@ -14,7 +14,7 @@ public class Player {
 	// Instance Vars
 
 	private String name;
-	private int balanceOfResources; // Set starting resources 
+	private int balanceOfResources; // Set starting resources
 	private int currentPosition = 0; // Set starting position
 
 	// Constructors
@@ -39,38 +39,19 @@ public class Player {
 	// Methods
 
 	/**
-	 * Method to check if the player owns any elements
-	 * 
-	 * @param board
-	 * @param player
-	 * @return
-	 */
-	public boolean isOwner(Board board) {
-
-		for (int loop = 0; loop < board.getElements().size(); loop++) {
-			if (board.getElements().get(loop) instanceof StandardElement) {
-				StandardElement stSq = (StandardElement) board.getElements().get(loop);
-				if (stSq.getOwnedBy() == this) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-
-	/**
 	 * Method that returns details about the players currently occupied element
 	 */
 	public void getCurrentPositionDetails(Board board) {
-		if (board.getElements().get(currentPosition) instanceof StandardElement) {
-			StandardElement ssq = (StandardElement) board.getElements().get(currentPosition);
+		Element element = board.getElements().get(currentPosition);
+		
+		if (element instanceof StandardElement) {
+			StandardElement ssq = (StandardElement) element;
 			System.out.println(ssq.toString());
-		} else if (board.getElements().get(currentPosition) instanceof ResourceElement) {
-			ResourceElement rsq = (ResourceElement) board.getElements().get(currentPosition);
+		} else if (element instanceof ResourceElement) {
+			ResourceElement rsq = (ResourceElement) element;
 			System.out.println(rsq.toString());
 		} else {
-			System.out.println(board.getElements().get(currentPosition).toString());
+			System.out.println(element.toString());
 		}
 	}
 
