@@ -225,7 +225,8 @@ public class TurnLauncher {
 
 	/**
 	 * end game warning
-	 * @param boardPosition 
+	 * 
+	 * @param boardPosition
 	 */
 	public void endGame(int boardPosition) {
 		// TODO: need to think of better text for here
@@ -794,8 +795,8 @@ public class TurnLauncher {
 			menuNum = 1;
 			validUserInput = false;
 
-			System.out.printf("\nIts still your turn! Please select one of the following options:\n%s",
-					GameLauncher.getMenuHeader());
+			System.out.printf("\nIt's still your turn %s! Please select one of the following options:\n%s",
+					activePlayer.getName(), GameLauncher.getMenuHeader());
 
 			for (Entry<MenuOption, Boolean> option : menu.entrySet()) {
 				if (option.getValue()) {
