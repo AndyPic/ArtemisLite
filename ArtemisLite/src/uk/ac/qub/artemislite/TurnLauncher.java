@@ -197,24 +197,19 @@ public class TurnLauncher {
 		do {
 			valid = true;
 			name = UserInput.getUserInputString();
-			// TODO: is there any other name validation needed? JD
-			if (players != null) {
 
-				if (name.equals("")) {
-					valid = false;
-					System.out.println("That name is invalid, please enter a different name");
-				}
+			if (name.equals("")) {
+				valid = false;
+				System.out.println("That name is invalid, please enter a different name");
+			}
 
-				for (Player user : players) {
-					if (!user.equals(player)) {
-						if (user.getName().equalsIgnoreCase(name.trim())) {
-							valid = false;
-							System.out.println(
-									"A company with that name already exists, please enter something different");
-						}
+			for (Player user : players) {
+				if (!user.equals(player)) {
+					if (user.getName().equalsIgnoreCase(name.trim())) {
+						valid = false;
+						System.out.println("A company with that name already exists, please enter something different");
 					}
 				}
-
 			}
 
 		} while (!valid);

@@ -1,6 +1,7 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author Jordan Davis
@@ -147,7 +148,9 @@ public class Board {
 		for (Element element : this.elements) {
 			if (element instanceof StandardElement) {
 				stdElement = (StandardElement) element;
-				if (stdElement.getOwnedBy()!= null && stdElement.getOwnedBy().equals(player)) {
+				stdElement.setOwnedBy(null);
+
+				if (stdElement.isOwnedBy(player)) {
 					if(!hasElement) {
 						System.out.println("\nYou own the following elements: ");
 						hasElement = true;
