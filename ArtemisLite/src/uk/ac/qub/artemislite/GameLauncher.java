@@ -23,7 +23,7 @@ public class GameLauncher {
 	private final static int MIN_PLAYERS = 2;
 	private final static int MAX_PLAYERS = 4;
 	private final static String MENU_HEADER = "\n=====| MENU |=====\n";
-	private final static int RESOURCE_VALUE_SHORT_GAME = 200;
+	private final static int RESOURCE_VALUE_SHORT_GAME = 2000;
 	private final static int RESOURCE_VALUE_LONG_GAME = 100;
 
 	// Sets game-over, main game loop
