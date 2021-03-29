@@ -147,7 +147,7 @@ public class Board {
 		for (Element element : this.elements) {
 			if (element instanceof StandardElement) {
 				stdElement = (StandardElement) element;
-				if (stdElement.getOwnedBy().equals(player)) {
+				if (stdElement.getOwnedBy()!= null && stdElement.getOwnedBy().equals(player)) {
 					if(!hasElement) {
 						System.out.println("\nYou own the following elements: ");
 						hasElement = true;
