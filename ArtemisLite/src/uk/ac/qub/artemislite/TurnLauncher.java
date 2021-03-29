@@ -333,7 +333,7 @@ public class TurnLauncher {
 
 		for (int loop = 0; loop < players.size(); loop++) {
 			// Do nothing if player is active player
-			if (players.get(loop) == activePlayer) {
+			if (players.get(loop).equals(activePlayer)) {
 				continue;
 			}
 			// Check if player has enough resources to buy property
@@ -553,7 +553,7 @@ public class TurnLauncher {
 		elementOwner = standardElement.getOwnedBy();
 		elementOwnerName = elementOwner.getName();
 
-		if (elementOwner == activePlayer) {
+		if (elementOwner.equals(activePlayer)) {
 			System.out.printf("%s, you have already started to research this element.\n", activePlayerName);
 			return;
 		}
