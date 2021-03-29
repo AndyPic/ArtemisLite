@@ -26,7 +26,7 @@ public class ModifyPlayerResources {
 		int newBalance = player.getBalanceOfResources() + resourceValue;
 		if (newBalance < 0) {
 			// this is a game-over state!
-			System.out.printf("%s is bankrupt!");
+			System.out.printf("%s is bankrupt!", player.getName());
 			GameLauncher.declareGameOver();
 		} else {
 			player.setBalanceOfResources(newBalance);
