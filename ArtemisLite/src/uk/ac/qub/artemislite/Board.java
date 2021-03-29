@@ -142,20 +142,18 @@ public class Board {
 		int count = 1;
 		StandardElement stdElement;
 		boolean hasElement = false;
-		
-		
 
 		for (Element element : this.elements) {
 			if (element instanceof StandardElement) {
 				stdElement = (StandardElement) element;
 
 				if (stdElement.isOwnedBy(player)) {
-					if(!hasElement) {
+					if (!hasElement) {
 						System.out.println("\nYou own the following elements: ");
 						hasElement = true;
 					}
 					System.out.printf("%d. %s [%s - %s]\n", count++, stdElement.getElementName(),
-							stdElement.getElementSystem().getName(),checkNumberOwned(stdElement, player));
+							stdElement.getElementSystem().getName(), checkNumberOwned(stdElement, player));
 				}
 			}
 		}
@@ -164,6 +162,7 @@ public class Board {
 
 	/**
 	 * checks how many elements in a system is owned by a player
+	 * 
 	 * @param element
 	 * @param player
 	 * @return
@@ -212,11 +211,10 @@ public class Board {
 			}
 		}
 	}// END
-	
-
 
 	/**
-	 * Method to check if any other player has started to research in the same system.
+	 * Method to check if any other player has started to research in the same
+	 * system.
 	 * 
 	 * @param board
 	 * @param player
@@ -226,23 +224,28 @@ public class Board {
 
 		boolean hasOwners = false;
 		Player purchasedPlayer = player;
-		StandardElement stdElement; 
-		
-		for(Element element : elements) {
-			if(element instanceof StandardElement) {
+		StandardElement stdElement;
+
+		for (Element element : elements) {
+			if (element instanceof StandardElement) {
 				stdElement = (StandardElement) element;
-				if(stdElement.getOwnedBy()!=null && !stdElement.isOwnedBy(player)) {
+				if (checkElement.getElementSystem() != stdElement.getElementSystem()) {
+					continue;
+				}
+				if (stdElement.getOwnedBy() != null && !stdElement.isOwnedBy(player)) {
 					hasOwners = true;
 					purchasedPlayer = stdElement.getOwnedBy();
 					break;
 				}
 			}
 		}
-		
-		if(hasOwners) {
-			System.out.println("Hint: "+purchasedPlayer.getName().toUpperCase()+" has started research in this system already.\nOnce you begin research there is no way out and will mean the mission can never be complete.\nAre you in it for personal gain or to see the mission succeed?\n");
+
+		if (hasOwners) {
+			System.out.println("Hint: " + purchasedPlayer.getName().toUpperCase()
+					+ " has started research in this system already.\nOnce you begin research there is no way out and will mean the mission can never be complete.\nAre you in it for personal gain or to see the mission succeed?\n");
 		} else {
-			System.out.println("Hint: No other companies have started to research this system yet, its a good investment!\n");
+			System.out.println(
+					"Hint: No other companies have started to research this system yet, its a good investment!\n");
 		}
 
 	}

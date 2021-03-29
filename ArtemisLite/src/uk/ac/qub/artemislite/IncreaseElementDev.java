@@ -21,19 +21,19 @@ public class IncreaseElementDev {
 		// Increase development level
 		
 		boolean finishedDeveloping = false;
+		Element chosenSq;
 
 		do {
 			// ask which element to develop
 			System.out.println("Which element would you like to develop?");
 			// maybe display elements owned by active player here
 
-			int chosenSq = 0;
-			chosenSq = UserInput.getUserInputInt();
-			ArrayList<Element> sqs = board.getElements();
-			for (Element sq : sqs) {
+			chosenSq = board.getElements().get(UserInput.getUserInputInt());
+			
+			for (Element element : board.getElements()) {
 							
-				if (sq.getBoardPosition() == chosenSq && sq instanceof StandardElement) {
-					StandardElement strdSq = (StandardElement) sq;
+				if (chosenSq.equals(element) && element instanceof StandardElement) {
+					StandardElement strdSq = (StandardElement) element;
 					
 					// check if system is fully owned
 					if (board.systemFullyOwned(strdSq, activePlayer)) {
@@ -48,7 +48,7 @@ public class IncreaseElementDev {
 						}
 						
 						// add an item to to the game history
-						TurnLauncher.gameHistoryStorage.addMoveToHistory(activePlayer.getName(), chosenSq, GameHistoryAction.DEVELOP_PORTFOLIO);
+						TurnLauncher.gameHistoryStorage.addMoveToHistory(activePlayer.getName(), chosenSq.getBoardPosition(), GameHistoryAction.DEVELOP_PORTFOLIO);
 						
 						
 					} else {
