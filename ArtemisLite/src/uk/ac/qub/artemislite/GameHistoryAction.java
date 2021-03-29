@@ -17,7 +17,7 @@ public enum GameHistoryAction {
 	DEVELOP_PORTFOLIO("developed portfolio"), 								// develop any owned element other than the current position
 	FORFEIT_RESOURCES("forfeit resources"), 								// when landing on a element owned by another player
 	NO_ACTION("took no action"),											// when unable to purchase a element
-	QUIT("quit");									
+	QUIT("quit, causing the game to end");									
 	
 	// note, claim resources is not an value in this enum because
 	// as current player, you will not claim resources on this element
