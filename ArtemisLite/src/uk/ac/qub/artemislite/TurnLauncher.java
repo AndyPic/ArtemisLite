@@ -226,7 +226,7 @@ public class TurnLauncher {
 	/**
 	 * end game warning
 	 */
-	public void endGame() {
+	public void endGame(int boardPosition) {
 		// TODO: need to think of better text for here
 		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
 
@@ -235,6 +235,7 @@ public class TurnLauncher {
 			GameLauncher.declareGameOver();
 			// Set player bankrupt
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -activePlayer.getBalanceOfResources());
+			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), boardPosition, GameHistoryAction.QUIT);
 		}
 
 	}
@@ -808,7 +809,7 @@ public class TurnLauncher {
 			} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
 				endTurn(board);
 			} else if (userMenuSelection.equals(MenuOption.END_GAME)) {
-				endGame();
+				endGame(activePlayer.getCurrentPosition());
 			}
 
 			firstMenuOfTurn = false;
