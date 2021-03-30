@@ -73,7 +73,7 @@ public class StandardElement extends Element {
 		} else {
 			string.append(String.format(intFormat, "Initial research hours", purchaseCost));
 		}
-		
+
 		string.append(String.format(intFormat, "Hours per reseach stage", minorDevCost));
 
 		if (ownedBy != null) {
@@ -90,19 +90,22 @@ public class StandardElement extends Element {
 	 * 
 	 * @throws Exception
 	 */
-	public void increaseDev() throws IllegalArgumentException {
+	public void increaseDev() {
 
-		if (currentMinorDevLevel < MAX_MINOR_DEV) {
+		if (currentMinorDevLevel == MAX_MINOR_DEV-1) {
+			incrementCurrentMinorDevLevel();
+			System.out.println("You have completed the last research stage (" + (currentMinorDevLevel)
+					+ "). It's now time to start the construction!");
+		} else if (currentMinorDevLevel < MAX_MINOR_DEV) {
 			incrementCurrentMinorDevLevel();
 			System.out.println("You have complete research stage " + (currentMinorDevLevel - 1)
 					+ ". It's now time to begin stage " + currentMinorDevLevel);
 		} else if (currentMajorDevLevel < MAX_MAJOR_DEV) {
 			incrementCurrentMajorDevLevel();
 			System.out
-					.println("You have completed all research on this element! its now time to start the construction");
+					.println("This element has just completed construction, we are 1 step closer to the project Artemis Launch");
 		} else if (currentMajorDevLevel == MAX_MAJOR_DEV) {
-			//TODO: is there a better exception for this? 
-			throw new IllegalArgumentException("Invalid dev increase");
+			System.out.println("This element is already has already completed research and development!");
 		}
 
 	}
@@ -211,6 +214,7 @@ public class StandardElement extends Element {
 
 	/**
 	 * increase minor dev level by 1
+	 * 
 	 * @param currentMinorDevLevel the currentMinorDevLevel to set
 	 */
 	public void incrementCurrentMinorDevLevel() throws IllegalArgumentException {
@@ -230,6 +234,7 @@ public class StandardElement extends Element {
 
 	/**
 	 * increase minor dev level by 1
+	 * 
 	 * @param currentMajorDevLevel the currentMajorDevLevel to set
 	 */
 	public void incrementCurrentMajorDevLevel() throws IllegalArgumentException {

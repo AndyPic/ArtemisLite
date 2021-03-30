@@ -3,8 +3,6 @@
  */
 package uk.ac.qub.artemislite;
 
-import java.util.ArrayList;
-
 /**
  * Increases development level and modifies player resources accordingly
  * @author Jordan Davis
@@ -22,12 +20,9 @@ public class IncreaseElementDev {
 		
 		boolean finishedDeveloping = false;
 		Element chosenSq;
-		int userInput;
 
 		do {
-			// ask which element to develop
 			System.out.println("Which element would you like to develop?");
-			// maybe display elements owned by active player here
 
 			chosenSq = board.getPlayerOwnedIndex(activePlayer, UserInput.getUserInputInt());
 			
