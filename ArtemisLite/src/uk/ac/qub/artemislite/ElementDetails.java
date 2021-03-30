@@ -9,26 +9,26 @@ package uk.ac.qub.artemislite;
  * @author Joseph Mawhinney
  * @author Andrew Pickard
  */
-public enum SquareDetails {
+public enum ElementDetails {
 
-	// position, squareName, squareSystem, purchaseCost, minorDevCost,
+	// position, elementName, elementSystem, purchaseCost, minorDevCost,
 	// majorDevCost, rent,
 	// rentMinor1, rentMinor2, rentMinor3, rentMajor1
 	// TODO still need to decide values and names for these sqaures
-	SQUARERESOURCE(1, "Resource Square", SystemType.RESOURCE),
-	SQUAREX(2, "SquareX", SystemType.SYSTEM1, 100, 200, 400, 10, 20, 30, 40, 80),
-	SQUAREY(3, "SquareY", SystemType.SYSTEM1, 100, 200, 400, 10, 20, 30, 40, 80),
-	SQUAREA(4, "SquareA", SystemType.SYSTEM2, 200, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREB(5, "SquareB", SystemType.SYSTEM2, 200, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREC(6, "SquareC", SystemType.SYSTEM2, 200, 400, 800, 30, 40, 50, 60, 120),
-	SQUAREBLANK(7, "Blank Square", SystemType.BLANK),
-	SQUARE1(8, "Square1", SystemType.SYSTEM3, 300, 600, 1200, 60, 70, 80, 90, 180),
-	SQUARE2(9, "Square2", SystemType.SYSTEM3, 300, 600, 1200, 60, 70, 80, 90, 180),
-	SQUARE3(10, "Square3", SystemType.SYSTEM3, 300, 600, 1200, 60, 70, 80, 90, 180),
-	SQUAREi(11, "Squarei", SystemType.SYSTEM4, 400, 800, 1600, 90, 100, 110, 120, 240),
-	SQUAREii(12, "Squareii", SystemType.SYSTEM4, 400, 800, 1600, 90, 100, 110, 120, 240);
+	RESOURCE_ELEMENT(1, "Recruitment Agents", SystemType.RESOURCE),
+	CREW_MODULE(2, "Crew Module", SystemType.ORION, 100, 200, 400, 10, 20, 30, 40, 80),
+	LAS(3, "Launch Abort System", SystemType.ORION, 100, 200, 400, 10, 20, 30, 40, 80),
+	SRB(4, "Solid Rocket Boosters", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
+	RS25(5, "RS-25 Engines", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
+	SLS_AVIONICS(6, "SLS Avionics", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
+	BLANK_ELEMENT(7, "Blank Element", SystemType.BLANK),
+	CRAWLER(8, "Crawlers", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
+	ML(9, "Mobile Launchers", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
+	LP39B(10, "Launch Pad 39B", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
+	PP(11, "Power and Propulsion", SystemType.GATEWAY, 400, 800, 1600, 90, 100, 110, 120, 240),
+	HLO(12, "Habitation and Logistics Outpost", SystemType.GATEWAY, 400, 800, 1600, 90, 100, 110, 120, 240);
 
-	private final int squarePos;
+	private final int elementPos;
 	private final String name;
 	private final SystemType system;
 	private int cost;
@@ -43,7 +43,7 @@ public enum SquareDetails {
 	/**
 	 * reduced args constructor
 	 * 
-	 * @param squarePos
+	 * @param elementPos
 	 * @param name
 	 * @param system
 	 * @param cost
@@ -55,8 +55,8 @@ public enum SquareDetails {
 	 * @param rentMinor3
 	 * @param rentMajor1
 	 */
-	private SquareDetails(int squarePos, String name, SystemType system) {
-		this.squarePos = squarePos;
+	private ElementDetails(int elementPos, String name, SystemType system) {
+		this.elementPos = elementPos;
 		this.name = name;
 		this.system = system;
 	}
@@ -64,7 +64,7 @@ public enum SquareDetails {
 	/**
 	 * Full args constructor
 	 * 
-	 * @param squarePos
+	 * @param elementPos
 	 * @param name
 	 * @param system
 	 * @param cost
@@ -76,9 +76,9 @@ public enum SquareDetails {
 	 * @param rentMinor3
 	 * @param rentMajor1
 	 */
-	private SquareDetails(int squarePos, String name, SystemType system, int cost, int minorCost, int majorCost,
+	private ElementDetails(int elementPos, String name, SystemType system, int cost, int minorCost, int majorCost,
 			int rent, int rentMinor1, int rentMinor2, int rentMinor3, int rentMajor1) {
-		this.squarePos = squarePos;
+		this.elementPos = elementPos;
 		this.name = name;
 		this.system = system;
 		this.cost = cost;
@@ -92,10 +92,10 @@ public enum SquareDetails {
 	}
 
 	/**
-	 * @return the squarePos
+	 * @return the elementPos
 	 */
-	public int getSquarePos() {
-		return squarePos;
+	public int getElementPos() {
+		return elementPos;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author Jordan Davis
@@ -12,7 +13,7 @@ public class Board {
 
 	// Instance Vars
 
-	private ArrayList<Square> squares = new ArrayList<Square>();
+	private ArrayList<Element> elements = new ArrayList<Element>();
 
 	// Constructors
 
@@ -20,27 +21,27 @@ public class Board {
 	 * Default constructor, builds the game board
 	 */
 	public Board() {
-		for (SquareDetails squareDetails : SquareDetails.values()) {
-			SystemType systemType = squareDetails.getSystem();
+		for (ElementDetails elementDetails : ElementDetails.values()) {
+			SystemType systemType = elementDetails.getSystem();
 			switch (systemType) {
 
 			case RESOURCE:
-				ResourceSquare resourceSquare = new ResourceSquare(squareDetails.getSquarePos(),
-						squareDetails.getName(), squareDetails.getSystem());
-				squares.add(resourceSquare);
+				ResourceElement resourceElement = new ResourceElement(elementDetails.getElementPos(),
+						elementDetails.getName(), elementDetails.getSystem());
+				elements.add(resourceElement);
 				break;
 
 			case BLANK:
-				Square blankSquare = new Square(squareDetails.getSquarePos(), squareDetails.getName(),
-						squareDetails.getSystem());
-				squares.add(blankSquare);
+				Element blankElement = new Element(elementDetails.getElementPos(), elementDetails.getName(),
+						elementDetails.getSystem());
+				elements.add(blankElement);
 				break;
 
 			default:
-				StandardSquare standardSquare = new StandardSquare(squareDetails.getSquarePos(),
-						squareDetails.getName(), squareDetails.getSystem(), squareDetails.getCost(),
-						squareDetails.getMinorCost(), squareDetails.getMajorCost(), squareDetails.getRent());
-				squares.add(standardSquare);
+				StandardElement standardElement = new StandardElement(elementDetails.getElementPos(),
+						elementDetails.getName(), elementDetails.getSystem(), elementDetails.getCost(),
+						elementDetails.getMinorCost(), elementDetails.getMajorCost(), elementDetails.getRent());
+				elements.add(standardElement);
 			}
 
 		}
@@ -49,10 +50,35 @@ public class Board {
 	// Methods
 
 	/**
-	 * @return the squares
+	 * @return the elements
 	 */
-	public ArrayList<Square> getSquares() {
-		return squares;
+	public ArrayList<Element> getElements() {
+		return elements;
+	}
+
+	/**
+	 * checks if player owns all elements in a system
+	 * 
+	 * @param board
+	 * @param reqElement
+	 * @param player
+	 * @return
+	 */
+	public boolean systemFullyOwned(Element reqElement, Player player) {
+		boolean fullyOwned = true;
+		StandardElement stdElement;
+
+		for (Element element : elements) {
+			if (element instanceof StandardElement) {
+				stdElement = (StandardElement) element;
+				if (stdElement.getElementSystem().equals(reqElement.getElementSystem())
+						&& !stdElement.isOwnedBy(player)) {
+					fullyOwned = false;
+					break;
+				}
+			}
+		}
+		return fullyOwned;
 	}
 
 	/**
@@ -63,17 +89,17 @@ public class Board {
 	public boolean allSystemComplete() {
 
 		boolean complete;
-		StandardSquare stdSquare;
+		StandardElement stdElement;
 
 		complete = true;
 
-		for (Square square : this.squares) {
+		for (Element element : this.elements) {
 
-			if (square instanceof StandardSquare) {
+			if (element instanceof StandardElement) {
 
-				stdSquare = (StandardSquare) square;
+				stdElement = (StandardElement) element;
 
-				if (stdSquare.getCurrentMajorDevLevel() != stdSquare.getMAX_MAJOR_DEV()) {
+				if (stdElement.getCurrentMajorDevLevel() != stdElement.getMAX_MAJOR_DEV()) {
 
 					complete = false;
 					break;
@@ -91,43 +117,137 @@ public class Board {
 	 * 
 	 */
 	public void viewElementOwnership() {
+		for (Element element : this.elements) {
 
-		for (Square sq : this.squares) {
+			if (element instanceof StandardElement) {
+				StandardElement stdElement = (StandardElement) element;
 
-			if (sq instanceof StandardSquare) {
-				StandardSquare stdSq = (StandardSquare) sq;
-
-				if (stdSq.getOwnedBy() != null) {
-					System.out.printf("[%02d][%s][%s]: Owned by %s.\n", stdSq.getBoardPosition(), stdSq.getSquareName(),
-							stdSq.getSquareSystem().getName(), stdSq.getOwnedBy().getName());
+				if (stdElement.getOwnedBy() != null) {
+					System.out.printf("[%s] - [%s]: Research started by %s.\n", stdElement.getElementSystem().getName(),
+							stdElement.getElementName(), stdElement.getOwnedBy().getName());
 				} else {
-					System.out.printf("[%02d][%s][%s]: Not owned.\n", stdSq.getBoardPosition(), stdSq.getSquareName(),
-							stdSq.getSquareSystem().getName());
+					System.out.printf("%s - [%s]: Research has not begun.\n", stdElement.getElementSystem().getName(),
+							stdElement.getElementName(), stdElement.getElementSystem().getName());
 				}
 			}
 		}
 	}// END
 
 	/**
-	 * Method to display the elements owned by a player
+	 * displays titles of elements owned by a specified player
+	 * 
+	 * @param player
+	 */
+	public void viewMyElements(Player player) {
+		int count = 1;
+		StandardElement stdElement;
+		boolean hasElement = false;
+
+		for (Element element : this.elements) {
+			if (element instanceof StandardElement) {
+				stdElement = (StandardElement) element;
+
+				if (stdElement.isOwnedBy(player)) {
+					if (!hasElement) {
+						System.out.println("\nYou own the following elements: ");
+						hasElement = true;
+					}
+					System.out.printf("%d. %s [%s - %s]\n", count++, stdElement.getElementName(),
+							stdElement.getElementSystem().getName(), checkNumberOwned(stdElement, player));
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * checks how many elements in a system is owned by a player
+	 * 
+	 * @param element
+	 * @param player
+	 * @return
+	 */
+	public String checkNumberOwned(StandardElement element, Player player) {
+
+		int total, owned;
+		StandardElement stdElement;
+
+		total = 0;
+		owned = 0;
+
+		for (Element checkElement : elements) {
+			if (checkElement instanceof StandardElement) {
+				stdElement = (StandardElement) checkElement;
+
+				if (stdElement.getElementSystem().equals(element.getElementSystem())) {
+					total++;
+					if (stdElement.isOwnedBy(player)) {
+						owned++;
+					}
+				}
+
+			}
+		}
+		return owned + " of " + total;
+	}
+
+	/**
+	 * displays all details of elements owned by a specified player
 	 * 
 	 * @param board
-	 * @param activePlayer
+	 * @param player
 	 */
-	public void viewMyElements(Player activePlayer) {
-
+	public void viewMyElementsDetails(Player player) {
 		System.out.println("You own the following elements: ");
 
-		for (Square sq : this.squares) {
+		for (Element element : this.elements) {
 
-			if (sq instanceof StandardSquare) {
-				StandardSquare stdSq = (StandardSquare) sq;
+			if (element instanceof StandardElement) {
+				StandardElement stdElement = (StandardElement) element;
 
-				if (stdSq.getOwnedBy() == activePlayer) {
-					System.out.println(stdSq.toString());
+				if (stdElement.isOwnedBy(player)) {
+					System.out.println(stdElement.toString());
 				}
 			}
 		}
 	}// END
+
+	/**
+	 * Method to check if any other player has started to research in the same
+	 * system.
+	 * 
+	 * @param board
+	 * @param player
+	 * @return
+	 */
+	public void isSystemStarted(Player player, Element checkElement) {
+
+		boolean hasOwners = false;
+		Player purchasedPlayer = player;
+		StandardElement stdElement;
+
+		for (Element element : elements) {
+			if (element instanceof StandardElement) {
+				stdElement = (StandardElement) element;
+				if (checkElement.getElementSystem() != stdElement.getElementSystem()) {
+					continue;
+				}
+				if (stdElement.getOwnedBy() != null && !stdElement.isOwnedBy(player)) {
+					hasOwners = true;
+					purchasedPlayer = stdElement.getOwnedBy();
+					break;
+				}
+			}
+		}
+
+		if (hasOwners) {
+			System.out.println("Hint: " + purchasedPlayer.getName().toUpperCase()
+					+ " has started research in this system already.\nOnce you begin research there is no way out and will mean the mission can never be complete.\nAre you in it for personal gain or to see the mission succeed?\n");
+		} else {
+			System.out.println(
+					"Hint: No other companies have started to research this system yet, its a good investment!\n");
+		}
+
+	}
 
 }

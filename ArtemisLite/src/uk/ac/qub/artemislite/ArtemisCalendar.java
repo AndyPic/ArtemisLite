@@ -67,7 +67,7 @@ public class ArtemisCalendar extends GregorianCalendar {
 			currentMonth = 0;
 			currentYear += 1;
 			currentDay = 1;
-
+			
 			calendar.set(CALENDAR_YEAR, currentYear);
 
 		} else {
@@ -92,7 +92,10 @@ public class ArtemisCalendar extends GregorianCalendar {
 
 		int noPlayers = players.size();
 		int monthSize = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
+		// TODO:maybe the randomness would be confusing to players as it is hidden and
+		// not explained to the player. Would be much easier to understand 1turn =
+		// 1month.
+		
 		// Increase days per player turn by a factor of days per month / number of
 		// players (with a bit of randomness added, so it isn't always exactly the same)
 		int daysPerTurn = rand.nextInt((monthSize / noPlayers) - (12 / noPlayers)) + (12 / noPlayers);
@@ -112,7 +115,7 @@ public class ArtemisCalendar extends GregorianCalendar {
 
 		String monthName = new DateFormatSymbols().getMonths()[month];
 
-		GUI.capitaliseFirstLetter(monthName);
+		UserInterface.capitaliseFirstLetter(monthName);
 
 		return monthName;
 	}

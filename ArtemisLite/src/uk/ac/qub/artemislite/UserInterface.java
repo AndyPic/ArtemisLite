@@ -9,7 +9,7 @@ package uk.ac.qub.artemislite;
  * @author Joseph Mawhinney
  * @author Andrew Pickard
  */
-public class GUI implements Runnable {
+public class UserInterface implements Runnable {
 
 	/**
 	 * Loops through the start-up message with a delay, print the rest of the
@@ -17,7 +17,6 @@ public class GUI implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// TODO fix input fall-through
 
 		// Keep track of what messages have been printed
 		int progress = 0;
@@ -26,13 +25,13 @@ public class GUI implements Runnable {
 		String[] startingMessage = new String[7];
 		startingMessage[0] = ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)) + ", "
 				+ ArtemisCalendar.getCalendar().get(1) + ".";
-		startingMessage[1] = "You and your colleagues are tasked with delivering The Artemis Project to success.";
-		startingMessage[2] = "The Artemis Project aims to launch the first woman, and next man to the moon by "
+		startingMessage[1] = "NASA have chosen you to help them deliver The Artemis Project successfully.";
+		startingMessage[2] = "The Project aims to launch the first woman, and next man to the moon by "
 				+ ArtemisCalendar.getMonthName(ArtemisCalendar.getEndDate().get(2)) + ", "
 				+ ArtemisCalendar.getEndDate().get(1) + ".";
-		startingMessage[3] = "In order to accomplish this lofty goal, you must work with your colleagues to ensure 'All Systems are Go!' by launch-day.";
-		startingMessage[4] = "Can your team acquire and fully develop all of the systems needed for a successful Lift-off?";
-		startingMessage[5] = "...or will you just be in it for personal gain?";
+		startingMessage[3] = "In order to accomplish this lofty goal, you must work alongside other chosen companies to ensure 'All Systems are Go!' by launch-day.";
+		startingMessage[4] = "Can you work together to research and fully develop all of the systems needed for a successful Lift-off?";
+		startingMessage[5] = "...or will your team just be in it for personal gain?";
 		startingMessage[6] = "You decide!";
 
 		// Quick sleep so cancel message prints first
@@ -66,6 +65,18 @@ public class GUI implements Runnable {
 
 	}// END
 
+	/**
+	 * 'Clears the console' by printing 25 blank lines in console. 
+	 * Overloaded version of this method accepts specific number of lines to clear
+	 */
+	public static void clearConsole() {
+
+		for (int loop = 0; loop <= 25; loop++) {
+			System.out.println();
+		}
+
+	}
+	
 	/**
 	 * 'Clears the console' by printing {@link numberOfLines} blank lines in
 	 * console.

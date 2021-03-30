@@ -11,16 +11,7 @@ import java.util.Scanner;
  */
 public class UserInput {
 
-	static Scanner scanner = new Scanner(System.in);
-
-	/**
-	 * 
-	 */
-	public static void clearScanner() {
-
-		scanner.nextLine();
-
-	}
+	private static Scanner scanner = new Scanner(System.in);
 
 	/**
 	 * Return int value for user input
@@ -32,14 +23,12 @@ public class UserInput {
 		int input;
 
 		while (!scanner.hasNextInt()) {
-			System.out.println("That is not a valid number!");
+			System.out.println("That is not a valid number! please try again");
 			scanner.nextLine();
 		}
 
 		input = scanner.nextInt();
-
-		// Do i need to clear scanner here? or can input var just be removed and
-		// replaced with "return scanner.nextInt();"
+		//clear for next input
 		scanner.nextLine();
 
 		return input;
@@ -56,8 +45,7 @@ public class UserInput {
 		return scanner.nextLine();
 
 	}
-	
-	//TODO: was this method removed previously on error?
+
 	/**
 	 * Method to close the scanner
 	 */

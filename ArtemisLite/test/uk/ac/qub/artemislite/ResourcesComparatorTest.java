@@ -3,6 +3,8 @@
  */
 package uk.ac.qub.artemislite;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,8 +35,8 @@ class ResourcesComparatorTest {
 		
 		p1.setBalanceOfResources(199);
 		p2.setBalanceOfResources(201);
+		p3.setBalanceOfResources(200);
 
-		
 		TurnLauncher.getPlayers().add(p1);
 		TurnLauncher.getPlayers().add(p2);
 		TurnLauncher.getPlayers().add(p3);
@@ -47,14 +49,11 @@ class ResourcesComparatorTest {
 		turnLauncher.displayPlayers();
 		
 		Collections.sort(TurnLauncher.getPlayers(), Collections.reverseOrder(new ResourcesComparator()));
-		System.out.println();
 		
+		System.out.println();
 		turnLauncher.displayPlayers();
 		
-		Collections.sort(TurnLauncher.getPlayers(), new ResourcesComparator());
-		System.out.println();
-		
-		turnLauncher.displayPlayers();
+		assertEquals(p1, TurnLauncher.getPlayers().get(2));
 		
 	}
 

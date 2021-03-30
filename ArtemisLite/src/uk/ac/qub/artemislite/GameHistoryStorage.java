@@ -3,7 +3,7 @@ package uk.ac.qub.artemislite;
 import java.util.ArrayList;
 
 /**
- * Keeps a history of all game landing squares, and the action taken on those squares
+ * Keeps a history of all game landing elements, and the action taken on those squares
  * @author Jordan Davis
  * @author David Finlay
  * @author Joseph Mawhinney

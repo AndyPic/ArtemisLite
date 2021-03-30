@@ -23,6 +23,8 @@ public class GameLauncher {
 	private final static int MIN_PLAYERS = 2;
 	private final static int MAX_PLAYERS = 4;
 	private final static String MENU_HEADER = "\n=====| MENU |=====\n";
+	private final static int RESOURCE_VALUE_SHORT_GAME = 2000;
+	private final static int RESOURCE_VALUE_LONG_GAME = 100;
 
 	// Sets game-over, main game loop
 	private static boolean gameOver = false;
@@ -32,8 +34,7 @@ public class GameLauncher {
 	 */
 	public static void introMessage() {
 		// Intro message
-		// TODO: can this be made static?
-		GUI introMessage = new GUI();
+		UserInterface introMessage = new UserInterface();
 		BufferedInterrupter buffInter = new BufferedInterrupter();
 		Thread introThread = new Thread(introMessage);
 		Thread inputThread = new Thread(buffInter);
@@ -51,9 +52,11 @@ public class GameLauncher {
 			}
 		}
 		// Stops the input thread after intro message finished
-		inputThread.interrupt();
+		if (inputThread.isAlive()) {
+			inputThread.interrupt();
+		}
 
-		GUI.clearConsole(1);
+		UserInterface.clearConsole(1);
 
 	}
 
@@ -80,8 +83,8 @@ public class GameLauncher {
 				break;
 			case 3:
 				System.out.println("Are you sure you want to quit the game?");
-				if (GUI.yesNoMenu() == 1) {
-					declareGameOver();
+				if (UserInterface.yesNoMenu() == 1) {
+					gameOver = true;
 					gameBegin = true;
 				}
 				break;
@@ -91,10 +94,10 @@ public class GameLauncher {
 
 		} while (!gameBegin);
 
-		GUI.clearConsole(20);
+		UserInterface.clearConsole();
 
 		if (!gameOver) {
-			GameLauncher.startGame();
+			startGame();
 		}
 
 	}
@@ -102,20 +105,20 @@ public class GameLauncher {
 	public static void showGameRules() {
 		File file = new File("GameRules.txt");
 		String line;
-		
-		GUI.clearConsole(20);
-		
+
+		UserInterface.clearConsole();
+
 		try {
 			FileReader fileReader = new FileReader(file);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			
+
 			line = bufferedReader.readLine();
-			
-			while(line!=null) {
+
+			while (line != null) {
 				System.out.println(line);
 				line = bufferedReader.readLine();
 			}
-			
+
 			bufferedReader.close();
 			fileReader.close();
 
@@ -128,7 +131,7 @@ public class GameLauncher {
 		} catch (Exception e) {
 			System.out.println("A error has occured, please restart the app");
 		}
-		
+
 	}
 
 	/**
@@ -144,33 +147,48 @@ public class GameLauncher {
 		createPlayers();
 
 		int gameLengthInput;
+
 		do {
-			System.out.println(MENU_HEADER + "1. Short Game" + "\n2. Long Game" + "\n3. Game length details");
+			System.out.printf("%s1. Short Game (%d staff-hours per lap of board)\n2. Long Game (%d staff-hours per lap of board)\n",MENU_HEADER, RESOURCE_VALUE_SHORT_GAME, RESOURCE_VALUE_LONG_GAME);
 			gameLengthInput = UserInput.getUserInputInt();
+			
 			switch (gameLengthInput) {
 			case 1:
+				setGameResources(RESOURCE_VALUE_SHORT_GAME);
 				break;
 			case 2:
-				turnLauncher.setupLongGame();
-				break;
-			case 3:
-				// TODO update info with new balance changes
-				System.out.println("Some details about the different modes...");
-				GUI.clearConsole(20);
+				setGameResources(RESOURCE_VALUE_LONG_GAME);
 				break;
 			default:
 				System.out.println("Invalid Menu Option, please try again");
 			}
 		} while (gameLengthInput != 1 && gameLengthInput != 2);
 
-		GUI.clearConsole(20);
+		UserInterface.clearConsole();
 
 		// finds the order that players will take their turn
 		turnLauncher.findPlayerOrder();
 
-		// Game Loop
-		GameLauncher.gameLoop();
+		gameLoop();
 
+	}
+	
+	/**
+	 * sets the starting resources & resources per lap of board & player
+	 * @param resourceValue to set
+	 */
+	public static void setGameResources(int resourceValue) {
+		//updates all resourceElements
+		for(Element element: board.getElements()) {
+			if(element instanceof ResourceElement) {
+				ResourceElement resourceElement = (ResourceElement) element;
+				resourceElement.setResourceToAllocate(resourceValue);
+			}
+		}
+		//updates all player starting resource
+		for(Player player : TurnLauncher.getPlayers()) {
+			player.setBalanceOfResources(resourceValue);
+		}
 	}
 
 	/**
@@ -181,29 +199,35 @@ public class GameLauncher {
 		boolean start = false;
 		int numOfPlayers;
 
+		// Force the first two players to be added
+		System.out.println("Lets add the first player");
+		turnLauncher.addPlayer();
+		System.out.println("Now its time for player two");
+		turnLauncher.addPlayer();
+
 		while (!start) {
 
 			players = TurnLauncher.getPlayers();
 			numOfPlayers = players.size();
 
 			if (numOfPlayers > 0) {
-				System.out.print(MENU_HEADER);
+				System.out.print("\n=====| REGISTERED COMPANIES |=====\n");
 				turnLauncher.displayPlayers();
 			}
 
 			System.out.print(MENU_HEADER);
 
 			if (numOfPlayers < MAX_PLAYERS) {
-				System.out.printf("1. Add New Player\n");
+				System.out.printf("1. Add a New Company\n");
 			}
 			if (numOfPlayers >= 1 && players.size() < MAX_PLAYERS) {
-				System.out.printf("2. Modify Existing Player\n");
+				System.out.printf("2. Modify an Existing Company\n");
 			}
 			if (numOfPlayers >= MIN_PLAYERS && players.size() < MAX_PLAYERS) {
-				System.out.printf("3. Begin Game\n");
+				System.out.printf("3. Begin the Game\n");
 			}
 			if (numOfPlayers == MAX_PLAYERS) {
-				System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Player\n");
+				System.out.printf("(Max number of players reached)\n1. Begin Game\n2. Modify Existing Company\n");
 			}
 
 			switch (UserInput.getUserInputInt()) {
@@ -231,7 +255,7 @@ public class GameLauncher {
 
 		}
 
-		GUI.clearConsole(20);
+		UserInterface.clearConsole();
 	}
 
 	/**
@@ -245,8 +269,8 @@ public class GameLauncher {
 
 			ArtemisCalendar.displayDate();
 
-			System.out.printf("\nIt's " + turnLauncher.getActivePlayer().getName() + "'s turn.\n");
-
+			System.out.printf("\nIt's time for " + turnLauncher.getActivePlayer().getName() + " to take a turn.\n");
+			
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
 			turnLauncher.playerTurnMenu(board);
@@ -293,11 +317,15 @@ public class GameLauncher {
 
 		if (board.allSystemComplete()) {
 			displayGameWonMessage();
+			
 		} else {
 			displayGameLossMessage(board);
 		}
-
-		postGameMenu();
+		
+		if(turnLauncher.getTurnNumber()!=0) {
+			postGameMenu();
+		}
+		
 
 	}
 
@@ -306,7 +334,7 @@ public class GameLauncher {
 		int userInput;
 		do {
 			System.out.printf("%s \n1. View score board\n2. View full move history\n3. Exit game", MENU_HEADER);
-			GUI.clearConsole(1);
+			UserInterface.clearConsole(1);
 			userInput = UserInput.getUserInputInt();
 			switch (userInput) {
 			case 1:
@@ -318,7 +346,7 @@ public class GameLauncher {
 				TurnLauncher.getGameHistoryStorage().displayMoveHistory();
 				break;
 			case 3:
-				GUI.clearConsole(2);
+				UserInterface.clearConsole(2);
 				System.out.println("====| Thank you for playing Artemis Lite |====");
 				break;
 			default:
@@ -335,9 +363,9 @@ public class GameLauncher {
 
 		Player activePlayer = turnLauncher.getActivePlayer();
 
-		System.out.printf("=====| PLAYER: %s |=====| RESOURCES: %d |=====| LOCATION: %s |=====\n",
+		System.out.printf("=====| PLAYER: %s |=====| STAFF-HOURS: %d |=====| LOCATION: %s |=====\n\n",
 				activePlayer.getName(), activePlayer.getBalanceOfResources(),
-				board.getSquares().get(activePlayer.getCurrentPosition()).getSquareName());
+				board.getElements().get(activePlayer.getCurrentPosition()).getElementName());
 
 	}
 
