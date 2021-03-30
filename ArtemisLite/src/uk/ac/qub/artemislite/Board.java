@@ -1,6 +1,7 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -247,6 +248,35 @@ public class Board {
 			System.out.println(
 					"Hint: No other companies have started to research this system yet, its a good investment!\n");
 		}
+
+	}
+
+	/**
+	 * method to find an element based on player owned elements
+	 * @param player
+	 * @param index
+	 * @return
+	 */
+	public Element getPlayerOwnedIndex(Player player, int index) {
+
+		Element result = null;
+		StandardElement stdElement;
+		int count = 0;
+
+		for (Element element : elements) {
+			if (element instanceof StandardElement) {
+				stdElement = (StandardElement) element;
+				if (stdElement.isOwnedBy(player)) {
+					count++;
+					if(count==index) {
+						result = element;
+					}
+				}
+			}
+
+		}
+
+		return result;
 
 	}
 

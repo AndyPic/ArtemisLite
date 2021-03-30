@@ -22,13 +22,14 @@ public class IncreaseElementDev {
 		
 		boolean finishedDeveloping = false;
 		Element chosenSq;
+		int userInput;
 
 		do {
 			// ask which element to develop
 			System.out.println("Which element would you like to develop?");
 			// maybe display elements owned by active player here
 
-			chosenSq = board.getElements().get(UserInput.getUserInputInt());
+			chosenSq = board.getPlayerOwnedIndex(activePlayer, UserInput.getUserInputInt());
 			
 			for (Element element : board.getElements()) {
 							
