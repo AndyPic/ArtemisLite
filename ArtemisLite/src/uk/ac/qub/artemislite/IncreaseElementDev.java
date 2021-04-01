@@ -22,6 +22,8 @@ public class IncreaseElementDev {
 		Element chosenSq;
 
 		do {
+			board.displayAvailableForDev(activePlayer);
+			
 			System.out.println("Which element would you like to develop?");
 
 			chosenSq = board.getPlayerOwnedIndex(activePlayer, UserInput.getUserInputInt());
@@ -66,6 +68,7 @@ public class IncreaseElementDev {
 			default:
 				System.out.println("That shouldn't happen");
 			}
+			UserInterface.clearConsole();
 
 		} while (!finishedDeveloping);
 	}

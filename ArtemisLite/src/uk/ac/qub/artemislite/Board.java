@@ -253,6 +253,7 @@ public class Board {
 
 	/**
 	 * method to find an element based on player owned elements
+	 * 
 	 * @param player
 	 * @param index
 	 * @return
@@ -268,7 +269,7 @@ public class Board {
 				stdElement = (StandardElement) element;
 				if (stdElement.isOwnedBy(player)) {
 					count++;
-					if(count==index) {
+					if (count == index) {
 						result = element;
 					}
 				}
@@ -278,6 +279,39 @@ public class Board {
 
 		return result;
 
+	}
+
+	/**
+	 * displays elements that can be developed and their dev level
+	 * 
+	 * @param player
+	 */
+	public void displayAvailableForDev(Player player) {
+
+		int count = 1;
+		StandardElement stdElement;
+		boolean hasElement = false;
+		System.out.println();
+		for (Element element : this.elements) {
+			if (element instanceof StandardElement) {
+				stdElement = (StandardElement) element;
+
+				if (stdElement.isOwnedBy(player)) {
+					if (!systemFullyOwned(stdElement, player)) {
+						continue;
+					}
+					if (!hasElement) {
+						System.out.println("\nYou own the following elements: ");
+						hasElement = true;
+					}
+					System.out.printf("%d. %s [%s - %s] \nResearch level: %d Cost: %d | Construction Level: %d Cost: %d\n\n", count++,
+							stdElement.getElementName(), stdElement.getElementSystem().getName(),
+							checkNumberOwned(stdElement, player), stdElement.getCurrentMinorDevLevel(), stdElement.getMinorDevCost(),
+							stdElement.getCurrentMajorDevLevel(), stdElement.getMajorDevCost(), stdElement);
+				}
+			}
+		}
+		System.out.println();
 	}
 
 }

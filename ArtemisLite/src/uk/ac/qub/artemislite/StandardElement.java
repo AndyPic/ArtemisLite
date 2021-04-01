@@ -105,7 +105,7 @@ public class StandardElement extends Element {
 			System.out
 					.println("This element has just completed construction, we are 1 step closer to the project Artemis Launch");
 		} else if (currentMajorDevLevel == MAX_MAJOR_DEV) {
-			System.out.println("This element is already has already completed research and development!");
+			System.out.println("\nThis element is already has already completed research and development!\n");
 		}
 
 	}

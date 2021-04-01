@@ -12,7 +12,7 @@ package uk.ac.qub.artemislite;
 public enum SystemType {
 
 	ORION("Orion Spacecraft"), SLS("Space Launch System"), EGS("Exploration Ground Systems"), GATEWAY("Gateway"),
-	RESOURCE("Resource Element"), BLANK("Blank Element");
+	RESOURCE("Recruitment"), BLANK("Holiday");
 
 	// Instance Vars
 

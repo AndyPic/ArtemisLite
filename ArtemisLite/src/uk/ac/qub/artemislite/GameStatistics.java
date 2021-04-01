@@ -124,7 +124,7 @@ public class GameStatistics {
 
 		// checks if player is not bankrupt then calculates score
 		for (Player player : TurnLauncher.getPlayers()) {
-			if (player.getBalanceOfResources() > 0) {
+			if (player.getBalanceOfResources() >= 0) {
 				ModifyPlayerResources.modifyResourcesSinglePlayer(player, playerElementInvestment(board, player));
 			}
 		}
@@ -134,7 +134,7 @@ public class GameStatistics {
 
 		// displays all player scores
 		for (Player player : TurnLauncher.getPlayers()) {
-			if (player.getBalanceOfResources() > 0) {
+			if (player.getBalanceOfResources() >= 0) {
 				System.out.printf("%s : %d", player.getName(), player.getBalanceOfResources());
 			} else
 				System.out.printf("%s : Bankrupt", player.getName());

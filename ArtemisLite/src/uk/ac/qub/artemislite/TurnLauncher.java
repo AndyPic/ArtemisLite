@@ -326,7 +326,7 @@ public class TurnLauncher {
 		playersWant = new ArrayList<Player>();
 		UserInterface.clearConsole();
 		System.out.printf(
-				"=====| AUCTION BEGINS |=====\nNASA has an obligation to get the element underday to ensure sucess of Artemis. \nThey have begun to look for new companies for %s research because %s %s\n",
+				"=====| AUCTION BEGINS |=====\nNASA has an obligation to get the element underway to ensure sucess of Artemis. \nThey have begun to look for new companies for %s research because %s %s\n",
 				elementName, activePlayerName, reasonToAuction);
 
 		for (int loop = 0; loop < players.size(); loop++) {
@@ -829,7 +829,6 @@ public class TurnLauncher {
 				activePlayer.getCurrentPositionDetails(board);
 			} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
 				GameLauncher.mainHeadder();
-				board.viewMyElements(activePlayer);
 				IncreaseElementDev id = new IncreaseElementDev();
 				id.increaseElementDev(board, activePlayer);
 

@@ -26,7 +26,7 @@ public class ModifyPlayerResources {
 		int newBalance = player.getBalanceOfResources() + resourceValue;
 		if (newBalance < 0) {
 			// this is a game-over state!
-			System.out.printf("%s is bankrupt!", player.getName());
+			System.out.printf("%s has run out of available hours to complete thier projects and they have caused the Artemis project to fail!", player.getName());
 			GameLauncher.declareGameOver();
 		} else {
 			player.setBalanceOfResources(newBalance);
@@ -47,7 +47,7 @@ public class ModifyPlayerResources {
 			newBalance = player.getBalanceOfResources() + resourceValue;
 			if (newBalance < 0) {
 				// this is a game-over state!
-				System.out.printf("%s is bankrupt!");
+				System.out.printf("%s has run out of available hours to complete thier projects and they have caused the Artemis project to fail!");
 				GameLauncher.declareGameOver();
 			} else {
 				player.setBalanceOfResources(newBalance);
