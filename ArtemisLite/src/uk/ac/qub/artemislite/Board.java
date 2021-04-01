@@ -304,10 +304,19 @@ public class Board {
 						System.out.println("\nYou own the following elements: ");
 						hasElement = true;
 					}
-					System.out.printf("%d. %s [%s - %s] \nResearch level: %d Cost: %d | Construction Level: %d Cost: %d\n\n", count++,
-							stdElement.getElementName(), stdElement.getElementSystem().getName(),
-							checkNumberOwned(stdElement, player), stdElement.getCurrentMinorDevLevel(), stdElement.getMinorDevCost(),
-							stdElement.getCurrentMajorDevLevel(), stdElement.getMajorDevCost(), stdElement);
+					if (stdElement.isMaxDevelopment()) {
+						System.out.printf(
+								"\n%d. %s [%s - %s] \nResearch and development complete! no further action needed\n",
+								count++, stdElement.getElementName(), stdElement.getElementSystem().getName(),
+								checkNumberOwned(stdElement, player));
+					} else {
+						System.out.printf(
+								"\n%d. %s [%s - %s] \nResearch level: [%d] Cost: (%d) | Construction Level: [%d] Cost: (%d)\n",
+								count++, stdElement.getElementName(), stdElement.getElementSystem().getName(),
+								checkNumberOwned(stdElement, player), stdElement.getCurrentMinorDevLevel(),
+								stdElement.getMinorDevCost(), stdElement.getCurrentMajorDevLevel(),
+								stdElement.getMajorDevCost(), stdElement);
+					}
 				}
 			}
 		}

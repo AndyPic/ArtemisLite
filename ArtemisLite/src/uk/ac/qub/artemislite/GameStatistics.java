@@ -137,7 +137,7 @@ public class GameStatistics {
 			if (player.getBalanceOfResources() >= 0) {
 				System.out.printf("%s : %d", player.getName(), player.getBalanceOfResources());
 			} else
-				System.out.printf("%s : Bankrupt", player.getName());
+				System.out.printf("%s : Bankrupt however they", player.getName());
 			if (missionProgress(board) > 0) {
 				System.out.printf(" contributed %.1f%s to the mission.\n", currentContribution(board, player), "%");
 			} else

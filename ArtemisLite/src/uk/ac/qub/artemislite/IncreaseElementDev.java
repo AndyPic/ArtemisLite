@@ -3,6 +3,8 @@
  */
 package uk.ac.qub.artemislite;
 
+import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
+
 /**
  * Increases development level and modifies player resources accordingly
  * 
@@ -35,7 +37,10 @@ public class IncreaseElementDev {
 
 					// check if system is fully owned
 					if (board.systemFullyOwned(strdSq, activePlayer)) {
-
+						if(strdSq.isMaxDevelopment()) {
+							System.out.println("This element is already complete, you dont need to develop further!");
+							break;
+						}
 
 						if (strdSq.getCurrentMinorDevLevel() < strdSq.getMAX_MINOR_DEV()) {
 							if (activePlayer.getBalanceOfResources() >= strdSq.getMinorDevCost()) {
@@ -69,12 +74,17 @@ public class IncreaseElementDev {
 					}
 				}
 			}
+			
+			
+			
+			
 			if (!finishedDeveloping) {
 				// ask if they want to develop another elements
 				System.out.println("Would you like to develop another element?");
 				switch (UserInterface.yesNoMenu()) {
 				case 1:
 					finishedDeveloping = false;
+					UserInterface.clearConsole();
 					break;
 				case 2:
 					finishedDeveloping = true;
@@ -83,9 +93,10 @@ public class IncreaseElementDev {
 					System.out.println("That shouldn't happen");
 				}
 			}
-			UserInterface.clearConsole();
 
 		} while (!finishedDeveloping);
+		System.out.println("-----> CONTINUE <-----");
+		UserInput.getUserInputString();
 	}
 
 }

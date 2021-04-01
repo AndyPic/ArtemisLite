@@ -231,7 +231,7 @@ public class TurnLauncher {
 			turnOver = true;
 			GameLauncher.declareGameOver();
 			// Set player bankrupt
-			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -activePlayer.getBalanceOfResources());
+			activePlayer.setBalanceOfResources(-1);
 			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), boardPosition, GameHistoryAction.QUIT);
 		}
 
@@ -400,11 +400,15 @@ public class TurnLauncher {
 			// Update player currency
 			ModifyPlayerResources.modifyResourcesSinglePlayer(highRollPlayer, -purchaseCost);
 			// add move to the game history
-			gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), highRollPlayer.getCurrentPosition(),
+			gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), standardElement.getBoardPosition(),
 					GameHistoryAction.PURCHASE_THIS_ELEMENT_AT_AUCTION);
 
 			// Update element ownership
 			standardElement.setOwnedBy(highRollPlayer);
+			
+			if(board.systemFullyOwned(standardElement, highRollPlayer)) {
+				gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), standardElement.getBoardPosition(), GameHistoryAction.STARTED_RESEARCH_ON_SYSTEM);
+			}
 
 			// Tell players what happened
 			System.out.printf(
@@ -623,6 +627,11 @@ public class TurnLauncher {
 
 			// Update element owner
 			standardElement.setOwnedBy(activePlayer);
+			
+			if(board.systemFullyOwned(standardElement, activePlayer)) {
+				gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.STARTED_RESEARCH_ON_SYSTEM);
+			}
+			
 			// TODO resources name
 			System.out.printf("%s has now begun R&D on %s, and has %d free hours remaining.\n", activePlayer.getName(),
 					standardElement.getElementName(), activePlayer.getBalanceOfResources());

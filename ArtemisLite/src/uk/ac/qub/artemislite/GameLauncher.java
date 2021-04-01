@@ -149,9 +149,11 @@ public class GameLauncher {
 		int gameLengthInput;
 
 		do {
-			System.out.printf("%s1. Short Game (%d staff-hours per lap of board)\n2. Long Game (%d staff-hours per lap of board)\n",MENU_HEADER, RESOURCE_VALUE_SHORT_GAME, RESOURCE_VALUE_LONG_GAME);
+			System.out.printf(
+					"%s1. Short Game (%d staff-hours per lap of board)\n2. Long Game (%d staff-hours per lap of board)\n",
+					MENU_HEADER, RESOURCE_VALUE_SHORT_GAME, RESOURCE_VALUE_LONG_GAME);
 			gameLengthInput = UserInput.getUserInputInt();
-			
+
 			switch (gameLengthInput) {
 			case 1:
 				setGameResources(RESOURCE_VALUE_SHORT_GAME);
@@ -172,21 +174,22 @@ public class GameLauncher {
 		gameLoop();
 
 	}
-	
+
 	/**
 	 * sets the starting resources & resources per lap of board & player
+	 * 
 	 * @param resourceValue to set
 	 */
 	public static void setGameResources(int resourceValue) {
-		//updates all resourceElements
-		for(Element element: board.getElements()) {
-			if(element instanceof ResourceElement) {
+		// updates all resourceElements
+		for (Element element : board.getElements()) {
+			if (element instanceof ResourceElement) {
 				ResourceElement resourceElement = (ResourceElement) element;
 				resourceElement.setResourceToAllocate(resourceValue);
 			}
 		}
-		//updates all player starting resource
-		for(Player player : TurnLauncher.getPlayers()) {
+		// updates all player starting resource
+		for (Player player : TurnLauncher.getPlayers()) {
 			player.setBalanceOfResources(resourceValue);
 		}
 	}
@@ -267,10 +270,10 @@ public class GameLauncher {
 
 			mainHeadder();
 
-			ArtemisCalendar.displayDate();
+			System.out.println(ArtemisCalendar.getDate());
 
 			System.out.printf("\nIt's time for " + turnLauncher.getActivePlayer().getName() + " to take a turn.\n");
-			
+
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
 			turnLauncher.playerTurnMenu(board);
@@ -291,9 +294,12 @@ public class GameLauncher {
 	 */
 	public static void displayGameLossMessage(Board board) {
 		// TODO: add actual ending message
-		// TODO: show mission progress
-		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n",
+		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n\nMission Debrief:\n",
 				ArtemisCalendar.getCalendar().getTime(), GameStatistics.missionProgress(board), "%");
+		systemCompletion(SystemType.ORION);
+		systemCompletion(SystemType.SLS);
+		systemCompletion(SystemType.EGS);
+		systemCompletion(SystemType.GATEWAY);
 
 	}
 
@@ -303,8 +309,46 @@ public class GameLauncher {
 	public static void displayGameWonMessage() {
 		// TODO: add actual ending message
 		// TODO: show time under / over estimated completion date
-		System.out.printf("On %s The Artemis Project has succesfully launched!\n",
+		System.out.printf("On %s The Artemis Project has succesfully launched!\n\nMission Debrief:\n",
 				ArtemisCalendar.getCalendar().getTime());
+		systemCompletion(SystemType.ORION);
+		systemCompletion(SystemType.SLS);
+		systemCompletion(SystemType.EGS);
+		systemCompletion(SystemType.GATEWAY);
+	}
+
+	public static void systemCompletion(SystemType system) {
+		boolean isComplete = true;
+		boolean isStarted = true;
+		StandardElement stdElement;
+		Player player=null;
+
+		for (Element element : board.getElements()) {
+			if (element instanceof StandardElement) {
+				stdElement = (StandardElement) element;
+				if (stdElement.getElementSystem().equals(system)) {
+					
+					if(!stdElement.isMaxDevelopment()) {
+						isComplete = false;
+					}
+					if (stdElement.getOwnedBy() == null) {
+						isComplete = false;
+						isStarted = false;
+						break;
+					} else {
+						player = stdElement.getOwnedBy();
+					}
+				}
+			}
+		}
+		
+		if(isComplete) {
+			System.out.printf("\nAll elements of %s where successfully researched and constructed by %s!\n", system.getName(), player.getName());
+		} else if(isStarted) {
+			System.out.printf("\n%s started research on all elements of %s, but unfortunately the Artemis project failed before construction could be complete.\n", player.getName(), system.getName());
+		} else {
+			System.out.printf("\nEven with all the efforts invested by the teams, %s never managed to get past the initial research stages.\n", system.getName());
+		}
 
 	}
 
@@ -317,15 +361,14 @@ public class GameLauncher {
 
 		if (board.allSystemComplete()) {
 			displayGameWonMessage();
-			
+
 		} else {
 			displayGameLossMessage(board);
 		}
-		
-		if(turnLauncher.getTurnNumber()!=0) {
+
+		if (turnLauncher.getTurnNumber() != 0) {
 			postGameMenu();
 		}
-		
 
 	}
 

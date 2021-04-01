@@ -130,8 +130,8 @@ public class ArtemisCalendar extends GregorianCalendar {
 	/**
 	 * Displays current game date
 	 */
-	public static void displayDate() {
-		System.out.printf("\nDate: %s, %s.\n", getMonthName(getCalendar().get(CALENDAR_MONTH)),
+	public static String getDate() {
+		return String.format("\nDate: %s, %s.\n", getMonthName(getCalendar().get(CALENDAR_MONTH)),
 				getCalendar().get(CALENDAR_YEAR));
 	}
 
