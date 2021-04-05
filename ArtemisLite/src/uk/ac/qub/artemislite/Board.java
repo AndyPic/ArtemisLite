@@ -13,7 +13,7 @@ public class Board {
 
 	// Instance Vars
 
-	private ArrayList<Element> elements = new ArrayList<Element>();
+	private List<Element> elements = new ArrayList<Element>();
 
 	// Constructors
 
@@ -54,7 +54,7 @@ public class Board {
 	 * 
 	 * @return the elements
 	 */
-	public ArrayList<Element> getElements() {
+	public List<Element> getElements() {
 		return elements;
 	}
 

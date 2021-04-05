@@ -4,9 +4,9 @@
 package uk.ac.qub.artemislite;
 
 import java.text.DateFormatSymbols;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -88,7 +88,7 @@ public class ArtemisCalendar extends GregorianCalendar {
 	 * 
 	 * @param players
 	 */
-	public void turnEndDate(ArrayList<Player> players) {
+	public void turnEndDate(List<Player> players) {
 
 		int noPlayers = players.size();
 		int monthSize = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -131,7 +131,7 @@ public class ArtemisCalendar extends GregorianCalendar {
 	 * Displays current game date
 	 */
 	public static String getDate() {
-		return String.format("\nDate: %s, %s.\n", getMonthName(getCalendar().get(CALENDAR_MONTH)),
+		return String.format("Date: %s, %s.\n", getMonthName(getCalendar().get(CALENDAR_MONTH)),
 				getCalendar().get(CALENDAR_YEAR));
 	}
 

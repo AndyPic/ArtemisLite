@@ -1,6 +1,6 @@
 package uk.ac.qub.artemislite;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class ModifyPlayerResources {
 	
 	Player player;
-	ArrayList<Player> players;
+	List<Player> players;
 	
 	/**
 	 * Modifies the resources of a single player. Calls declareGameOver if a player's resources fall below zero
@@ -41,7 +41,7 @@ public class ModifyPlayerResources {
 	 * @param resourceValue - the value of the resources
 	 * 
 	 */
-	public static void modifyResourcesAllPlayers(ArrayList<Player> players, int resourceValue) {
+	public static void modifyResourcesAllPlayers(List<Player> players, int resourceValue) {
 		int newBalance = 0;
 		for(Player player: players) {
 			newBalance = player.getBalanceOfResources() + resourceValue;

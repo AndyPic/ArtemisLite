@@ -5,6 +5,7 @@ package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 /**
@@ -20,18 +21,13 @@ public class TurnLauncher {
 	private final int NUM_OF_DICE = 2;
 
 	// Variables
-
-	protected GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
 	private boolean turnOver = false;
-	private static ArrayList<Player> players;
+	private List<Player> players;
 	private Player activePlayer;
 	private Die die;
 	private int turnNumber = 0;
-	// view all element, view my element, get element detail, increase dev level,
-	// end
-	// turn, end game
 	private LinkedHashMap<MenuOption, Boolean> menu;
-	private final static String CONTINUE_HEADER = "\n-----> CONTINUE <-----\n";
+	private final String CONTINUE_HEADER = "\n-----> CONTINUE <-----\n";
 
 	// Constructors
 
@@ -48,24 +44,13 @@ public class TurnLauncher {
 		}
 
 	}
-//	
-//	for (ElementDetails elementDetails : ElementDetails.values()) {
-//		SystemType systemType = elementDetails.getSystem();
-//		switch (systemType) {
 
 	// Methods
 
 	/**
-	 * @return the gameHistoryStorage
-	 */
-	public GameHistoryStorage getGameHistoryStorage() {
-		return gameHistoryStorage;
-	}
-
-	/**
 	 * @return the players
 	 */
-	public static ArrayList<Player> getPlayers() {
+	public List<Player> getPlayers() {
 		return players;
 	}
 
@@ -89,11 +74,8 @@ public class TurnLauncher {
 	public void addPlayer() {
 
 		Player player = new Player();
-
 		promptName(player);
-
 		players.add(player);
-
 		UserInterface.clearConsole();
 
 	}
@@ -156,9 +138,7 @@ public class TurnLauncher {
 			} else {
 				result += currentRoll + " and ";
 			}
-
 		}
-
 		return result;
 	}
 
@@ -169,7 +149,6 @@ public class TurnLauncher {
 	 * @return int value of total roll
 	 */
 	public int getRollValue(String roll) {
-
 		/*
 		 * removes all non-digit chars and whitespace. Regex explanation: [^ ] = match
 		 * any character not in the brackets \d = any digit + = match adjacent
@@ -223,16 +202,14 @@ public class TurnLauncher {
 	 * 
 	 * @param boardPosition
 	 */
-	public void endGame(int boardPosition) {
-		// TODO: need to think of better text for here
-		System.out.println("Are you sure you want to declare bankruptcy and end the game?");
+	public void endGame() {
+		System.out.println("Are you sure you want to shut down your company? this will end the game for all others");
 
 		if (UserInterface.yesNoMenu() == 1) {
-			turnOver = true;
 			GameLauncher.declareGameOver();
 			// Set player bankrupt
 			activePlayer.setBalanceOfResources(-1);
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), boardPosition, GameHistoryAction.QUIT);
+			GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.QUIT);
 		}
 
 	}
@@ -308,7 +285,7 @@ public class TurnLauncher {
 		// Default to the active player
 		Player highRollPlayer;
 		// Arraylist of players that want the element
-		ArrayList<Player> playersWant;
+		List<Player> playersWant;
 
 		highRollPlayer = null;
 		purchaseCost = standardElement.getPurchaseCost();
@@ -391,14 +368,14 @@ public class TurnLauncher {
 			// Update player currency
 			ModifyPlayerResources.modifyResourcesSinglePlayer(highRollPlayer, -purchaseCost);
 			// add move to the game history
-			gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), standardElement.getBoardPosition(),
+			GameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), standardElement.getBoardPosition(),
 					GameHistoryAction.PURCHASE_THIS_ELEMENT_AT_AUCTION);
 
 			// Update element ownership
 			standardElement.setOwnedBy(highRollPlayer);
 
 			if (board.systemFullyOwned(standardElement, highRollPlayer)) {
-				gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), standardElement.getBoardPosition(),
+				GameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), standardElement.getBoardPosition(),
 						GameHistoryAction.STARTED_RESEARCH_ON_SYSTEM);
 			}
 
@@ -407,8 +384,6 @@ public class TurnLauncher {
 					"\n%s is now responsible for the research and development of %s, and has %d free staff-hours remaining.\n",
 					highRollPlayer.getName(), elementName, highRollPlayer.getBalanceOfResources());
 		}
-
-		// TODO: update UI for auction winner
 
 	}// END
 
@@ -428,9 +403,6 @@ public class TurnLauncher {
 		completedLap = false;
 
 		System.out.printf("\nYou are currently visiting %s\n", board.getElements().get(currentPos).getElementName());
-		// TODO: we somehow need to workout how to show the player more info about what
-		// elements are ahead so they feel like they are actually playing a game and not
-		// just hitting roll dice JD
 		System.out.println("\n-----> ROLL THE DICE <-----");
 		UserInput.getUserInputString();
 		UserInterface.clearConsole();
@@ -488,6 +460,7 @@ public class TurnLauncher {
 	public void checkElement(Board board) {
 		int pos;
 		Element newElement;
+		StandardElement standardElement;
 
 		pos = activePlayer.getCurrentPosition();
 		newElement = board.getElements().get(pos);
@@ -495,7 +468,7 @@ public class TurnLauncher {
 		// Check if element is standard
 		if (newElement instanceof StandardElement) {
 
-			StandardElement standardElement = (StandardElement) newElement;
+			standardElement = (StandardElement) newElement;
 
 			// Check if the element is owned by someone already
 			if (standardElement.getOwnedBy() != null) {
@@ -513,7 +486,7 @@ public class TurnLauncher {
 						System.out.printf("%s and no other companies have enough free hours to begin research %s.\n",
 								activePlayer.getName(), standardElement.getElementName());
 						// add a non-action move to gameHistory
-						gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+						GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 								GameHistoryAction.NO_ACTION);
 					}
 				}
@@ -550,7 +523,6 @@ public class TurnLauncher {
 		System.out.printf("PASS CONTROL TO [%s]\n\n", elementOwnerName.toUpperCase());
 
 		if (activePlayer.getBalanceOfResources() <= rentCost) {
-			// TODO Better message here, implement game end?
 			System.out.printf(
 					"You have the option to headhunt some engineers (+%d hours) from %s.\nYou have %d staff hours remaining but they only have %d hours. \nIf you hire these staff %s will fail to complete their own projects on time and ultimately the Artemis program will end. \n%s Are you prepared to let the mission fail for personal gain?\n",
 					rentCost, activePlayerName, elementOwner.getBalanceOfResources(),
@@ -568,7 +540,7 @@ public class TurnLauncher {
 			// Take rent off active player
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -rentCost);
 			// add move to game history
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+			GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 					GameHistoryAction.FORFEIT_RESOURCES);
 
 			// Give rent to element owner
@@ -581,7 +553,7 @@ public class TurnLauncher {
 		case 2:
 			System.out.printf("%s chose to not take any engineers from %s.\n", elementOwnerName, activePlayerName);
 			// add a non-action move to game history
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+			GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 					GameHistoryAction.NO_ACTION);
 			break;
 		}
@@ -600,7 +572,6 @@ public class TurnLauncher {
 		board.isSystemStarted(activePlayer, standardElement);
 		// Offer player the element
 		System.out.printf(
-				// TODO rename resources to whatever we decide to call it
 				"You currently have %d hours remaining, would you like to begin researching the element?\n",
 				activePlayer.getBalanceOfResources());
 
@@ -609,18 +580,17 @@ public class TurnLauncher {
 			// Charge player for element
 			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -standardElement.getPurchaseCost());
 			// add move to game history
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+			GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 					GameHistoryAction.PURCHASE_THIS_ELEMENT);
 
 			// Update element owner
 			standardElement.setOwnedBy(activePlayer);
 
 			if (board.systemFullyOwned(standardElement, activePlayer)) {
-				gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+				GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 						GameHistoryAction.STARTED_RESEARCH_ON_SYSTEM);
 			}
 
-			// TODO resources name
 			System.out.printf("%s has now begun R&D on %s, and has %d free hours remaining.\n", activePlayer.getName(),
 					standardElement.getElementName(), activePlayer.getBalanceOfResources());
 			break;
@@ -628,7 +598,7 @@ public class TurnLauncher {
 			// Auction the element, doesn't want to buy
 			auctionElement("decided not to invest time in the project.", standardElement, board);
 			// add a non-action move to game history
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+			GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 					GameHistoryAction.DID_NOT_INVEST);
 			break;
 		}
@@ -638,10 +608,10 @@ public class TurnLauncher {
 	/**
 	 * Rolls dice for each player in an array and returns the highest scoring player
 	 * 
-	 * @param arrayList of players to roll
+	 * @param List of players to roll
 	 * @return Player with highest dice roll
 	 */
-	public Player allPlayersRoll(ArrayList<Player> playersToRoll) {
+	public Player allPlayersRoll(List<Player> playersToRoll) {
 		String roll;
 		int highestRoll, playerRoll;
 		Player highestRollPlayer;
@@ -650,8 +620,6 @@ public class TurnLauncher {
 		playerRoll = 0;
 		highestRollPlayer = playersToRoll.get(0);
 		matchingRoll = false;
-		// TODO: do you want this so each player has to press to roll dice? or just 1
-		// press rolls for all players JD
 		System.out.println("-----> ROLL THE DICE <-----");
 
 		do {
@@ -679,9 +647,6 @@ public class TurnLauncher {
 			}
 
 		} while (matchingRoll);
-		// TODO: do you think using "--> <--" every time the player need to press enter
-		// is
-		// intuitive enough? or do we need to write "press enter" every time
 		System.out.printf("\n=====| WINNER: %s |=====\n%s\n", highestRollPlayer.getName(), CONTINUE_HEADER);
 		UserInput.getUserInputString();
 
@@ -694,11 +659,11 @@ public class TurnLauncher {
 	 * Method that increments the calendar date and turnNumber by 1 and displays an
 	 * end of round message to players.
 	 */
-	public void roundEnd(Board board) {
+	public void roundEnd() {
 
 		turnNumber++;
 
-		double progress = GameStatistics.missionProgress(board);
+		double progress = GameStatistics.missionProgress(GameLauncher.board);
 
 		ArtemisCalendar.getCalendar().incrementDate();
 
@@ -739,7 +704,7 @@ public class TurnLauncher {
 	 * 
 	 * @param board
 	 */
-	public void endTurn(Board board) {
+	public void endTurn() {
 
 		int activePlayerIndex = players.indexOf(activePlayer);
 
@@ -747,7 +712,7 @@ public class TurnLauncher {
 			setActivePlayer(players.get(activePlayerIndex + 1));
 		} else {
 			setActivePlayer(players.get(0));
-			roundEnd(board);
+			roundEnd();
 			System.out.println(CONTINUE_HEADER);
 			UserInput.getUserInputString();
 		}
@@ -775,7 +740,7 @@ public class TurnLauncher {
 			int menuNum, userInput;
 			boolean validUserInput;
 			MenuOption userMenuSelection;
-			ArrayList<MenuOption> keysList = new ArrayList<MenuOption>();
+			List<MenuOption> keysList = new ArrayList<MenuOption>();
 
 			if (firstMenuOfTurn) {
 				GameLauncher.mainHeadder();
@@ -829,9 +794,9 @@ public class TurnLauncher {
 				IncreaseElementDev.increaseElementDev(board, activePlayer);
 
 			} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
-				endTurn(board);
+				endTurn();
 			} else if (userMenuSelection.equals(MenuOption.END_GAME)) {
-				endGame(activePlayer.getCurrentPosition());
+				endGame();
 			}
 
 			firstMenuOfTurn = false;

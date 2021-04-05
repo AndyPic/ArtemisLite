@@ -1,6 +1,7 @@
 package uk.ac.qub.artemislite;
 
 import java.util.Collections;
+import java.util.List;
 
 public class GameStatistics {
 
@@ -37,16 +38,12 @@ public class GameStatistics {
 		// Get resource amount currently invested
 		double currentProgress = 0;
 
-		for (Element b : board.getElements()) {
+		for (StandardElement stdElement : board.getStdElements()) {
 
-			if (b instanceof StandardElement) {
-				StandardElement stdSq = (StandardElement) b;
-
-				if (stdSq.getOwnedBy() != null) {
-					currentProgress += stdSq.getPurchaseCost();
-					currentProgress += (stdSq.getCurrentMajorDevLevel() * stdSq.getMajorDevCost());
-					currentProgress += (stdSq.getCurrentMinorDevLevel() * stdSq.getMinorDevCost());
-				}
+			if (stdElement.getOwnedBy() != null) {
+				currentProgress += stdElement.getPurchaseCost();
+				currentProgress += (stdElement.getCurrentMajorDevLevel() * stdElement.getMajorDevCost());
+				currentProgress += (stdElement.getCurrentMinorDevLevel() * stdElement.getMinorDevCost());
 			}
 		}
 
@@ -66,16 +63,12 @@ public class GameStatistics {
 
 		int playerInvestment = 0;
 
-		for (Element b : board.getElements()) {
+		for (StandardElement stdElement : board.getStdElements()) {
 
-			if (b instanceof StandardElement) {
-				StandardElement stdSq = (StandardElement) b;
-
-				if (stdSq.getOwnedBy() == player) {
-					playerInvestment += stdSq.getPurchaseCost();
-					playerInvestment += (stdSq.getCurrentMajorDevLevel() * stdSq.getMajorDevCost());
-					playerInvestment += (stdSq.getCurrentMinorDevLevel() * stdSq.getMinorDevCost());
-				}
+			if (stdElement.getOwnedBy() == player) {
+				playerInvestment += stdElement.getPurchaseCost();
+				playerInvestment += (stdElement.getCurrentMajorDevLevel() * stdElement.getMajorDevCost());
+				playerInvestment += (stdElement.getCurrentMinorDevLevel() * stdElement.getMinorDevCost());
 			}
 		}
 		return playerInvestment;
@@ -121,23 +114,24 @@ public class GameStatistics {
 	public static void endingPlayerScore(Board board) {
 
 		System.out.println("The scores are as follows:");
+		List<Player> players = GameLauncher.turnLauncher.getPlayers();
 
 		// checks if player is not bankrupt then calculates score
-		for (Player player : TurnLauncher.getPlayers()) {
+		for (Player player : players) {
 			if (player.getBalanceOfResources() >= 0) {
 				ModifyPlayerResources.modifyResourcesSinglePlayer(player, playerElementInvestment(board, player));
 			}
 		}
 
 		// Orders the players in decending order
-		Collections.sort(TurnLauncher.getPlayers(), Collections.reverseOrder(new ResourcesComparator()));
+		Collections.sort(players, Collections.reverseOrder(new ResourcesComparator()));
 
 		// displays all player scores
-		for (Player player : TurnLauncher.getPlayers()) {
+		for (Player player : players) {
 			if (player.getBalanceOfResources() >= 0) {
 				System.out.printf("%s : %d", player.getName(), player.getBalanceOfResources());
 			} else
-				System.out.printf("%s : Bankrupt however they", player.getName());
+				System.out.printf("%s : Company was closed, however they", player.getName());
 			if (missionProgress(board) > 0) {
 				System.out.printf(" contributed %.1f%s to the mission.\n", currentContribution(board, player), "%");
 			} else

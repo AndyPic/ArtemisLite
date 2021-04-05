@@ -84,7 +84,7 @@ public class GameHistoryItem {
 	 * Displays a standardised output for a game history item
 	 */
 	public void displayAll() {
-		System.out.printf("%3s. Location: %30s.    Player %s %s %-10s\n", this.gameCounter,
+		System.out.printf("%-3s Location:    %-25s || %s %-30s || %s\n", this.gameCounter+".",
 				this.getElementNameFromPosition(this.boardLandingPosition), this.playerName, this.gameHistoryAction.label, this.actionDate);
 	}
 

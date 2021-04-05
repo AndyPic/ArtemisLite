@@ -21,9 +21,6 @@ public class IncreaseElementDev {
 	 */
 	public static void increaseElementDev(Board board, Player activePlayer) {
 
-		// TODO also check if they have enough money to develop
-		// Increase development level
-
 		boolean finishedDeveloping = false;
 		StandardElement chosenElement;
 		int devCost, userInput, numOfDevElements;
@@ -47,8 +44,6 @@ public class IncreaseElementDev {
 				UserInterface.clearConsole();
 				GameLauncher.mainHeadder();
 
-				// TODO: this wont work if user enters number higher than the number of elements
-				// they own JD
 				chosenElement = board.getPlayerOwnedIndex(activePlayer, userInput);
 
 				if (!board.systemFullyOwned(chosenElement, activePlayer)) {
@@ -71,14 +66,12 @@ public class IncreaseElementDev {
 				}
 
 				// add an item to to the game history
-				GameLauncher.turnLauncher.gameHistoryStorage.addMoveToHistory(activePlayer.getName(),
+				GameHistoryStorage.addMoveToHistory(activePlayer.getName(),
 						chosenElement.getBoardPosition(), GameHistoryAction.DEVELOP_PORTFOLIO);
 
 				if (board.allSystemComplete()) {
 					finishedDeveloping = true;
 					GameLauncher.declareGameOver();
-					GameLauncher.turnLauncher.endTurn(board);
-
 				}
 
 			}

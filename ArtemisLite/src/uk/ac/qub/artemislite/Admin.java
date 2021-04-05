@@ -21,6 +21,9 @@ public class Admin {
 
 	}// END MAIN
 	
+	/**
+	 * method runs all the key game sequence
+	 */
 	public static void beginGame() {
 		
 		//displays game intro

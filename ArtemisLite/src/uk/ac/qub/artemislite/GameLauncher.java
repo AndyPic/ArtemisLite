@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class GameLauncher {
 
 	protected static TurnLauncher turnLauncher = new TurnLauncher();
-	private static Board board = new Board();
+	protected static Board board = new Board();
 
 	private final static int MIN_PLAYERS = 2;
 	private final static int MAX_PLAYERS = 4;
@@ -73,8 +73,6 @@ public class GameLauncher {
 			System.out.println(MENU_HEADER + "Hint: you can select a menu option by entering a number: (e.g. 1)"
 					+ "\n1.Start Game" + "\n2.Show Game Rules" + "\n3.Quit Game");
 
-			// TODO: Should we change this so all menus accept a String as valid also? JD
-			// (e.g.'Start game')
 			switch (UserInput.getUserInputInt()) {
 			case 1:
 				gameBegin = true;
@@ -186,7 +184,7 @@ public class GameLauncher {
 		board.getResourceElement().setResourceToAllocate(resourceValue);
 
 		// updates all player starting resource
-		for (Player player : TurnLauncher.getPlayers()) {
+		for (Player player : turnLauncher.getPlayers()) {
 			player.setBalanceOfResources(resourceValue);
 		}
 	}
@@ -195,7 +193,7 @@ public class GameLauncher {
 	 * runs menu to setup new players / modify existing
 	 */
 	public static void createPlayers() {
-		ArrayList<Player> players;
+		List<Player> players;
 		boolean start = false;
 		int numOfPlayers;
 
@@ -207,7 +205,7 @@ public class GameLauncher {
 
 		while (!start) {
 
-			players = TurnLauncher.getPlayers();
+			players = turnLauncher.getPlayers();
 			numOfPlayers = players.size();
 
 			if (numOfPlayers > 0) {
@@ -284,12 +282,13 @@ public class GameLauncher {
 	 */
 	public static void declareGameOver() {
 		gameOver = true;
+		turnLauncher.endTurn();
 	}
 
 	/**
 	 * Displays the game loss message
 	 */
-	public static void displayGameLossMessage(Board board) {
+	public static void displayGameLossMessage() {
 		// TODO: add actual ending message
 		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n\nMission Debrief:\n",
 				ArtemisCalendar.getCalendar().getTime(), GameStatistics.missionProgress(board), "%");
@@ -314,6 +313,10 @@ public class GameLauncher {
 		systemCompletion(SystemType.GATEWAY);
 	}
 
+	/**
+	 * finds if a system has started research, completed construction or never started and displays message
+	 * @param systemType to be checked
+	 */
 	public static void systemCompletion(SystemType system) {
 		boolean isComplete = true;
 		boolean isStarted = true;
@@ -363,7 +366,7 @@ public class GameLauncher {
 			displayGameWonMessage();
 
 		} else {
-			displayGameLossMessage(board);
+			displayGameLossMessage();
 		}
 
 		if (turnLauncher.getTurnNumber() != 0) {
@@ -381,10 +384,12 @@ public class GameLauncher {
 			userInput = UserInput.getUserInputInt();
 			switch (userInput) {
 			case 1:
+				UserInterface.clearConsole();
 				GameStatistics.endingPlayerScore(board);
 				break;
 			case 2:
-				turnLauncher.getGameHistoryStorage().displayMoveHistory();
+				UserInterface.clearConsole();
+				GameHistoryStorage.displayMoveHistory();
 				break;
 			case 3:
 				UserInterface.clearConsole(2);
