@@ -92,20 +92,21 @@ public class StandardElement extends Element {
 	 */
 	public void increaseDev() {
 
-		if (currentMinorDevLevel == MAX_MINOR_DEV-1) {
+		if (currentMinorDevLevel == MAX_MINOR_DEV - 1) {
 			incrementCurrentMinorDevLevel();
-			System.out.println("You have completed the last research stage (" + (currentMinorDevLevel)
-					+ "). It's now time to start the construction!");
+			System.out.println("You have completed the last research stage (" + (currentMinorDevLevel) + ") on "
+					+ getElementName() + ". It's now time to start the construction!");
 		} else if (currentMinorDevLevel < MAX_MINOR_DEV) {
 			incrementCurrentMinorDevLevel();
-			System.out.println("You have complete research stage " + (currentMinorDevLevel - 1)
-					+ ". It's now time to begin stage " + currentMinorDevLevel);
+			System.out.println("You have complete research stage " + (currentMinorDevLevel - 1) + " on "
+					+ getElementName() + ". It's now time to begin stage " + currentMinorDevLevel);
 		} else if (currentMajorDevLevel < MAX_MAJOR_DEV) {
 			incrementCurrentMajorDevLevel();
-			System.out
-					.println("This element has just completed construction, we are 1 step closer to the project Artemis Launch");
+			System.out.println(getElementName()
+					+ " has just completed construction, we are 1 step closer to the project Artemis Launch");
 		} else if (currentMajorDevLevel == MAX_MAJOR_DEV) {
-			System.out.println("\nThis element is already has already completed research and development!\n");
+			System.out
+					.println("\n" + getElementName() + " is already has already completed research and development!\n");
 		}
 
 	}
@@ -292,6 +293,36 @@ public class StandardElement extends Element {
 	 */
 	public int getMAX_MAJOR_DEV() {
 		return MAX_MAJOR_DEV;
+	}
+
+	/**
+	 * calculates of the next development is major or minor and gets the cost
+	 * 
+	 * @return dev cost of element
+	 */
+	public int getDevCost() {
+
+		int devCost = minorDevCost;
+		if (currentMinorDevLevel < MAX_MINOR_DEV) {
+			devCost = majorDevCost;
+		}
+		return devCost;
+	}
+
+	/**
+	 * checks if a player can afford to increase element dev
+	 * 
+	 * @param player to be checked
+	 * @return true if player can afford element
+	 */
+	public boolean canAffordDev(Player player) {
+		boolean canDev = false;
+
+		if (player.getBalanceOfResources() >= getDevCost()) {
+			canDev = true;
+		}
+
+		return canDev;
 	}
 
 }

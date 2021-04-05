@@ -21,7 +21,7 @@ public class TurnLauncher {
 
 	// Variables
 
-	protected static GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
+	protected GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
 	private boolean turnOver = false;
 	private static ArrayList<Player> players;
 	private Player activePlayer;
@@ -58,7 +58,7 @@ public class TurnLauncher {
 	/**
 	 * @return the gameHistoryStorage
 	 */
-	public static GameHistoryStorage getGameHistoryStorage() {
+	public GameHistoryStorage getGameHistoryStorage() {
 		return gameHistoryStorage;
 	}
 
@@ -295,15 +295,6 @@ public class TurnLauncher {
 	}
 
 	/**
-	 * Decreases the initial value of resources for all players for a longer game
-	 */
-//	public void setupLongGame() {
-	// TODO: this should also reduce the resources gained on each lap of the board?
-	// JD
-//		ModifyPlayerResources.modifyResourcesAllPlayers(players, this.RESOURCE_VALUE_LONG_GAME);
-//	}
-
-	/**
 	 * 
 	 * Method to auction a element to all players, except the player auctioning it
 	 * 
@@ -405,9 +396,10 @@ public class TurnLauncher {
 
 			// Update element ownership
 			standardElement.setOwnedBy(highRollPlayer);
-			
-			if(board.systemFullyOwned(standardElement, highRollPlayer)) {
-				gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), standardElement.getBoardPosition(), GameHistoryAction.STARTED_RESEARCH_ON_SYSTEM);
+
+			if (board.systemFullyOwned(standardElement, highRollPlayer)) {
+				gameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), standardElement.getBoardPosition(),
+						GameHistoryAction.STARTED_RESEARCH_ON_SYSTEM);
 			}
 
 			// Tell players what happened
@@ -466,12 +458,7 @@ public class TurnLauncher {
 		newElementName = newElement.getElementName();
 
 		if (completedLap) {
-			ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, 200);
-			gameHistoryStorage.addMoveToHistory(activePlayer.getName(), 1, GameHistoryAction.PASSED_RESOURCES_ELEMENT);
-			ResourceElement resourceElement = (ResourceElement) board.getElements().get(0);
-			System.out.println(
-					"\nAfter stopping by the recruitment office you are able to hire more talented engineers (+"
-							+ resourceElement.getResourceToAllocate() + " staff-hours)\n");
+			board.getResourceElement().giveInvestment(activePlayer);
 		}
 
 		board.viewMyElements(activePlayer);
@@ -627,11 +614,12 @@ public class TurnLauncher {
 
 			// Update element owner
 			standardElement.setOwnedBy(activePlayer);
-			
-			if(board.systemFullyOwned(standardElement, activePlayer)) {
-				gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.STARTED_RESEARCH_ON_SYSTEM);
+
+			if (board.systemFullyOwned(standardElement, activePlayer)) {
+				gameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+						GameHistoryAction.STARTED_RESEARCH_ON_SYSTEM);
 			}
-			
+
 			// TODO resources name
 			System.out.printf("%s has now begun R&D on %s, and has %d free hours remaining.\n", activePlayer.getName(),
 					standardElement.getElementName(), activePlayer.getBalanceOfResources());
@@ -858,21 +846,18 @@ public class TurnLauncher {
 
 		boolean canDevelop = false;
 		boolean ownsElement = false;
-		for (Element element : board.getElements()) {
-			if (element instanceof StandardElement) {
-				StandardElement stdElement = (StandardElement) element;
+		for (StandardElement stdElement : board.getStdElements()) {
 
-				if (stdElement.isOwnedBy(activePlayer)) {
-					ownsElement = true;
-				}
-
-				if (stdElement.isOwnedBy(activePlayer) && !stdElement.isMaxDevelopment()) {
-					if (board.systemFullyOwned(stdElement, activePlayer)) {
-						canDevelop = true;
-					}
-				}
-
+			if (stdElement.isOwnedBy(activePlayer)) {
+				ownsElement = true;
 			}
+
+			if (stdElement.isOwnedBy(activePlayer) && !stdElement.isMaxDevelopment()) {
+				if (board.systemFullyOwned(stdElement, activePlayer)) {
+					canDevelop = true;
+				}
+			}
+
 		}
 		menu.put(MenuOption.INCREASE_DEVELOPMENT, canDevelop);
 		menu.put(MenuOption.VIEW_PLAYER_ELEMENTS, ownsElement);

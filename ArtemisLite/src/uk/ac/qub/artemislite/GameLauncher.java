@@ -23,7 +23,8 @@ public class GameLauncher {
 	private final static int MIN_PLAYERS = 2;
 	private final static int MAX_PLAYERS = 4;
 	private final static String MENU_HEADER = "\n=====| MENU |=====\n";
-	private final static int RESOURCE_VALUE_SHORT_GAME = 2000;
+	// TODO: set correct price
+	private final static int RESOURCE_VALUE_SHORT_GAME = 20000;
 	private final static int RESOURCE_VALUE_LONG_GAME = 100;
 
 	// Sets game-over, main game loop
@@ -182,12 +183,8 @@ public class GameLauncher {
 	 */
 	public static void setGameResources(int resourceValue) {
 		// updates all resourceElements
-		for (Element element : board.getElements()) {
-			if (element instanceof ResourceElement) {
-				ResourceElement resourceElement = (ResourceElement) element;
-				resourceElement.setResourceToAllocate(resourceValue);
-			}
-		}
+		board.getResourceElement().setResourceToAllocate(resourceValue);
+
 		// updates all player starting resource
 		for (Player player : TurnLauncher.getPlayers()) {
 			player.setBalanceOfResources(resourceValue);
@@ -320,34 +317,37 @@ public class GameLauncher {
 	public static void systemCompletion(SystemType system) {
 		boolean isComplete = true;
 		boolean isStarted = true;
-		StandardElement stdElement;
-		Player player=null;
+		Player player = null;
 
-		for (Element element : board.getElements()) {
-			if (element instanceof StandardElement) {
-				stdElement = (StandardElement) element;
-				if (stdElement.getElementSystem().equals(system)) {
-					
-					if(!stdElement.isMaxDevelopment()) {
-						isComplete = false;
-					}
-					if (stdElement.getOwnedBy() == null) {
-						isComplete = false;
-						isStarted = false;
-						break;
-					} else {
-						player = stdElement.getOwnedBy();
-					}
+		for (StandardElement stdElement : board.getStdElements()) {
+
+			if (stdElement.getElementSystem().equals(system)) {
+
+				if (!stdElement.isMaxDevelopment()) {
+					isComplete = false;
 				}
+				if (stdElement.getOwnedBy() == null) {
+					isComplete = false;
+					isStarted = false;
+					break;
+				} else {
+					player = stdElement.getOwnedBy();
+				}
+
 			}
 		}
-		
-		if(isComplete) {
-			System.out.printf("\nAll elements of %s where successfully researched and constructed by %s!\n", system.getName(), player.getName());
-		} else if(isStarted) {
-			System.out.printf("\n%s started research on all elements of %s, but unfortunately the Artemis project failed before construction could be complete.\n", player.getName(), system.getName());
+
+		if (isComplete) {
+			System.out.printf("\nAll elements of %s where successfully researched and constructed by %s!\n",
+					system.getName(), player.getName());
+		} else if (isStarted) {
+			System.out.printf(
+					"\n%s started research on all elements of %s, but unfortunately the Artemis project failed before construction could be complete.\n",
+					player.getName(), system.getName());
 		} else {
-			System.out.printf("\nEven with all the efforts invested by the teams, %s never managed to get past the initial research stages.\n", system.getName());
+			System.out.printf(
+					"\nEven with all the efforts invested by the teams, %s never managed to get past the initial research stages.\n",
+					system.getName());
 		}
 
 	}
@@ -381,12 +381,10 @@ public class GameLauncher {
 			userInput = UserInput.getUserInputInt();
 			switch (userInput) {
 			case 1:
-				if (TurnLauncher.getPlayers().size() > 0) {
-					GameStatistics.endingPlayerScore(board);
-				}
+				GameStatistics.endingPlayerScore(board);
 				break;
 			case 2:
-				TurnLauncher.getGameHistoryStorage().displayMoveHistory();
+				turnLauncher.getGameHistoryStorage().displayMoveHistory();
 				break;
 			case 3:
 				UserInterface.clearConsole(2);

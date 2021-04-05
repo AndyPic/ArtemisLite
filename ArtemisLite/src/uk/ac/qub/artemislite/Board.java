@@ -1,6 +1,7 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jordan Davis
@@ -49,10 +50,31 @@ public class Board {
 	// Methods
 
 	/**
+	 * returns a List of all elements on the board
+	 * 
 	 * @return the elements
 	 */
 	public ArrayList<Element> getElements() {
 		return elements;
+	}
+
+	/**
+	 * returns a list of all StandardElements on the board
+	 * 
+	 * @return all stdElements
+	 */
+	public List<StandardElement> getStdElements() {
+
+		List<StandardElement> stdElements = new ArrayList<StandardElement>();
+		StandardElement stdElement;
+
+		for (Element element : elements) {
+			if (element instanceof StandardElement) {
+				stdElement = (StandardElement) element;
+				stdElements.add(stdElement);
+			}
+		}
+		return stdElements;
 	}
 
 	/**
@@ -65,16 +87,11 @@ public class Board {
 	 */
 	public boolean systemFullyOwned(Element reqElement, Player player) {
 		boolean fullyOwned = true;
-		StandardElement stdElement;
 
-		for (Element element : elements) {
-			if (element instanceof StandardElement) {
-				stdElement = (StandardElement) element;
-				if (stdElement.getElementSystem().equals(reqElement.getElementSystem())
-						&& !stdElement.isOwnedBy(player)) {
-					fullyOwned = false;
-					break;
-				}
+		for (StandardElement stdElement : getStdElements()) {
+			if (stdElement.getElementSystem().equals(reqElement.getElementSystem()) && !stdElement.isOwnedBy(player)) {
+				fullyOwned = false;
+				break;
 			}
 		}
 		return fullyOwned;
@@ -87,27 +104,15 @@ public class Board {
 	 */
 	public boolean allSystemComplete() {
 
-		boolean complete;
-		StandardElement stdElement;
+		boolean complete = true;
 
-		complete = true;
-
-		for (Element element : this.elements) {
-
-			if (element instanceof StandardElement) {
-				stdElement = (StandardElement) element;
-
-				if (!stdElement.isMaxDevelopment()) {
-
-					complete = false;
-					break;
-
-				}
+		for (StandardElement stdElement : getStdElements()) {
+			if (!stdElement.isMaxDevelopment()) {
+				complete = false;
+				break;
 			}
 		}
-
 		return complete;
-
 	}
 
 	/**
@@ -115,18 +120,14 @@ public class Board {
 	 * 
 	 */
 	public void viewElementOwnership() {
-		for (Element element : this.elements) {
+		for (StandardElement stdElement : getStdElements()) {
 
-			if (element instanceof StandardElement) {
-				StandardElement stdElement = (StandardElement) element;
-
-				if (stdElement.getOwnedBy() != null) {
-					System.out.printf("[%s] - [%s]: Research started by %s.\n", stdElement.getElementSystem().getName(),
-							stdElement.getElementName(), stdElement.getOwnedBy().getName());
-				} else {
-					System.out.printf("%s - [%s]: Research has not begun.\n", stdElement.getElementSystem().getName(),
-							stdElement.getElementName(), stdElement.getElementSystem().getName());
-				}
+			if (stdElement.getOwnedBy() != null) {
+				System.out.printf("%s - [%s]: Research started by %s.\n", stdElement.getElementSystem().getName(),
+						stdElement.getElementName(), stdElement.getOwnedBy().getName());
+			} else {
+				System.out.printf("%s - [%s]: Research has not begun.\n", stdElement.getElementSystem().getName(),
+						stdElement.getElementName(), stdElement.getElementSystem().getName());
 			}
 		}
 	}// END
@@ -138,22 +139,20 @@ public class Board {
 	 */
 	public void viewMyElements(Player player) {
 		int count = 1;
-		StandardElement stdElement;
 		boolean hasElement = false;
 
-		for (Element element : this.elements) {
-			if (element instanceof StandardElement) {
-				stdElement = (StandardElement) element;
+		for (StandardElement stdElement : getStdElements()) {
 
-				if (stdElement.isOwnedBy(player)) {
-					if (!hasElement) {
-						System.out.println("\nYou own the following elements: ");
-						hasElement = true;
-					}
-					System.out.printf("%d. %s [%s - %s]\n", count++, stdElement.getElementName(),
-							stdElement.getElementSystem().getName(), checkNumberOwned(stdElement, player));
+			if (stdElement.isOwnedBy(player)) {
+				// only prints header if player has atleast 1 property
+				if (!hasElement) {
+					System.out.println("\nYou own the following elements: ");
+					hasElement = true;
 				}
+				System.out.printf("%d. %s [%s - %s]\n", count++, stdElement.getElementName(),
+						stdElement.getElementSystem().getName(), checkNumberOwned(stdElement, player));
 			}
+
 		}
 
 	}
@@ -168,23 +167,19 @@ public class Board {
 	public String checkNumberOwned(StandardElement element, Player player) {
 
 		int total, owned;
-		StandardElement stdElement;
 
 		total = 0;
 		owned = 0;
 
-		for (Element checkElement : elements) {
-			if (checkElement instanceof StandardElement) {
-				stdElement = (StandardElement) checkElement;
+		for (StandardElement stdElement : getStdElements()) {
 
-				if (stdElement.getElementSystem().equals(element.getElementSystem())) {
-					total++;
-					if (stdElement.isOwnedBy(player)) {
-						owned++;
-					}
+			if (stdElement.getElementSystem().equals(element.getElementSystem())) {
+				total++;
+				if (stdElement.isOwnedBy(player)) {
+					owned++;
 				}
-
 			}
+
 		}
 		return owned + " of " + total;
 	}
@@ -198,15 +193,12 @@ public class Board {
 	public void viewMyElementsDetails(Player player) {
 		System.out.println("You own the following elements: ");
 
-		for (Element element : this.elements) {
+		for (StandardElement stdElement : getStdElements()) {
 
-			if (element instanceof StandardElement) {
-				StandardElement stdElement = (StandardElement) element;
-
-				if (stdElement.isOwnedBy(player)) {
-					System.out.println(stdElement.toString());
-				}
+			if (stdElement.isOwnedBy(player)) {
+				System.out.println(stdElement.toString());
 			}
+
 		}
 	}// END
 
@@ -222,20 +214,18 @@ public class Board {
 
 		boolean hasOwners = false;
 		Player purchasedPlayer = player;
-		StandardElement stdElement;
 
-		for (Element element : elements) {
-			if (element instanceof StandardElement) {
-				stdElement = (StandardElement) element;
-				if (checkElement.getElementSystem() != stdElement.getElementSystem()) {
-					continue;
-				}
-				if (stdElement.getOwnedBy() != null && !stdElement.isOwnedBy(player)) {
-					hasOwners = true;
-					purchasedPlayer = stdElement.getOwnedBy();
-					break;
-				}
+		for (StandardElement stdElement : getStdElements()) {
+
+			if (checkElement.getElementSystem() != stdElement.getElementSystem()) {
+				continue;
 			}
+			if (stdElement.getOwnedBy() != null && !stdElement.isOwnedBy(player)) {
+				hasOwners = true;
+				purchasedPlayer = stdElement.getOwnedBy();
+				break;
+			}
+
 		}
 
 		if (hasOwners) {
@@ -255,23 +245,19 @@ public class Board {
 	 * @param index
 	 * @return
 	 */
-	public Element getPlayerOwnedIndex(Player player, int index) {
+	public StandardElement getPlayerOwnedIndex(Player player, int index) {
 
-		Element result = null;
-		StandardElement stdElement;
+		StandardElement result = null;
 		int count = 0;
 
-		for (Element element : elements) {
-			if (element instanceof StandardElement) {
-				stdElement = (StandardElement) element;
-				if (stdElement.isOwnedBy(player)) {
-					count++;
-					if (count == index) {
-						result = element;
-					}
+		for (StandardElement stdElement : getStdElements()) {
+			if (systemFullyOwned(stdElement, player)) {
+				count++;
+				if (count == index) {
+					result = stdElement;
+					break;
 				}
 			}
-
 		}
 
 		return result;
@@ -279,45 +265,61 @@ public class Board {
 	}
 
 	/**
-	 * displays elements that can be developed and their dev level
+	 * displays elements that can be developed and their dev level and returns the
+	 * number of elements displayed
 	 * 
 	 * @param player
+	 * @return int for the number of elements displayed
 	 */
-	public void displayAvailableForDev(Player player) {
+	public int availableForDev(Player player) {
 
-		int count = 1;
-		StandardElement stdElement;
+		int count = 0;
 		boolean hasElement = false;
 		System.out.println();
-		for (Element element : this.elements) {
-			if (element instanceof StandardElement) {
-				stdElement = (StandardElement) element;
 
-				if (stdElement.isOwnedBy(player)) {
-					if (!systemFullyOwned(stdElement, player)) {
-						continue;
-					}
-					if (!hasElement) {
-						System.out.println("\nYou own the following elements: ");
-						hasElement = true;
-					}
-					if (stdElement.isMaxDevelopment()) {
-						System.out.printf(
-								"\n%d. %s [%s - %s] \nResearch and development complete! no further action needed\n",
-								count++, stdElement.getElementName(), stdElement.getElementSystem().getName(),
-								checkNumberOwned(stdElement, player));
-					} else {
-						System.out.printf(
-								"\n%d. %s [%s - %s] \nResearch level: [%d] Cost: (%d) | Construction Level: [%d] Cost: (%d)\n",
-								count++, stdElement.getElementName(), stdElement.getElementSystem().getName(),
-								checkNumberOwned(stdElement, player), stdElement.getCurrentMinorDevLevel(),
-								stdElement.getMinorDevCost(), stdElement.getCurrentMajorDevLevel(),
-								stdElement.getMajorDevCost(), stdElement);
-					}
+		for (StandardElement stdElement : getStdElements()) {
+
+			if (stdElement.isOwnedBy(player)) {
+				if (!systemFullyOwned(stdElement, player)) {
+					continue;
+				}
+				if (!hasElement) {
+					System.out.println("=====| ELEMENTS |=====");
+					hasElement = true;
+				}
+				if (stdElement.isMaxDevelopment()) {
+					System.out.printf(
+							"\n%d. %s [%s - %s] \nResearch and development complete! no further action needed\n",
+							++count, stdElement.getElementName(), stdElement.getElementSystem().getName(),
+							checkNumberOwned(stdElement, player));
+				} else {
+					System.out.printf(
+							"\n%d. %s [%s - %s] \nResearch level: [%d] Cost: (%d) | Construction Level: [%d] Cost: (%d)\n",
+							++count, stdElement.getElementName(), stdElement.getElementSystem().getName(),
+							checkNumberOwned(stdElement, player), stdElement.getCurrentMinorDevLevel(),
+							stdElement.getMinorDevCost(), stdElement.getCurrentMajorDevLevel(),
+							stdElement.getMajorDevCost(), stdElement);
 				}
 			}
 		}
 		System.out.println();
+		return count;
+	}
+
+	/**
+	 * Gets the first resource element on the game board (resource element may not
+	 * always been at index 0 if board layout changes)
+	 * 
+	 * @return first resource element
+	 */
+	public ResourceElement getResourceElement() {
+		ResourceElement resourceElement = null;
+		for (Element element : elements) {
+			if (element instanceof ResourceElement) {
+				resourceElement = (ResourceElement) element;
+			}
+		}
+		return resourceElement;
 	}
 
 }

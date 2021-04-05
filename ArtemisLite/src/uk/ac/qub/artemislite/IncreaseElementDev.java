@@ -15,6 +15,7 @@ public class IncreaseElementDev {
 
 	/**
 	 * Displays possible development options and menu for user
+	 * 
 	 * @param board
 	 * @param activePlayer
 	 */
@@ -24,87 +25,67 @@ public class IncreaseElementDev {
 		// Increase development level
 
 		boolean finishedDeveloping = false;
-		Element chosenSq;
+		StandardElement chosenElement;
+		int devCost, userInput, numOfDevElements;
 
 		do {
-			board.displayAvailableForDev(activePlayer);
 			
-			System.out.println("Which element would you like to develop?");
+			numOfDevElements = board.availableForDev(activePlayer);
 
-			chosenSq = board.getPlayerOwnedIndex(activePlayer, UserInput.getUserInputInt());
+			System.out.println("Which element would you like to develop? (Enter 0 to stop developing)");
 
-			for (Element element : board.getElements()) {
+			userInput = UserInput.getUserInputInt();
 
-				if (chosenSq.equals(element) && element instanceof StandardElement) {
-					StandardElement strdSq = (StandardElement) element;
-
-					// check if system is fully owned
-					if (board.systemFullyOwned(strdSq, activePlayer)) {
-						
-						if(strdSq.isMaxDevelopment()) {
-							System.out.println("This element is already complete, you dont need to develop further!");
-							break;
-						}
-						
-						if (strdSq.getCurrentMinorDevLevel() < strdSq.getMAX_MINOR_DEV()) {
-							if (activePlayer.getBalanceOfResources() >= strdSq.getMinorDevCost()) {
-								strdSq.increaseDev();
-								strdSq.increaseRent();
-								ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer,
-										-strdSq.getMinorDevCost());
-							} else {
-								System.out.printf("Resources down to %d. That means you cannot develop further at this moment\n",activePlayer.getBalanceOfResources());
-								finishedDeveloping = true;
-							}
-						} else if (strdSq.getCurrentMajorDevLevel() < strdSq.getMAX_MAJOR_DEV()) {
-							if (activePlayer.getBalanceOfResources() >= strdSq.getMajorDevCost()) {
-								strdSq.increaseDev();
-								strdSq.increaseRent();
-								ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer,
-										-strdSq.getMajorDevCost());
-							} else {
-								System.out.printf("Resources down to %d. That means you cannot develop further at this moment\n",activePlayer.getBalanceOfResources());
-								finishedDeveloping = true;
-							}
-						}
-
-						// add an item to to the game history
-						TurnLauncher.gameHistoryStorage.addMoveToHistory(activePlayer.getName(),
-								chosenSq.getBoardPosition(), GameHistoryAction.DEVELOP_PORTFOLIO);
-
-					} else {
-
-						System.out.println("You do not yet own all elements in this system");
-					}
-				}
-			}
-			
-			
-			if(board.allSystemComplete()) {
+			if (userInput == 0) {
+				finishedDeveloping = true;
+			} else if(userInput < 0 || userInput > numOfDevElements) {
+				UserInterface.clearConsole();
+				GameLauncher.mainHeadder();
+				System.out.println("That is an invalid input, please try again");
+			} else {
 				
-				finishedDeveloping= true;
-				GameLauncher.declareGameOver();
-				GameLauncher.turnLauncher.endTurn(board);
-				
-			} else if (!finishedDeveloping) {
-				// ask if they want to develop another elements
-				System.out.println("Would you like to develop another element?");
-				switch (UserInterface.yesNoMenu()) {
-				case 1:
-					finishedDeveloping = false;
-					UserInterface.clearConsole();
-					break;
-				case 2:
+				UserInterface.clearConsole();
+				GameLauncher.mainHeadder();
+
+				// TODO: this wont work if user enters number higher than the number of elements
+				// they own JD
+				chosenElement = board.getPlayerOwnedIndex(activePlayer, userInput);
+
+				if (!board.systemFullyOwned(chosenElement, activePlayer)) {
+					System.out.println("You do not yet own all elements in this system");
+
+				} else if (chosenElement.isMaxDevelopment()) {
+					System.out.println(
+							"This element has already been fully constructed, you dont need to develop further!");
+
+				} else if (!chosenElement.canAffordDev(activePlayer)) {
+					System.out.printf("Resources down to %d. That means you cannot continue with R&D at this moment\n",
+							activePlayer.getBalanceOfResources());
 					finishedDeveloping = true;
-					break;
-				default:
-					System.out.println("That shouldn't happen");
+
+				} else {
+					devCost = chosenElement.getDevCost();
+					chosenElement.increaseDev();
+					chosenElement.increaseRent();
+					ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -devCost);
 				}
+
+				// add an item to to the game history
+				GameLauncher.turnLauncher.gameHistoryStorage.addMoveToHistory(activePlayer.getName(),
+						chosenElement.getBoardPosition(), GameHistoryAction.DEVELOP_PORTFOLIO);
+
+				if (board.allSystemComplete()) {
+					finishedDeveloping = true;
+					GameLauncher.declareGameOver();
+					GameLauncher.turnLauncher.endTurn(board);
+
+				}
+
 			}
 
 		} while (!finishedDeveloping);
-		System.out.println("-----> CONTINUE <-----");
-		UserInput.getUserInputString();
+//		System.out.println("-----> CONTINUE <-----");
+//		UserInput.getUserInputString();
 	}
-	
+
 }
