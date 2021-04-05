@@ -21,10 +21,16 @@ public class UserInput {
 	public static int getUserInputInt() {
 
 		int input;
+		String userInput;
 
 		while (!scanner.hasNextInt()) {
-			System.out.println("That is not a valid number! please try again");
-			scanner.nextLine();
+			 userInput = scanner.nextLine();
+			if(userInput.equalsIgnoreCase("rules") || userInput.equalsIgnoreCase("rule")) {
+				GameLauncher.showGameRules();
+			} else {
+				System.out.println("That is not a valid number! please try again");
+			}
+			
 		}
 
 		input = scanner.nextInt();
@@ -41,9 +47,14 @@ public class UserInput {
 	 * @return String
 	 */
 	public static String getUserInputString() {
-
-		return scanner.nextLine();
-
+		String userInput = scanner.nextLine();
+		
+		if(userInput.equalsIgnoreCase("rules") || userInput.equalsIgnoreCase("rule")) {
+			GameLauncher.showGameRules();
+			//recursive call to allow another entry after rules.
+			getUserInputString();
+		}
+			return userInput;
 	}
 
 	/**

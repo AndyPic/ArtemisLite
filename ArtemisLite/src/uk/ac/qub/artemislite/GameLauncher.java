@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class GameLauncher {
 
-	private static TurnLauncher turnLauncher = new TurnLauncher();
+	protected static TurnLauncher turnLauncher = new TurnLauncher();
 	private static Board board = new Board();
 
 	private final static int MIN_PLAYERS = 2;
@@ -150,7 +150,7 @@ public class GameLauncher {
 
 		do {
 			System.out.printf(
-					"%s1. Short Game (%d staff-hours per lap of board)\n2. Long Game (%d staff-hours per lap of board)\n",
+					"Hint: you can view the game rules at any point by entering the word 'rules'\n%s1. Short Game (%d staff-hours per lap of board)\n2. Long Game (%d staff-hours per lap of board)\n",
 					MENU_HEADER, RESOURCE_VALUE_SHORT_GAME, RESOURCE_VALUE_LONG_GAME);
 			gameLengthInput = UserInput.getUserInputInt();
 

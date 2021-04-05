@@ -1,8 +1,6 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Jordan Davis
@@ -97,10 +95,9 @@ public class Board {
 		for (Element element : this.elements) {
 
 			if (element instanceof StandardElement) {
-
 				stdElement = (StandardElement) element;
 
-				if (stdElement.getCurrentMajorDevLevel() != stdElement.getMAX_MAJOR_DEV()) {
+				if (!stdElement.isMaxDevelopment()) {
 
 					complete = false;
 					break;

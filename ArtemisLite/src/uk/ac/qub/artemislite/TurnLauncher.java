@@ -838,8 +838,7 @@ public class TurnLauncher {
 				activePlayer.getCurrentPositionDetails(board);
 			} else if (userMenuSelection.equals(MenuOption.INCREASE_DEVELOPMENT)) {
 				GameLauncher.mainHeadder();
-				IncreaseElementDev id = new IncreaseElementDev();
-				id.increaseElementDev(board, activePlayer);
+				IncreaseElementDev.increaseElementDev(board, activePlayer);
 
 			} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
 				endTurn(board);

@@ -3,8 +3,6 @@
  */
 package uk.ac.qub.artemislite;
 
-import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
-
 /**
  * Increases development level and modifies player resources accordingly
  * 
@@ -15,7 +13,12 @@ import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
  */
 public class IncreaseElementDev {
 
-	public void increaseElementDev(Board board, Player activePlayer) {
+	/**
+	 * Displays possible development options and menu for user
+	 * @param board
+	 * @param activePlayer
+	 */
+	public static void increaseElementDev(Board board, Player activePlayer) {
 
 		// TODO also check if they have enough money to develop
 		// Increase development level
@@ -37,11 +40,12 @@ public class IncreaseElementDev {
 
 					// check if system is fully owned
 					if (board.systemFullyOwned(strdSq, activePlayer)) {
+						
 						if(strdSq.isMaxDevelopment()) {
 							System.out.println("This element is already complete, you dont need to develop further!");
 							break;
 						}
-
+						
 						if (strdSq.getCurrentMinorDevLevel() < strdSq.getMAX_MINOR_DEV()) {
 							if (activePlayer.getBalanceOfResources() >= strdSq.getMinorDevCost()) {
 								strdSq.increaseDev();
@@ -76,9 +80,13 @@ public class IncreaseElementDev {
 			}
 			
 			
-			
-			
-			if (!finishedDeveloping) {
+			if(board.allSystemComplete()) {
+				
+				finishedDeveloping= true;
+				GameLauncher.declareGameOver();
+				GameLauncher.turnLauncher.endTurn(board);
+				
+			} else if (!finishedDeveloping) {
 				// ask if they want to develop another elements
 				System.out.println("Would you like to develop another element?");
 				switch (UserInterface.yesNoMenu()) {
@@ -98,5 +106,5 @@ public class IncreaseElementDev {
 		System.out.println("-----> CONTINUE <-----");
 		UserInput.getUserInputString();
 	}
-
+	
 }
