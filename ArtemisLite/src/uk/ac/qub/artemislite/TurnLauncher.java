@@ -209,7 +209,8 @@ public class TurnLauncher {
 			GameLauncher.declareGameOver();
 			// Set player bankrupt
 			activePlayer.setBalanceOfResources(-1);
-			GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(), GameHistoryAction.QUIT);
+			GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
+					GameHistoryAction.QUIT);
 		}
 
 	}
@@ -571,8 +572,7 @@ public class TurnLauncher {
 
 		board.isSystemStarted(activePlayer, standardElement);
 		// Offer player the element
-		System.out.printf(
-				"You currently have %d hours remaining, would you like to begin researching the element?\n",
+		System.out.printf("You currently have %d hours remaining, would you like to begin researching the element?\n",
 				activePlayer.getBalanceOfResources());
 
 		switch (UserInterface.yesNoMenu()) {
@@ -707,15 +707,17 @@ public class TurnLauncher {
 	public void endTurn() {
 
 		int activePlayerIndex = players.indexOf(activePlayer);
-
-		if (activePlayerIndex != players.size() - 1) {
-			setActivePlayer(players.get(activePlayerIndex + 1));
-		} else {
-			setActivePlayer(players.get(0));
-			roundEnd();
-			System.out.println(CONTINUE_HEADER);
-			UserInput.getUserInputString();
+		if (!GameLauncher.getGameOver()) {
+			if (activePlayerIndex != players.size() - 1) {
+				setActivePlayer(players.get(activePlayerIndex + 1));
+			} else {
+				setActivePlayer(players.get(0));
+				roundEnd();
+				System.out.println(CONTINUE_HEADER);
+				UserInput.getUserInputString();
+			}
 		}
+
 		turnOver = true;
 
 	}

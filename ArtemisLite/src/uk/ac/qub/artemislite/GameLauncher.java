@@ -19,6 +19,8 @@ public class GameLauncher {
 
 	protected static TurnLauncher turnLauncher = new TurnLauncher();
 	protected static Board board = new Board();
+	private static UserInterface msgPrinter = new UserInterface();
+	private static BufferedInterrupter buffInter = new BufferedInterrupter();
 
 	private final static int MIN_PLAYERS = 2;
 	private final static int MAX_PLAYERS = 4;
@@ -27,37 +29,34 @@ public class GameLauncher {
 	private final static int RESOURCE_VALUE_SHORT_GAME = 20000;
 	private final static int RESOURCE_VALUE_LONG_GAME = 100;
 
+
 	// Sets game-over, main game loop
 	private static boolean gameOver = false;
 
+	
 	/**
-	 * displays game intro message to screen
+	 * displays game messages to screen with a delay between each line
 	 */
-	public static void introMessage() {
-		// Intro message
-		UserInterface introMessage = new UserInterface();
-		BufferedInterrupter buffInter = new BufferedInterrupter();
-		Thread introThread = new Thread(introMessage);
+	public static void displayMessage() {
+
+		Thread msgThread = new Thread(msgPrinter);
 		Thread inputThread = new Thread(buffInter);
 
-		System.out.println("== Hit enter to skip intro ==\n");
-
-		introThread.start();
-
+		System.out.println("== Hit enter to skip ==\n");
+		
+		msgThread.start();
 		inputThread.start();
-
 		// interrupt introThread if still running on input
-		while (introThread.isAlive()) {
+		while (msgThread.isAlive()) {
 			if (!inputThread.isAlive()) {
-				introThread.interrupt();
+				msgThread.interrupt();
 			}
+			
 		}
 		// Stops the input thread after intro message finished
 		if (inputThread.isAlive()) {
 			inputThread.interrupt();
 		}
-
-		UserInterface.clearConsole(1);
 
 	}
 
@@ -67,6 +66,8 @@ public class GameLauncher {
 	public static void startMenu() {
 
 		boolean gameBegin = false;
+		
+		msgPrinter.loadIntroMessage();
 
 		do {
 
@@ -284,75 +285,13 @@ public class GameLauncher {
 		gameOver = true;
 		turnLauncher.endTurn();
 	}
-
+	
 	/**
-	 * Displays the game loss message
+	 * returns state of the gamge
+	 * @return
 	 */
-	public static void displayGameLossMessage() {
-		// TODO: add actual ending message
-		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n\nMission Debrief:\n",
-				ArtemisCalendar.getCalendar().getTime(), GameStatistics.missionProgress(board), "%");
-		systemCompletion(SystemType.ORION);
-		systemCompletion(SystemType.SLS);
-		systemCompletion(SystemType.EGS);
-		systemCompletion(SystemType.GATEWAY);
-
-	}
-
-	/**
-	 * Displays the game won message
-	 */
-	public static void displayGameWonMessage() {
-		// TODO: add actual ending message
-		// TODO: show time under / over estimated completion date
-		System.out.printf("On %s The Artemis Project has succesfully launched!\n\nMission Debrief:\n",
-				ArtemisCalendar.getCalendar().getTime());
-		systemCompletion(SystemType.ORION);
-		systemCompletion(SystemType.SLS);
-		systemCompletion(SystemType.EGS);
-		systemCompletion(SystemType.GATEWAY);
-	}
-
-	/**
-	 * finds if a system has started research, completed construction or never started and displays message
-	 * @param systemType to be checked
-	 */
-	public static void systemCompletion(SystemType system) {
-		boolean isComplete = true;
-		boolean isStarted = true;
-		Player player = null;
-
-		for (StandardElement stdElement : board.getStdElements()) {
-
-			if (stdElement.getElementSystem().equals(system)) {
-
-				if (!stdElement.isMaxDevelopment()) {
-					isComplete = false;
-				}
-				if (stdElement.getOwnedBy() == null) {
-					isComplete = false;
-					isStarted = false;
-					break;
-				} else {
-					player = stdElement.getOwnedBy();
-				}
-
-			}
-		}
-
-		if (isComplete) {
-			System.out.printf("\nAll elements of %s where successfully researched and constructed by %s!\n",
-					system.getName(), player.getName());
-		} else if (isStarted) {
-			System.out.printf(
-					"\n%s started research on all elements of %s, but unfortunately the Artemis project failed before construction could be complete.\n",
-					player.getName(), system.getName());
-		} else {
-			System.out.printf(
-					"\nEven with all the efforts invested by the teams, %s never managed to get past the initial research stages.\n",
-					system.getName());
-		}
-
+	public static boolean getGameOver() {
+		return gameOver;
 	}
 
 	/**
@@ -363,10 +302,10 @@ public class GameLauncher {
 	public static void gameOverSequence() {
 
 		if (board.allSystemComplete()) {
-			displayGameWonMessage();
+			msgPrinter.loadWinMessage();
 
 		} else {
-			displayGameLossMessage();
+			msgPrinter.loadLossMessage();
 		}
 
 		if (turnLauncher.getTurnNumber() != 0) {
