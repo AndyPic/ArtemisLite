@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -17,46 +17,46 @@ import java.util.ArrayList;
  */
 public class GameLauncher {
 
-	private static TurnLauncher turnLauncher = new TurnLauncher();
-	private static Board board = new Board();
+	protected static TurnLauncher turnLauncher = new TurnLauncher();
+	protected static Board board = new Board();
+	private static UserInterface msgPrinter = new UserInterface();
+	private static BufferedInterrupter buffInter = new BufferedInterrupter();
 
 	private final static int MIN_PLAYERS = 2;
 	private final static int MAX_PLAYERS = 4;
 	private final static String MENU_HEADER = "\n=====| MENU |=====\n";
-	private final static int RESOURCE_VALUE_SHORT_GAME = 2000;
+	// TODO: set correct price
+	private final static int RESOURCE_VALUE_SHORT_GAME = 20000;
 	private final static int RESOURCE_VALUE_LONG_GAME = 100;
+
 
 	// Sets game-over, main game loop
 	private static boolean gameOver = false;
 
+	
 	/**
-	 * displays game intro message to screen
+	 * displays game messages to screen with a delay between each line
 	 */
-	public static void introMessage() {
-		// Intro message
-		UserInterface introMessage = new UserInterface();
-		BufferedInterrupter buffInter = new BufferedInterrupter();
-		Thread introThread = new Thread(introMessage);
+	public static void displayMessage() {
+
+		Thread msgThread = new Thread(msgPrinter);
 		Thread inputThread = new Thread(buffInter);
 
-		System.out.println("== Hit enter to skip intro ==\n");
-
-		introThread.start();
-
+		System.out.println("== Hit enter to skip ==\n");
+		
+		msgThread.start();
 		inputThread.start();
-
 		// interrupt introThread if still running on input
-		while (introThread.isAlive()) {
+		while (msgThread.isAlive()) {
 			if (!inputThread.isAlive()) {
-				introThread.interrupt();
+				msgThread.interrupt();
 			}
+			
 		}
 		// Stops the input thread after intro message finished
 		if (inputThread.isAlive()) {
 			inputThread.interrupt();
 		}
-
-		UserInterface.clearConsole(1);
 
 	}
 
@@ -66,14 +66,14 @@ public class GameLauncher {
 	public static void startMenu() {
 
 		boolean gameBegin = false;
+		
+		msgPrinter.loadIntroMessage();
 
 		do {
 
 			System.out.println(MENU_HEADER + "Hint: you can select a menu option by entering a number: (e.g. 1)"
 					+ "\n1.Start Game" + "\n2.Show Game Rules" + "\n3.Quit Game");
 
-			// TODO: Should we change this so all menus accept a String as valid also? JD
-			// (e.g.'Start game')
 			switch (UserInput.getUserInputInt()) {
 			case 1:
 				gameBegin = true;
@@ -149,9 +149,11 @@ public class GameLauncher {
 		int gameLengthInput;
 
 		do {
-			System.out.printf("%s1. Short Game (%d staff-hours per lap of board)\n2. Long Game (%d staff-hours per lap of board)\n",MENU_HEADER, RESOURCE_VALUE_SHORT_GAME, RESOURCE_VALUE_LONG_GAME);
+			System.out.printf(
+					"Hint: you can view the game rules at any point by entering the word 'rules'\n%s1. Short Game (%d staff-hours per lap of board)\n2. Long Game (%d staff-hours per lap of board)\n",
+					MENU_HEADER, RESOURCE_VALUE_SHORT_GAME, RESOURCE_VALUE_LONG_GAME);
 			gameLengthInput = UserInput.getUserInputInt();
-			
+
 			switch (gameLengthInput) {
 			case 1:
 				setGameResources(RESOURCE_VALUE_SHORT_GAME);
@@ -172,21 +174,18 @@ public class GameLauncher {
 		gameLoop();
 
 	}
-	
+
 	/**
 	 * sets the starting resources & resources per lap of board & player
+	 * 
 	 * @param resourceValue to set
 	 */
 	public static void setGameResources(int resourceValue) {
-		//updates all resourceElements
-		for(Element element: board.getElements()) {
-			if(element instanceof ResourceElement) {
-				ResourceElement resourceElement = (ResourceElement) element;
-				resourceElement.setResourceToAllocate(resourceValue);
-			}
-		}
-		//updates all player starting resource
-		for(Player player : TurnLauncher.getPlayers()) {
+		// updates all resourceElements
+		board.getResourceElement().setResourceToAllocate(resourceValue);
+
+		// updates all player starting resource
+		for (Player player : turnLauncher.getPlayers()) {
 			player.setBalanceOfResources(resourceValue);
 		}
 	}
@@ -195,7 +194,7 @@ public class GameLauncher {
 	 * runs menu to setup new players / modify existing
 	 */
 	public static void createPlayers() {
-		ArrayList<Player> players;
+		List<Player> players;
 		boolean start = false;
 		int numOfPlayers;
 
@@ -207,7 +206,7 @@ public class GameLauncher {
 
 		while (!start) {
 
-			players = TurnLauncher.getPlayers();
+			players = turnLauncher.getPlayers();
 			numOfPlayers = players.size();
 
 			if (numOfPlayers > 0) {
@@ -267,10 +266,10 @@ public class GameLauncher {
 
 			mainHeadder();
 
-			ArtemisCalendar.displayDate();
+			System.out.println(ArtemisCalendar.getDate());
 
 			System.out.printf("\nIt's time for " + turnLauncher.getActivePlayer().getName() + " to take a turn.\n");
-			
+
 			turnLauncher.moveMethod(board);
 			turnLauncher.checkElement(board);
 			turnLauncher.playerTurnMenu(board);
@@ -284,28 +283,15 @@ public class GameLauncher {
 	 */
 	public static void declareGameOver() {
 		gameOver = true;
+		turnLauncher.endTurn();
 	}
-
+	
 	/**
-	 * Displays the game loss message
+	 * returns state of the gamge
+	 * @return
 	 */
-	public static void displayGameLossMessage(Board board) {
-		// TODO: add actual ending message
-		// TODO: show mission progress
-		System.out.printf("On %s The Artemis Project has failed at %.1f%s completion.\n",
-				ArtemisCalendar.getCalendar().getTime(), GameStatistics.missionProgress(board), "%");
-
-	}
-
-	/**
-	 * Displays the game won message
-	 */
-	public static void displayGameWonMessage() {
-		// TODO: add actual ending message
-		// TODO: show time under / over estimated completion date
-		System.out.printf("On %s The Artemis Project has succesfully launched!\n",
-				ArtemisCalendar.getCalendar().getTime());
-
+	public static boolean getGameOver() {
+		return gameOver;
 	}
 
 	/**
@@ -316,16 +302,15 @@ public class GameLauncher {
 	public static void gameOverSequence() {
 
 		if (board.allSystemComplete()) {
-			displayGameWonMessage();
-			
+			msgPrinter.loadWinMessage();
+
 		} else {
-			displayGameLossMessage(board);
+			msgPrinter.loadLossMessage();
 		}
-		
-		if(turnLauncher.getTurnNumber()!=0) {
+
+		if (turnLauncher.getTurnNumber() != 0) {
 			postGameMenu();
 		}
-		
 
 	}
 
@@ -338,12 +323,12 @@ public class GameLauncher {
 			userInput = UserInput.getUserInputInt();
 			switch (userInput) {
 			case 1:
-				if (TurnLauncher.getPlayers().size() > 0) {
-					GameStatistics.endingPlayerScore(board);
-				}
+				UserInterface.clearConsole();
+				GameStatistics.endingPlayerScore(board);
 				break;
 			case 2:
-				TurnLauncher.getGameHistoryStorage().displayMoveHistory();
+				UserInterface.clearConsole();
+				GameHistoryStorage.displayMoveHistory();
 				break;
 			case 3:
 				UserInterface.clearConsole(2);

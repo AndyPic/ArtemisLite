@@ -3,75 +3,82 @@
  */
 package uk.ac.qub.artemislite;
 
-import java.util.ArrayList;
-
 /**
  * Increases development level and modifies player resources accordingly
+ * 
  * @author Jordan Davis
  * @author David Finlay
  * @author Joseph Mawhinney
  * @author Andrew Pickard
  */
 public class IncreaseElementDev {
-	
 
-	public void increaseElementDev(Board board, Player activePlayer){
+	/**
+	 * Displays possible development options and menu for user
+	 * 
+	 * @param board
+	 * @param activePlayer
+	 */
+	public static void increaseElementDev(Board board, Player activePlayer) {
 
-		// TODO also check if they have enough money to develop
-		// Increase development level
-		
 		boolean finishedDeveloping = false;
-		Element chosenSq;
+		StandardElement chosenElement;
+		int devCost, userInput, numOfDevElements;
 
 		do {
-			// ask which element to develop
-			System.out.println("Which element would you like to develop?");
-			// maybe display elements owned by active player here
-
-			chosenSq = board.getElements().get(UserInput.getUserInputInt());
 			
-			for (Element element : board.getElements()) {
-							
-				if (chosenSq.equals(element) && element instanceof StandardElement) {
-					StandardElement strdSq = (StandardElement) element;
-					
-					// check if system is fully owned
-					if (board.systemFullyOwned(strdSq, activePlayer)) {
-						
-						strdSq.increaseDev();
-						strdSq.increaseRent();
-						
-						if(strdSq.getCurrentMinorDevLevel() < strdSq.getMAX_MINOR_DEV()){
-							ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -strdSq.getMinorDevCost());
-						} else if(strdSq.getCurrentMajorDevLevel() < strdSq.getMAX_MAJOR_DEV()) {
-							ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -strdSq.getMajorDevCost());
-						}
-						
-						// add an item to to the game history
-						TurnLauncher.gameHistoryStorage.addMoveToHistory(activePlayer.getName(), chosenSq.getBoardPosition(), GameHistoryAction.DEVELOP_PORTFOLIO);
-						
-						
-					} else {
-						
-						System.out.println("You do not yet own all elements in this system");
-					}
-				}
-			}
+			numOfDevElements = board.availableForDev(activePlayer);
 
-			// ask if they want to develop another elements
-			System.out.println("Would you like to develop another element?");
-			switch (UserInterface.yesNoMenu()) {
-			case 1:
-				finishedDeveloping = false;
-				break;
-			case 2:
+			System.out.println("Which element would you like to develop? (Enter 0 to stop developing)");
+
+			userInput = UserInput.getUserInputInt();
+
+			if (userInput == 0) {
 				finishedDeveloping = true;
-				break;
-			default:
-				System.out.println("That shouldn't happen");
+			} else if(userInput < 0 || userInput > numOfDevElements) {
+				UserInterface.clearConsole();
+				GameLauncher.mainHeadder();
+				System.out.println("That is an invalid input, please try again");
+			} else {
+				
+				UserInterface.clearConsole();
+				GameLauncher.mainHeadder();
+
+				chosenElement = board.getPlayerOwnedIndex(activePlayer, userInput);
+
+				if (!board.systemFullyOwned(chosenElement, activePlayer)) {
+					System.out.println("You do not yet own all elements in this system");
+
+				} else if (chosenElement.isMaxDevelopment()) {
+					System.out.println(
+							"This element has already been fully constructed, you dont need to develop further!");
+
+				} else if (!chosenElement.canAffordDev(activePlayer)) {
+					System.out.printf("Resources down to %d. That means you cannot continue with R&D at this moment\n",
+							activePlayer.getBalanceOfResources());
+					finishedDeveloping = true;
+
+				} else {
+					devCost = chosenElement.getDevCost();
+					chosenElement.increaseDev();
+					chosenElement.increaseRent();
+					ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, -devCost);
+				}
+
+				// add an item to to the game history
+				GameHistoryStorage.addMoveToHistory(activePlayer.getName(),
+						chosenElement.getBoardPosition(), GameHistoryAction.DEVELOP_PORTFOLIO);
+
+				if (board.allSystemComplete()) {
+					finishedDeveloping = true;
+					GameLauncher.declareGameOver();
+				}
+
 			}
 
 		} while (!finishedDeveloping);
+//		System.out.println("-----> CONTINUE <-----");
+//		UserInput.getUserInputString();
 	}
 
 }

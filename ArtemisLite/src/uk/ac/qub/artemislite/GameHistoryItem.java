@@ -27,6 +27,11 @@ public class GameHistoryItem {
 	 * the action taken on this element
 	 */
 	private GameHistoryAction gameHistoryAction;
+	
+	/**
+	 * date action occured;
+	 */
+	private String actionDate;
 
 	/**
 	 * default constructor
@@ -55,6 +60,7 @@ public class GameHistoryItem {
 		this.playerName = playerName;
 		this.boardLandingPosition = boardLandingPosition;
 		this.gameHistoryAction = gameHistoryAction;
+		this.actionDate = ArtemisCalendar.getDate();
 	}
 	
 	
@@ -78,8 +84,8 @@ public class GameHistoryItem {
 	 * Displays a standardised output for a game history item
 	 */
 	public void displayAll() {
-		System.out.printf("Action number %3s. Location: %32s. Player %s %s\n", this.gameCounter,
-				this.getElementNameFromPosition(this.boardLandingPosition), this.playerName, this.gameHistoryAction.label);
+		System.out.printf("%-3s Location:    %-25s || %s %-30s || %s\n", this.gameCounter+".",
+				this.getElementNameFromPosition(this.boardLandingPosition), this.playerName, this.gameHistoryAction.label, this.actionDate);
 	}
 
 }

@@ -1,6 +1,6 @@
 package uk.ac.qub.artemislite;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class ModifyPlayerResources {
 	
 	Player player;
-	ArrayList<Player> players;
+	List<Player> players;
 	
 	/**
 	 * Modifies the resources of a single player. Calls declareGameOver if a player's resources fall below zero
@@ -26,7 +26,7 @@ public class ModifyPlayerResources {
 		int newBalance = player.getBalanceOfResources() + resourceValue;
 		if (newBalance < 0) {
 			// this is a game-over state!
-			System.out.printf("%s is bankrupt!", player.getName());
+			System.out.printf("%s has run out of available hours to complete thier projects and they have caused the Artemis project to fail!", player.getName());
 			GameLauncher.declareGameOver();
 		} else {
 			player.setBalanceOfResources(newBalance);
@@ -41,13 +41,13 @@ public class ModifyPlayerResources {
 	 * @param resourceValue - the value of the resources
 	 * 
 	 */
-	public static void modifyResourcesAllPlayers(ArrayList<Player> players, int resourceValue) {
+	public static void modifyResourcesAllPlayers(List<Player> players, int resourceValue) {
 		int newBalance = 0;
 		for(Player player: players) {
 			newBalance = player.getBalanceOfResources() + resourceValue;
 			if (newBalance < 0) {
 				// this is a game-over state!
-				System.out.printf("%s is bankrupt!");
+				System.out.printf("%s has run out of available hours to complete thier projects and they have caused the Artemis project to fail!");
 				GameLauncher.declareGameOver();
 			} else {
 				player.setBalanceOfResources(newBalance);

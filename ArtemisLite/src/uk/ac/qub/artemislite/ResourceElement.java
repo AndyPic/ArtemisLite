@@ -42,7 +42,10 @@ public class ResourceElement extends Element {
 	public void giveInvestment(Player player) {
 
 		player.setBalanceOfResources(player.getBalanceOfResources() + this.resourceToAllocate);
-
+		GameHistoryStorage.addMoveToHistory(player.getName(), getBoardPosition(), GameHistoryAction.PASSED_RESOURCES_ELEMENT);
+		System.out.println(
+				"\nAfter stopping by the recruitment office you are able to hire more talented engineers (+"
+						+ getElementName() + " staff-hours)\n");
 	}
 
 	/**

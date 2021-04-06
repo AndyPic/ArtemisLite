@@ -21,7 +21,7 @@ public enum ElementDetails {
 	SRB(4, "Solid Rocket Boosters", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
 	RS25(5, "RS-25 Engines", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
 	SLS_AVIONICS(6, "SLS Avionics", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
-	BLANK_ELEMENT(7, "Blank Element", SystemType.BLANK),
+	BLANK_ELEMENT(7, "Public Holiday", SystemType.BLANK),
 	CRAWLER(8, "Crawlers", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
 	ML(9, "Mobile Launchers", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
 	LP39B(10, "Launch Pad 39B", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),

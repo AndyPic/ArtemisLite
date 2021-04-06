@@ -52,13 +52,12 @@ class GameHistoryStorageTest {
 
 	@Test
 	void testAddAndDisplayMoveHistory() {
-		GameHistoryStorage gameHistoryStorage = new GameHistoryStorage();
-		gameHistoryStorage.addMoveToHistory(playerNameValid1, boardLandingPosValid1, gameHistoryActionValid1);
-		gameHistoryStorage.addMoveToHistory(playerNameValid2, boardLandingPosValid2, gameHistoryActionValid2);
-		gameHistoryStorage.addMoveToHistory(playerNameValid3, boardLandingPosValid3, gameHistoryActionValid3);
-		gameHistoryStorage.addMoveToHistory(playerNameValid4, boardLandingPosValid4, gameHistoryActionValid4);
+		GameHistoryStorage.addMoveToHistory(playerNameValid1, boardLandingPosValid1, gameHistoryActionValid1);
+		GameHistoryStorage.addMoveToHistory(playerNameValid2, boardLandingPosValid2, gameHistoryActionValid2);
+		GameHistoryStorage.addMoveToHistory(playerNameValid3, boardLandingPosValid3, gameHistoryActionValid3);
+		GameHistoryStorage.addMoveToHistory(playerNameValid4, boardLandingPosValid4, gameHistoryActionValid4);
 		
-		 gameHistoryStorage.displayMoveHistory();
+		 GameHistoryStorage.displayMoveHistory();
 		 String expectedResult = "Game Move History...\n"
 		 + "Action number   1. Location: element  3. Player player1 developed portfolio\n"
 		 + "Action number   2. Location: element  8. Player player2 developed this element\n"
