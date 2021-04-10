@@ -15,7 +15,7 @@ public enum ElementDetails {
 	// majorDevCost, rent,
 	// rentMinor1, rentMinor2, rentMinor3, rentMajor1
 	// TODO still need to decide values and names for these sqaures
-	RESOURCE_ELEMENT(1, "Recruitment Agents", SystemType.RESOURCE),
+	RESOURCE_ELEMENT(1, "Recruitment Agency", SystemType.RESOURCE),
 	CREW_MODULE(2, "Crew Module", SystemType.ORION, 100, 200, 400, 10, 20, 30, 40, 80),
 	LAS(3, "Launch Abort System", SystemType.ORION, 100, 200, 400, 10, 20, 30, 40, 80),
 	SRB(4, "Solid Rocket Boosters", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
