@@ -11,6 +11,7 @@ public enum MenuOption {
 	VIEW_PLAYER_ELEMENTS ("View elements you own"),
 	GET_ELEMENT_DETAILS ("Get current element details"),
 	INCREASE_DEVELOPMENT ("Increase element development"),
+	AUCTION_ELEMENT ("Auction one of your elements"),
 	END_TURN ("End your turn"),
 	END_GAME ("End the game");
 	

@@ -29,11 +29,9 @@ public class GameLauncher {
 	private final static int RESOURCE_VALUE_SHORT_GAME = 20000;
 	private final static int RESOURCE_VALUE_LONG_GAME = 100;
 
-
 	// Sets game-over, main game loop
 	private static boolean gameOver = false;
 
-	
 	/**
 	 * displays game messages to screen with a delay between each line
 	 */
@@ -43,7 +41,7 @@ public class GameLauncher {
 		Thread inputThread = new Thread(buffInter);
 
 		System.out.println("== Hit enter to skip ==\n");
-		
+
 		msgThread.start();
 		inputThread.start();
 		// interrupt introThread if still running on input
@@ -51,7 +49,7 @@ public class GameLauncher {
 			if (!inputThread.isAlive()) {
 				msgThread.interrupt();
 			}
-			
+
 		}
 		// Stops the input thread after intro message finished
 		if (inputThread.isAlive()) {
@@ -66,7 +64,7 @@ public class GameLauncher {
 	public static void startMenu() {
 
 		boolean gameBegin = false;
-		
+
 		msgPrinter.loadIntroMessage();
 
 		do {
@@ -108,9 +106,8 @@ public class GameLauncher {
 
 		UserInterface.clearConsole();
 
-		try {
-			FileReader fileReader = new FileReader(file);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
+		try (FileReader fileReader = new FileReader(file);
+				BufferedReader bufferedReader = new BufferedReader(fileReader);) {
 
 			line = bufferedReader.readLine();
 
@@ -119,17 +116,14 @@ public class GameLauncher {
 				line = bufferedReader.readLine();
 			}
 
-			bufferedReader.close();
-			fileReader.close();
-
 		} catch (FileNotFoundException e) {
 			System.out.println("Game rules have not been found");
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (IOException e) {
 			System.out.println("There was a problem opening game rules");
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (Exception e) {
-			System.out.println("A error has occured, please restart the app");
+			System.out.println("An error has occured, please restart the app");
 		}
 
 	}
@@ -285,9 +279,10 @@ public class GameLauncher {
 		gameOver = true;
 		turnLauncher.endTurn();
 	}
-	
+
 	/**
 	 * returns state of the gamge
+	 * 
 	 * @return
 	 */
 	public static boolean getGameOver() {
@@ -359,6 +354,19 @@ public class GameLauncher {
 	 */
 	public static String getMenuHeader() {
 		return MENU_HEADER;
+	}
+	
+	/**
+	 * Sets the active player to own all elements
+	 * 
+	 * @param board
+	 */
+	public static void giveAll() {
+		
+		for (StandardElement stdElement : board.getStdElements()) {
+			stdElement.setOwnedBy(turnLauncher.getActivePlayer());
+		}
+		
 	}
 
 }

@@ -4,6 +4,7 @@
 package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -276,14 +277,24 @@ public class TurnLauncher {
 	 * 
 	 * Method to auction a element to all players, except the player auctioning it
 	 * 
-	 * @param reasonToAuction - eg. "not enough resources"
+	 * @param reasonIndex     :
+	 * 
+	 *                        <pre>
+	 *                        0 = "doesn't have enough staff-hours available to
+	 *                        begin research." <br>
+	 *                        1 = "decided not to invest time in the project." <br>
+	 *                        2 = "wants to sell the element." <br>
 	 * @param standardElement - The element being auctioned
 	 */
-	public void auctionElement(String reasonToAuction, StandardElement standardElement, Board board) {
+	public void auctionElement(int reasonIndex, StandardElement standardElement, Board board) {
+
+		String[] reasonsToAuction = new String[3];
+		reasonsToAuction[0] = "doesn't have enough staff-hours available to begin research.";
+		reasonsToAuction[1] = "decided not to invest time in the project.";
+		reasonsToAuction[2] = "wants to sell the element.";
 
 		int purchaseCost;
 		String elementName, activePlayerName;
-		// Default to the active player
 		Player highRollPlayer;
 		// Arraylist of players that want the element
 		List<Player> playersWant;
@@ -296,7 +307,7 @@ public class TurnLauncher {
 		UserInterface.clearConsole();
 		System.out.printf(
 				"=====| AUCTION BEGINS |=====\nNASA has an obligation to get the element underway to ensure sucess of Artemis. \nThey have begun to look for new companies for %s research because %s %s\n",
-				elementName, activePlayerName, reasonToAuction);
+				elementName, activePlayerName, reasonsToAuction[reasonIndex]);
 
 		for (int loop = 0; loop < players.size(); loop++) {
 			// Do nothing if player is active player
@@ -306,7 +317,7 @@ public class TurnLauncher {
 			// Check if player has enough resources to buy property
 			if (players.get(loop).getBalanceOfResources() >= purchaseCost) {
 
-				board.viewMyElements(activePlayer);
+				// board.viewMyElements(activePlayer);
 
 				System.out.println("\n=====| ELEMENT DETAILS |=====");
 				System.out.println(standardElement.toString());
@@ -366,8 +377,6 @@ public class TurnLauncher {
 			// Announce winner of auction
 			System.out.printf("\n=====| WINNER: %s |=====\n", highRollPlayer.getName());
 
-			// Update player currency
-			ModifyPlayerResources.modifyResourcesSinglePlayer(highRollPlayer, -purchaseCost);
 			// add move to the game history
 			GameHistoryStorage.addMoveToHistory(highRollPlayer.getName(), standardElement.getBoardPosition(),
 					GameHistoryAction.PURCHASE_THIS_ELEMENT_AT_AUCTION);
@@ -380,10 +389,17 @@ public class TurnLauncher {
 						GameHistoryAction.STARTED_RESEARCH_ON_SYSTEM);
 			}
 
-			// Tell players what happened
+			// Update player currency + Tell players what happened
+			ModifyPlayerResources.modifyResourcesSinglePlayer(highRollPlayer, -purchaseCost);
 			System.out.printf(
 					"\n%s is now responsible for the research and development of %s, and has %d free staff-hours remaining.\n",
 					highRollPlayer.getName(), elementName, highRollPlayer.getBalanceOfResources());
+			if (reasonIndex == 2) {
+				ModifyPlayerResources.modifyResourcesSinglePlayer(activePlayer, purchaseCost);
+				System.out.printf(
+						"\n%s is no longer responsible for the research and development of %s, and has %d free staff-hours remaining.\n",
+						activePlayerName, elementName, activePlayer.getBalanceOfResources());
+			}
 		}
 
 	}// END
@@ -480,8 +496,7 @@ public class TurnLauncher {
 				// Only start auction if there is a player that can afford it
 				for (int loop = 0; loop < players.size(); loop++) {
 					if (players.get(loop).getBalanceOfResources() >= standardElement.getPurchaseCost()) {
-						auctionElement("doesn't have enough staff-hours available to begin research.", standardElement,
-								board);
+						auctionElement(0, standardElement, board);
 						break;
 					} else if (loop == (players.size() - 1)) {
 						System.out.printf("%s and no other companies have enough free hours to begin research %s.\n",
@@ -596,7 +611,7 @@ public class TurnLauncher {
 			break;
 		case 2:
 			// Auction the element, doesn't want to buy
-			auctionElement("decided not to invest time in the project.", standardElement, board);
+			auctionElement(1, standardElement, board);
 			// add a non-action move to game history
 			GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 					GameHistoryAction.DID_NOT_INVEST);
@@ -611,19 +626,27 @@ public class TurnLauncher {
 	 * @param List of players to roll
 	 * @return Player with highest dice roll
 	 */
-	public Player allPlayersRoll(List<Player> playersToRoll) {
+	public Player allPlayersRoll(Collection<Player> players) {
+
 		String roll;
-		int highestRoll, playerRoll;
 		Player highestRollPlayer;
+		int highestRoll, playerRoll;
 		boolean matchingRoll;
 
+		List<Player> playersToRoll = new ArrayList<>(players);
+		List<Player> playersToRemove = new ArrayList<>();
+
+		highestRollPlayer = null;
 		playerRoll = 0;
-		highestRollPlayer = playersToRoll.get(0);
 		matchingRoll = false;
 		System.out.println("-----> ROLL THE DICE <-----");
 
 		do {
+
+			playersToRoll.removeAll(playersToRemove);
+
 			highestRoll = 0;
+			playersToRemove.clear();
 
 			UserInput.getUserInputString();
 			UserInterface.clearConsole();
@@ -634,11 +657,17 @@ public class TurnLauncher {
 				System.out.println(player.getName() + " " + roll);
 
 				if (playerRoll > highestRoll) {
-					highestRoll = playerRoll;
+
+					playersToRemove.add(highestRollPlayer);
+
 					highestRollPlayer = player;
+					highestRoll = playerRoll;
 					matchingRoll = false;
 				} else if (playerRoll == highestRoll) {
+
 					matchingRoll = true;
+				} else {
+					playersToRemove.add(player);
 				}
 
 			}
@@ -647,6 +676,7 @@ public class TurnLauncher {
 			}
 
 		} while (matchingRoll);
+
 		System.out.printf("\n=====| WINNER: %s |=====\n%s\n", highestRollPlayer.getName(), CONTINUE_HEADER);
 		UserInput.getUserInputString();
 
@@ -795,6 +825,11 @@ public class TurnLauncher {
 				GameLauncher.mainHeadder();
 				IncreaseElementDev.increaseElementDev(board, activePlayer);
 
+			} else if (userMenuSelection.equals(MenuOption.AUCTION_ELEMENT)) {
+
+				GameLauncher.mainHeadder();
+				playerInitiatedAuction(board);
+
 			} else if (userMenuSelection.equals(MenuOption.END_TURN)) {
 				endTurn();
 			} else if (userMenuSelection.equals(MenuOption.END_GAME)) {
@@ -809,14 +844,71 @@ public class TurnLauncher {
 
 	}
 
+	/**
+	 * Method to hold an auction, initiated by the player
+	 * 
+	 * @param board
+	 */
+	public void playerInitiatedAuction(Board board) {
+
+		int userInput, numElements;
+		boolean finishedAuction = false;
+		StandardElement chosenElement;
+
+		do {
+			chosenElement = null;
+			numElements = board.availableForAuction(activePlayer);
+			
+			if (numElements == 0) {
+				finishedAuction = true;
+				continue;
+			}
+
+			System.out.println("Which element would you like to auction? (Enter 0 to return)");
+			userInput = UserInput.getUserInputInt();
+
+			if (userInput == 0) {
+				finishedAuction = true;
+			} else if (userInput < 0 || userInput > numElements) {
+				UserInterface.clearConsole();
+				GameLauncher.mainHeadder();
+				System.out.println("That is an invalid input, please try again");
+			} else {
+
+				chosenElement = board.getPlayerElement(activePlayer, userInput);
+
+				auctionElement(2, chosenElement, board);
+
+			}
+
+		} while (!finishedAuction);
+
+	}
+
 	public void checkPossibleMenuOptions(Board board) {
 
 		boolean canDevelop = false;
 		boolean ownsElement = false;
+		boolean canAuction = false;
+
 		for (StandardElement stdElement : board.getStdElements()) {
 
 			if (stdElement.isOwnedBy(activePlayer)) {
 				ownsElement = true;
+				
+				canAuction = true;
+				// Check dev level
+				if (stdElement.getCurrentMinorDevLevel() == 0) {
+					for (StandardElement systemElement : board.getStdElements()) {
+						if (systemElement.getElementSystem() == stdElement.getElementSystem()
+								&& systemElement.getCurrentMinorDevLevel() != 0) {
+							canAuction = false;
+						}
+						
+					}
+				} else {
+					canAuction = false;
+				}
 			}
 
 			if (stdElement.isOwnedBy(activePlayer) && !stdElement.isMaxDevelopment()) {
@@ -828,6 +920,7 @@ public class TurnLauncher {
 		}
 		menu.put(MenuOption.INCREASE_DEVELOPMENT, canDevelop);
 		menu.put(MenuOption.VIEW_PLAYER_ELEMENTS, ownsElement);
+		menu.put(MenuOption.AUCTION_ELEMENT, canAuction);
 
 	}
 

@@ -3,7 +3,9 @@
  */
 package uk.ac.qub.artemislite;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -22,51 +24,6 @@ public class UserInterface implements Runnable {
 	 */
 	@Override
 	public void run() {
-
-//		// Keep track of what messages have been printed
-//		int progress = 0;
-//
-//		// Array of intro message sequence
-//		String[] startingMessage = new String[7];
-//		startingMessage[0] = ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)) + ", "
-//				+ ArtemisCalendar.getCalendar().get(1) + ".";
-//		startingMessage[1] = "NASA have chosen you to help them deliver The Artemis Project successfully.";
-//		startingMessage[2] = "The Project aims to launch the first woman, and next man to the moon by "
-//				+ ArtemisCalendar.getMonthName(ArtemisCalendar.getEndDate().get(2)) + ", "
-//				+ ArtemisCalendar.getEndDate().get(1) + ".";
-//		startingMessage[3] = "In order to accomplish this lofty goal, you must work alongside other chosen companies to ensure 'All Systems are Go!' by launch-day.";
-//		startingMessage[4] = "Can you work together to research and fully develop all of the systems needed for a successful Lift-off?";
-//		startingMessage[5] = "...or will your team just be in it for personal gain?";
-//		startingMessage[6] = "You decide!";
-//
-//		// Quick sleep so cancel message prints first
-//		try {
-//			Thread.sleep(10);
-//		} catch (InterruptedException e1) {
-//			// Print error, shouldn't get interrupted, unless you're really quick!
-//			e1.printStackTrace();
-//		}
-//
-//		// Loop through the intro message with a delay
-//		for (int loop = 0; loop < startingMessage.length; loop++) {
-//
-//			try {
-//				System.out.println(startingMessage[loop]);
-//				progress++;
-//				Thread.sleep(1337);
-//			} catch (InterruptedException e) {
-//				// Break out of for loop on interrupt
-//				break;
-//			}
-//
-//		}
-//
-//		// Loop through the rest of intro if interrupted
-//		if (progress < startingMessage.length) {
-//			for (; progress < startingMessage.length; progress++) {
-//				System.out.println(startingMessage[progress]);
-//			}
-//		}
 
 		// Loop through the intro message with a delay
 		while (!messageToDisplay.isEmpty()) {
@@ -270,6 +227,38 @@ public class UserInterface implements Runnable {
 			input = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
 		}
 		return input;
+	}
+	
+	/**
+	 * Method to hold various chat commands
+	 * 
+	 * @return
+	 */
+	public static boolean commands(String userInput) {
+		boolean isCmdValid = false;
+		List<String> validCommands = new ArrayList<>();
+		validCommands.add("rules");
+		validCommands.add("giveall");
+		
+		// Find if command is valid
+		for (String cmd: validCommands) {
+			if (userInput.equalsIgnoreCase(cmd.trim())) {
+				isCmdValid = true;
+				// If cmd valid, execute the command
+				switch (validCommands.indexOf(cmd)) {
+				
+				case 0:
+					GameLauncher.showGameRules();
+					break;
+				case 1:
+					GameLauncher.giveAll();
+					break;
+				
+				}
+			}
+		}
+		
+		return isCmdValid;
 	}
 
 }

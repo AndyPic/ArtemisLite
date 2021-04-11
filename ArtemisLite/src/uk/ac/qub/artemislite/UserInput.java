@@ -25,8 +25,8 @@ public class UserInput {
 
 		while (!scanner.hasNextInt()) {
 			 userInput = scanner.nextLine();
-			if(userInput.equalsIgnoreCase("rules") || userInput.equalsIgnoreCase("rule")) {
-				GameLauncher.showGameRules();
+			if(UserInterface.commands(userInput)) {
+				continue;
 			} else {
 				System.out.println("That is not a valid number! please try again");
 			}
@@ -49,8 +49,7 @@ public class UserInput {
 	public static String getUserInputString() {
 		String userInput = scanner.nextLine();
 		
-		if(userInput.equalsIgnoreCase("rules") || userInput.equalsIgnoreCase("rule")) {
-			GameLauncher.showGameRules();
+		if(UserInterface.commands(userInput)) {
 			//recursive call to allow another entry after rules.
 			getUserInputString();
 		}
