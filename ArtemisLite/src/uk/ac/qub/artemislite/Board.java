@@ -2,6 +2,8 @@ package uk.ac.qub.artemislite;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Jordan Davis
@@ -265,6 +267,32 @@ public class Board {
 	}
 
 	/**
+	 * method to find an element based on player owned elements
+	 * 
+	 * @param player
+	 * @param index
+	 * @return
+	 */
+	public StandardElement getPlayerElement(Player player, int index) {
+
+		StandardElement result = null;
+		int count = 0;
+
+		for (StandardElement stdElement : getStdElements()) {
+			if (stdElement.getOwnedBy() == player) {
+				count++;
+				if (count == index) {
+					result = stdElement;
+					break;
+				}
+			}
+		}
+
+		return result;
+
+	}
+
+	/**
 	 * displays elements that can be developed and their dev level and returns the
 	 * number of elements displayed
 	 * 
@@ -300,6 +328,54 @@ public class Board {
 							stdElement.getMinorDevCost(), stdElement.getCurrentMajorDevLevel(),
 							stdElement.getMajorDevCost(), stdElement);
 				}
+			}
+		}
+		System.out.println();
+		return count;
+	}
+
+	/**
+	 * Method to print to screen all elements eligible for auction, and return the
+	 * number (int) of them.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public int availableForAuction(Player player) {
+
+		int count = 0;
+		boolean hasElement = false;
+		System.out.println();
+
+		List<StandardElement> eligibleElements = new ArrayList<>();
+		Set<SystemType> systemUnderDevelopment = new TreeSet<>();
+
+		// Find elements owned, and systems where at least 1 element is under
+		// development
+		for (StandardElement stdElement : getStdElements()) {
+			if (stdElement.isOwnedBy(player)) {
+				eligibleElements.add(stdElement);
+				if (stdElement.getCurrentMinorDevLevel() > 0) {
+					systemUnderDevelopment.add(stdElement.getElementSystem());
+				}
+			}
+		}
+
+		// Guard clause to avoid looping if not necessary
+		if (!systemUnderDevelopment.isEmpty()) {
+			// Remove elements whose system is under development
+			for (int loop = 0; loop <= eligibleElements.size(); loop++) {
+				if (systemUnderDevelopment.contains(eligibleElements.get(loop).getElementSystem())) {
+					eligibleElements.remove(loop);
+				}
+			}
+		}
+
+		// List all eligible elements
+		for (StandardElement eligibleElement : eligibleElements) {
+			if (eligibleElement.getCurrentMinorDevLevel() == 0) {
+				System.out.printf("\n%d. %s [%s - %s]\n", ++count, eligibleElement.getElementName(),
+						eligibleElement.getElementSystem().getName(), checkNumberOwned(eligibleElement, player));
 			}
 		}
 		System.out.println();
