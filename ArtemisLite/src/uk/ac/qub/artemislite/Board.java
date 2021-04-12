@@ -341,13 +341,10 @@ public class Board {
 	 * @param player
 	 * @return
 	 */
-	public int availableForAuction(Player player) {
-
-		int count = 0;
-		boolean hasElement = false;
-		System.out.println();
-
+	public List<StandardElement> availableForAuction(Player player) {
+		
 		List<StandardElement> eligibleElements = new ArrayList<>();
+		List<StandardElement> ineligibleElements = new ArrayList<>();
 		Set<SystemType> systemUnderDevelopment = new TreeSet<>();
 
 		// Find elements owned, and systems where at least 1 element is under
@@ -363,14 +360,28 @@ public class Board {
 
 		// Guard clause to avoid looping if not necessary
 		if (!systemUnderDevelopment.isEmpty()) {
-			// Remove elements whose system is under development
-			for (int loop = 0; loop <= eligibleElements.size(); loop++) {
+			// Find all elements whose system is under development
+			for (int loop = 0; loop < eligibleElements.size(); loop++) {
 				if (systemUnderDevelopment.contains(eligibleElements.get(loop).getElementSystem())) {
-					eligibleElements.remove(loop);
+					ineligibleElements.add(eligibleElements.get(loop));
 				}
 			}
+			// Remove elements
+			eligibleElements.removeAll(ineligibleElements);
 		}
 
+		return eligibleElements;
+	}
+	
+	/**
+	 * Method to list all auctionable elements from arraylist
+	 * 
+	 * @param eligibleElements
+	 * @param player
+	 */
+	public void listAuctionElements(List<StandardElement> eligibleElements, Player player) {
+		System.out.println();
+		int count = 0;
 		// List all eligible elements
 		for (StandardElement eligibleElement : eligibleElements) {
 			if (eligibleElement.getCurrentMinorDevLevel() == 0) {
@@ -379,7 +390,7 @@ public class Board {
 			}
 		}
 		System.out.println();
-		return count;
+		
 	}
 
 	/**

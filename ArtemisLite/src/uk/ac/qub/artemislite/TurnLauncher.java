@@ -857,7 +857,8 @@ public class TurnLauncher {
 
 		do {
 			chosenElement = null;
-			numElements = board.availableForAuction(activePlayer);
+			numElements = board.availableForAuction(activePlayer).size();
+			board.listAuctionElements(board.availableForAuction(activePlayer), activePlayer);
 			
 			if (numElements == 0) {
 				finishedAuction = true;
@@ -895,21 +896,12 @@ public class TurnLauncher {
 
 			if (stdElement.isOwnedBy(activePlayer)) {
 				ownsElement = true;
-				
-				canAuction = true;
-				// Check dev level
-				if (stdElement.getCurrentMinorDevLevel() == 0) {
-					for (StandardElement systemElement : board.getStdElements()) {
-						if (systemElement.getElementSystem() == stdElement.getElementSystem()
-								&& systemElement.getCurrentMinorDevLevel() != 0) {
-							canAuction = false;
-						}
-						
-					}
-				} else {
-					canAuction = false;
-				}
 			}
+			
+			// Check if any auctionable elements
+			if (board.availableForAuction(activePlayer).size() > 0) { 
+				canAuction = true;
+			} 
 
 			if (stdElement.isOwnedBy(activePlayer) && !stdElement.isMaxDevelopment()) {
 				if (board.systemFullyOwned(stdElement, activePlayer)) {
