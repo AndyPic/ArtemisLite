@@ -610,11 +610,11 @@ public class TurnLauncher {
 					standardElement.getElementName(), activePlayer.getBalanceOfResources());
 			break;
 		case 2:
-			// Auction the element, doesn't want to buy
-			auctionElement(1, standardElement, board);
 			// add a non-action move to game history
 			GameHistoryStorage.addMoveToHistory(activePlayer.getName(), activePlayer.getCurrentPosition(),
 					GameHistoryAction.DID_NOT_INVEST);
+			// Auction the element, doesn't want to buy
+			auctionElement(1, standardElement, board);
 			break;
 		}
 
