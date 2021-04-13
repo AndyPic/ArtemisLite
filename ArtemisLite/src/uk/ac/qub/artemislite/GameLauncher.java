@@ -308,7 +308,10 @@ public class GameLauncher {
 		}
 
 	}
-
+	
+	/**
+	 * Method to display and carry out options after a game has ended.
+	 */
 	public static void postGameMenu() {
 
 		int userInput;

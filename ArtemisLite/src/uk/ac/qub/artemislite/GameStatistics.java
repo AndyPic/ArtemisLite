@@ -113,30 +113,36 @@ public class GameStatistics {
 	 */
 	public static void endingPlayerScore(Board board) {
 
-		System.out.println("The scores are as follows:");
+		System.out.println("The scores are as follows:\n");
 		List<Player> players = GameLauncher.turnLauncher.getPlayers();
 
-		// checks if player is not bankrupt then calculates score
+		// checks if player is not bankrupt then calculates score (cumulative resources
+		// + amount invested)
 		for (Player player : players) {
 			if (player.getBalanceOfResources() >= 0) {
 				ModifyPlayerResources.modifyResourcesSinglePlayer(player, playerElementInvestment(board, player));
 			}
 		}
 
-		// Orders the players in decending order
+		// Orders the players in descending order (by resources)
 		Collections.sort(players, Collections.reverseOrder(new ResourcesComparator()));
 
 		// displays all player scores
+		System.out.println(" _____________________________________________________ ");
+		System.out.println("|---- COMPANY NAME ----|-- SCORE --|-- CONTRIBUTION --|");
+		System.out.println("|                      |           |                  |");
 		for (Player player : players) {
 			if (player.getBalanceOfResources() >= 0) {
-				System.out.printf("%s : %d", player.getName(), player.getBalanceOfResources());
+				System.out.printf ("| %20.20s | %9d |", player.getName(), player.getBalanceOfResources());
 			} else
-				System.out.printf("%s : Company was closed, however they", player.getName());
+				System.out.printf ("| %20.20s | %9s |", player.getName(), "BANKRUPT");
 			if (missionProgress(board) > 0) {
-				System.out.printf(" contributed %.1f%s to the mission.\n", currentContribution(board, player), "%");
-			} else
-				System.out.printf("\n");
+				System.out.printf (" %15.1f%s |\n", currentContribution(board, player), "%");
+			} else {
+				System.out.printf ("\n");
+			}
 		}
+				System.out.println("|_____________________________________________________|");
 
 	}
 
@@ -145,15 +151,15 @@ public class GameStatistics {
 	 * current date.<br>
 	 * <b>NOTE:</b> Does not account for days.
 	 */
-	public static double timeToLaunch() {
+	public static int timeToLaunch() {
 
-		double currentYear = ArtemisCalendar.getCalendar().get(1);
-		double currentMonth = ArtemisCalendar.getCalendar().get(2);
+		int currentYear = ArtemisCalendar.getCalendar().get(1);
+		int currentMonth = ArtemisCalendar.getCalendar().get(2);
 
-		double launchYear = ArtemisCalendar.getEndDate().get(1);
-		double launchMonth = ArtemisCalendar.getEndDate().get(2);
+		int launchYear = ArtemisCalendar.getEndDate().get(1);
+		int launchMonth = ArtemisCalendar.getEndDate().get(2);
 
-		double monthsToLaunch = ((launchYear - currentYear) * 12) + launchMonth - currentMonth;
+		int monthsToLaunch = ((launchYear - currentYear) * 12) + launchMonth - currentMonth;
 
 		return monthsToLaunch;
 	} // END

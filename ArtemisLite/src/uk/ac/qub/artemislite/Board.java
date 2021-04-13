@@ -278,7 +278,7 @@ public class Board {
 		StandardElement result = null;
 		int count = 0;
 
-		for (StandardElement stdElement : getStdElements()) {
+		for (StandardElement stdElement : availableForAuction(player)) {
 			if (stdElement.getOwnedBy() == player) {
 				count++;
 				if (count == index) {
