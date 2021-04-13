@@ -69,13 +69,16 @@ public class UserInterface implements Runnable {
 	 */
 	public void loadWinMessage() {
 
-		messageToDisplay.add(ArtemisCalendar.getMonthName(ArtemisCalendar.getCalendar().get(2)) + ", "
-				+ ArtemisCalendar.getCalendar().get(1) + ".");
-		messageToDisplay.add(String.format("On %s The Artemis Project has succesfully launched!\n\nMission Debrief:\n",
+		messageToDisplay.add(String.format("On %s The Artemis Project has succesfully launched!\n",
 				ArtemisCalendar.getCalendar().getTime()));
-		messageToDisplay.add("The time has finally come...");
-		messageToDisplay.add("Artemis project has been a success and its time to launch!");
-		//TODO: add actual message
+		if (GameStatistics.timeToLaunch() > 0) {
+			messageToDisplay.add(String.format("Congratulations! The mission launched %d months ahead of schedule.\n" , GameStatistics.timeToLaunch()));
+		} else if (GameStatistics.timeToLaunch() < 0) {
+			messageToDisplay.add(String.format("Unfortunately, the mission launched %d months behind schedule.\n" , GameStatistics.timeToLaunch()));
+		} else {
+			messageToDisplay.add("The mission launched on schedule.\n");
+		}
+		messageToDisplay.add("\nMission Debrief:\n");
 		messageToDisplay.add(systemCompletion(SystemType.ORION));
 		messageToDisplay.add(systemCompletion(SystemType.SLS));
 		messageToDisplay.add(systemCompletion(SystemType.EGS));
@@ -92,7 +95,6 @@ public class UserInterface implements Runnable {
 				+ ArtemisCalendar.getCalendar().get(1) + ".");
 		messageToDisplay.add(String.format("On %s The Artemis Project has failed at %.1f%s completion.\n\nMission Debrief:\n",
 				ArtemisCalendar.getCalendar().getTime(), GameStatistics.missionProgress(GameLauncher.board), "%"));
-		//TODO: add actual message
 		messageToDisplay.add(systemCompletion(SystemType.ORION));
 		messageToDisplay.add(systemCompletion(SystemType.SLS));
 		messageToDisplay.add(systemCompletion(SystemType.EGS));
@@ -132,15 +134,15 @@ public class UserInterface implements Runnable {
 		}
 
 		if (isComplete) {
-			result = String.format("\nAll elements of %s where successfully researched and constructed by %s!\n",
+			result = String.format("\nAll elements of %s were successfully researched and constructed by %s!\n",
 					system.getName(), player.getName());
 		} else if (isStarted) {
 			result = String.format(
-					"\n%s started research on all elements of %s, but unfortunately the Artemis project failed before construction could be complete.\n",
+					"\n%s started research & development on the %s, but unfortunately the Artemis project failed before construction could be completed.\n",
 					player.getName(), system.getName());
 		} else {
 			result = String.format(
-					"\nEven with all the efforts invested by the teams, %s never managed to get past the initial research stages.\n",
+					"\nDespite the efforts invested by the teams, %s never managed to get past the initial research stages.\n",
 					system.getName());
 		}
 
