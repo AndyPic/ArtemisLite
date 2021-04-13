@@ -27,7 +27,7 @@ public class GameHistoryItem {
 	 * the action taken on this element
 	 */
 	private GameHistoryAction gameHistoryAction;
-	
+
 	/**
 	 * date action occured;
 	 */
@@ -62,14 +62,15 @@ public class GameHistoryItem {
 		this.gameHistoryAction = gameHistoryAction;
 		this.actionDate = ArtemisCalendar.getDate();
 	}
-	
-	
+
 	/**
-	 * Converts a board landing position (as an <code>ing</code>) into the equivalent name
+	 * Converts a board landing position (as an <code>ing</code>) into the
+	 * equivalent name
+	 * 
 	 * @param boardLandingPosition is the position on the board
 	 * @return the name from the ElementDetails class
 	 */
-	public String getElementNameFromPosition (int boardLandingPosition) {
+	public String getElementNameFromPosition(int boardLandingPosition) {
 		String elementName = "";
 		// finds the details from the ENUM
 		for (ElementDetails elementDetails : ElementDetails.values()) {
@@ -84,8 +85,9 @@ public class GameHistoryItem {
 	 * Displays a standardised output for a game history item
 	 */
 	public void displayAll() {
-		System.out.printf("%-3s Location:    %-25s || %s %-30s || %s\n", this.gameCounter+".",
-				this.getElementNameFromPosition(this.boardLandingPosition), this.playerName, this.gameHistoryAction.label, this.actionDate);
+		System.out.printf("%-3s Location: %-25s. %-15s %-30s %-25s\n", this.gameCounter + ".",
+				this.getElementNameFromPosition(this.boardLandingPosition), this.playerName,
+				this.gameHistoryAction.label, this.actionDate);
 	}
 
 }
