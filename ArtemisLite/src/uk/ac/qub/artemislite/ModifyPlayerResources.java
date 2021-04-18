@@ -24,6 +24,7 @@ public class ModifyPlayerResources {
 		if (newBalance < 0) {
 			// this is a game-over state!
 			System.out.printf("%s has run out of available hours to complete thier projects and they have caused the Artemis project to fail!", player.getName());
+			player.setBalanceOfResources(-1);
 			GameLauncher.declareGameOver();
 		} else {
 			player.setBalanceOfResources(newBalance);
@@ -45,6 +46,7 @@ public class ModifyPlayerResources {
 			if (newBalance < 0) {
 				// this is a game-over state!
 				System.out.printf("%s has run out of available hours to complete thier projects and they have caused the Artemis project to fail!");
+				player.setBalanceOfResources(-1);
 				GameLauncher.declareGameOver();
 			} else {
 				player.setBalanceOfResources(newBalance);

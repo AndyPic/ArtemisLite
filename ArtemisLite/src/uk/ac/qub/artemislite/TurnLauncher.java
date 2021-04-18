@@ -178,7 +178,7 @@ public class TurnLauncher {
 			valid = true;
 			name = UserInput.getUserInputString();
 
-			if (name.equals("")) {
+			if (name.trim().equals("")) {
 				valid = false;
 				System.out.println("That name is invalid, please enter a different name");
 			}
@@ -510,9 +510,10 @@ public class TurnLauncher {
 			}
 
 		}
-		System.out.println(CONTINUE_HEADER);
-		UserInput.getUserInputString();
-		UserInterface.clearConsole();
+			System.out.println(CONTINUE_HEADER);
+			UserInput.getUserInputString();
+			UserInterface.clearConsole();
+
 	}
 
 	/**
@@ -561,10 +562,13 @@ public class TurnLauncher {
 
 			// Give rent to element owner
 			ModifyPlayerResources.modifyResourcesSinglePlayer(elementOwner, rentCost);
-			System.out.printf(
-					"%s took engineers from %s giving them an additional [%d hours].\n%s now has a total of [%d hours].\n%s now has a total of [%d hours].\n",
-					elementOwnerName, activePlayerName, rentCost, elementOwnerName,
-					elementOwner.getBalanceOfResources(), activePlayerName, activePlayer.getBalanceOfResources());
+			if(!GameLauncher.getGameOver()) {
+				System.out.printf(
+						"%s took engineers from %s giving them an additional [%d hours].\n%s now has a total of [%d hours].\n%s now has a total of [%d hours].\n",
+						elementOwnerName, activePlayerName, rentCost, elementOwnerName,
+						elementOwner.getBalanceOfResources(), activePlayerName, activePlayer.getBalanceOfResources());
+			}
+
 			break;
 		case 2:
 			System.out.printf("%s chose to not take any engineers from %s.\n", elementOwnerName, activePlayerName);
@@ -574,7 +578,9 @@ public class TurnLauncher {
 			break;
 		}
 
-		System.out.printf("PASS CONTROL BACK TO %s\n", activePlayerName);
+		if(!GameLauncher.getGameOver()) {
+			System.out.printf("PASS CONTROL BACK TO %s\n", activePlayerName);
+		}
 
 	}
 

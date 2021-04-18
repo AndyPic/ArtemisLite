@@ -24,32 +24,31 @@ class StandardElementTest {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		purchaseCostValid = 100;
-		
-		boardPositionValid = 2;
-		boardPositionInvalid = 13;
-		
-		minorDevCostValid = 200;
-		majorDevCostValid = 400;
-		
-		rentCostValid = 10;
-		
-		minorDevLevelValid = 1;
-		minorDevLevelInvalid = 4;
-		majorDevLevelValid = 1;
-		majorDevLevelInvalid = 2;
-		
-		nameValid = "SquareX";
-		nameInvalid = "";
-		
-		squareSystemValid = SystemType.ORION;
-		
-		p1 = new Player("Jordan");
-		p2 = new Player("David");
-		
-		stdElement = new StandardElement();
-		stdElementSet = new StandardElement(boardPositionValid, nameValid, squareSystemValid, purchaseCostValid, minorDevCostValid, majorDevCostValid, rentCostValid);
-		
+purchaseCostValid = ElementDetails.LAS.getCost();
+        
+        boardPositionValid = ElementDetails.LAS.getElementPos();
+        boardPositionInvalid = 13;
+        
+        minorDevCostValid = ElementDetails.LAS.getMinorCost();
+        majorDevCostValid = ElementDetails.LAS.getMajorCost();
+        
+        rentCostValid = 10;
+        
+        minorDevLevelValid = 1;
+        minorDevLevelInvalid = 4;
+        majorDevLevelValid = 1;
+        majorDevLevelInvalid = 2;
+        
+        nameValid = ElementDetails.LAS.getName();
+        nameInvalid = "";
+        
+        squareSystemValid = ElementDetails.LAS.getSystem();
+        
+        p1 = new Player("Jordan");
+        p2 = new Player("David");
+        
+        stdElement = new StandardElement();
+        stdElementSet = new StandardElement(boardPositionValid, nameValid, squareSystemValid, purchaseCostValid, minorDevCostValid, majorDevCostValid, rentCostValid);		
 	}
 
 	@Test
@@ -162,26 +161,12 @@ class StandardElementTest {
 		assertEquals(1, stdElement.getCurrentMajorDevLevel());
 		assertEquals(3, stdElement.getCurrentMinorDevLevel());
 	}
-	
-	@Test
-	void testIncreaseDevError() {
-		stdElement.increaseDev();
-		stdElement.increaseDev();
-		stdElement.increaseDev();
-		stdElement.increaseDev();
-		
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-			stdElement.increaseDev();
-		});
-		
-		assertEquals("Invalid dev increase", exception.getMessage());
-	}
 
 	@Test
 	void testIncreaseRent() {
 		stdElementSet.incrementCurrentMinorDevLevel();
 		stdElementSet.increaseRent();
-		assertEquals(200, stdElementSet.getRentCost());
+		assertEquals(100, stdElementSet.getRentCost());
 		
 	}
 

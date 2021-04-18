@@ -18,22 +18,6 @@ class TurnLauncherTest {
 	}
 
 	@Test
-	void testFindPlayerOrder() {
-
-		turnLauncher.addPlayer();
-		turnLauncher.addPlayer();
-		turnLauncher.addPlayer();
-
-		System.out.println("Original player order:");
-		turnLauncher.displayPlayers();
-		turnLauncher.findPlayerOrder();
-
-		System.out.println("Rearanged player order:");
-		turnLauncher.displayPlayers();
-
-	}
-
-	@Test
 	void testRollDice() {
 
 		int total = 0;
