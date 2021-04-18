@@ -10,7 +10,7 @@ package uk.ac.qub.artemislite;
  *
  */
 public class BankruptException extends RuntimeException {
-	
+	//TODO: can this be deleted, it isnt used anywhere
 	/**
 	 * default serial
 	 */

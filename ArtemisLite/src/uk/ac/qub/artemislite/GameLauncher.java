@@ -26,8 +26,8 @@ public class GameLauncher {
 	private final static int MAX_PLAYERS = 4;
 	private final static String MENU_HEADER = "\n=====| MENU |=====\n";
 	// TODO: set correct price
-	private final static int RESOURCE_VALUE_SHORT_GAME = 20000;
-	private final static int RESOURCE_VALUE_LONG_GAME = 100;
+	private final static int RESOURCE_VALUE_SHORT_GAME = 300;
+	private final static int RESOURCE_VALUE_LONG_GAME = 200;
 
 	// Sets game-over, main game loop
 	private static boolean gameOver = false;
@@ -180,7 +180,7 @@ public class GameLauncher {
 
 		// updates all player starting resource
 		for (Player player : turnLauncher.getPlayers()) {
-			player.setBalanceOfResources(resourceValue);
+			player.setBalanceOfResources(resourceValue*8);
 		}
 	}
 
