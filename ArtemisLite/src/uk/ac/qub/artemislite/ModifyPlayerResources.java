@@ -13,9 +13,6 @@ import java.util.List;
  */
 public class ModifyPlayerResources {
 	
-	Player player;
-	List<Player> players;
-	
 	/**
 	 * Modifies the resources of a single player. Calls declareGameOver if a player's resources fall below zero
 	 * @param player

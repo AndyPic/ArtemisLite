@@ -14,19 +14,18 @@ public enum ElementDetails {
 	// position, elementName, elementSystem, purchaseCost, minorDevCost,
 	// majorDevCost, rent,
 	// rentMinor1, rentMinor2, rentMinor3, rentMajor1
-	// TODO still need to decide values and names for these sqaures
 	RESOURCE_ELEMENT(0, "Recruitment Agency", SystemType.RESOURCE),
-	CREW_MODULE(1, "Crew Module", SystemType.ORION, 100, 200, 400, 10, 20, 30, 40, 80),
-	LAS(2, "Launch Abort System", SystemType.ORION, 100, 200, 400, 10, 20, 30, 40, 80),
-	SRB(3, "Solid Rocket Boosters", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
-	RS25(4, "RS-25 Engines", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
-	SLS_AVIONICS(5, "SLS Avionics", SystemType.SLS, 200, 400, 800, 30, 40, 50, 60, 120),
+	CREW_MODULE(1, "Crew Module", SystemType.ORION, 100, 50, 50, 30, 90, 270, 400, 550),
+	LAS(2, "Launch Abort System", SystemType.ORION, 120, 50, 50, 40, 100, 300, 450, 600),
+	SRB(3, "Solid Rocket Boosters", SystemType.SLS, 180, 100, 100, 70, 200, 550, 750, 950),
+	RS25(4, "RS-25 Engines", SystemType.SLS, 180, 100, 100, 70, 200, 550, 750, 950),
+	SLS_AVIONICS(5, "SLS Avionics", SystemType.SLS, 200, 100, 100, 80, 220, 600, 800, 1000),
 	BLANK_ELEMENT(6, "Public Holiday", SystemType.BLANK),
-	CRAWLER(7, "Crawlers", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
-	ML(8, "Mobile Launchers", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
-	LP39B(9, "Launch Pad 39B", SystemType.EGS, 300, 600, 1200, 60, 70, 80, 90, 180),
-	PP(10, "Power and Propulsion", SystemType.GATEWAY, 400, 800, 1600, 90, 100, 110, 120, 240),
-	HLO(11, "Habitation and Logistics Outpost", SystemType.GATEWAY, 400, 800, 1600, 90, 100, 110, 120, 240);
+	CRAWLER(7, "Crawlers", SystemType.EGS, 260, 150, 150, 110, 330, 800, 975, 1150),
+	ML(8, "Mobile Launchers", SystemType.EGS, 260, 150, 150, 110, 330, 800, 975, 1150),
+	LP39B(9, "Launch Pad 39B", SystemType.EGS, 280, 150, 150, 120, 360, 850, 1025, 1200),
+	PP(10, "Power and Propulsion", SystemType.GATEWAY, 350, 200, 50, 175, 500, 1100, 1300, 1500),
+	HLO(11, "Habitation and Logistics Outpost", SystemType.GATEWAY, 400, 200, 150, 200, 600, 1400, 1700, 2000);
 
 	private final int elementPos;
 	private final String name;
