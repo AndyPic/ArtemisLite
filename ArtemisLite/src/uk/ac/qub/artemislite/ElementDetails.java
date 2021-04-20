@@ -4,6 +4,8 @@
 package uk.ac.qub.artemislite;
 
 /**
+ * lists all details for the elements on the game board
+ * elements are added to the board in decending order
  * @author Jordan Davis
  * @author David Finlay
  * @author Joseph Mawhinney

@@ -4,10 +4,7 @@
 package uk.ac.qub.artemislite;
 
 import java.text.DateFormatSymbols;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Random;
 
 /**
  * @author Andy
@@ -26,8 +23,6 @@ public class ArtemisCalendar extends GregorianCalendar {
 	private static final int CALENDAR_DAY = 5;
 
 	// Variables
-
-	private Random rand = new Random();
 	private int currentYear = 2020;
 	private int currentMonth = 0;
 	private int currentDay = 1;

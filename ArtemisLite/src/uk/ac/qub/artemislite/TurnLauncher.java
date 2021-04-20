@@ -49,13 +49,15 @@ public class TurnLauncher {
 	// Methods
 
 	/**
-	 * @return the players
+	 * Get all of the players
+	 * @return the players (ArrayList)
 	 */
 	public List<Player> getPlayers() {
 		return players;
 	}
 
 	/**
+	 * get the current player
 	 * @return the activePlayer
 	 */
 	public Player getActivePlayer() {
@@ -63,7 +65,8 @@ public class TurnLauncher {
 	}
 
 	/**
-	 * @param activePlayer the activePlayer to set
+	 * set the currently active player
+	 * @param activePlayer to set
 	 */
 	public void setActivePlayer(Player activePlayer) {
 		this.activePlayer = activePlayer;
@@ -278,7 +281,6 @@ public class TurnLauncher {
 	 * Method to auction a element to all players, except the player auctioning it
 	 * 
 	 * @param reasonIndex     :
-	 * 
 	 *                        <pre>
 	 *                        0 = "doesn't have enough staff-hours available to
 	 *                        begin research." <br>
@@ -890,6 +892,10 @@ public class TurnLauncher {
 
 	}
 
+	/**
+	 * check what menu options should be shown to player based on current game state
+	 * @param board
+	 */
 	public void checkPossibleMenuOptions(Board board) {
 
 		boolean canDevelop = false;

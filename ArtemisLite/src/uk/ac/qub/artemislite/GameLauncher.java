@@ -99,6 +99,9 @@ public class GameLauncher {
 
 	}
 
+	/**
+	 * displays the game rules to screen
+	 */
 	public static void showGameRules() {
 		File file = new File("GameRules.txt");
 		String line;

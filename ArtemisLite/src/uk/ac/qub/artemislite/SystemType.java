@@ -4,6 +4,7 @@
 package uk.ac.qub.artemislite;
 
 /**
+ * list of all possible systems that an element can be part off
  * @author Jordan Davis
  * @author David Finlay
  * @author Joseph Mawhinney

@@ -77,8 +77,7 @@ public class IncreaseElementDev {
 			}
 
 		} while (!finishedDeveloping);
-//		System.out.println("-----> CONTINUE <-----");
-//		UserInput.getUserInputString();
+
 	}
 
 }

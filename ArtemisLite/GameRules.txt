@@ -1,7 +1,7 @@
 Game Rules: 
 
 Game Objective:
-The game is won when all elements on the board have been fully developed and the Artemis mission is ready to launch.
+The game is won when all elements on the board have been fully researched and constructed, the Artemis mission is then ready to launch.
 When a player runs out of resources they are declared bankrupt, the game will end and the scores will be calculated to find the most successful player.
 Can your team acquire and fully develop all of the systems needed for a successful Lift-off? or will you just be in it for personal gain?
 
@@ -11,7 +11,7 @@ Each system consists of 2 or 3 elements, each of which can have 3 minor developm
 The game contains 2 of 6-sided dice.
 
 Setup:
-1. Between 2 and 4 players (companies) can be added to the game and can decide their own names. 
+1. Between 2 and 4 players (companies) can be added to the game and can decide their own company names. 
 2. Players can select either a Long or Short game. In a short game, players will accrue more staff-hours (currency) per turn. 
 3. Each player rolls the dice, highest roll goes first. 
 
@@ -22,12 +22,24 @@ Game Play:
 4. The player will then be presented with other possible options for their turn such as viewing free elements or increasing development level of their elements.
 
 Recruitment Agency:
-Any player that lands on or passes the Recruitment Agency will receive 20,000 or 100 staff-hours for short or long games respectively.
+Any player that lands on or passes the Recruitment Agency will receive 300 or 200 staff-hours for short or long games respectively.
 
 Public Holiday:
 This element may not be owned, and will not require the player to forfeit any staff-hours.
 
-Bankrupt:
-A player is declared bankrupt if their number of staff-hours falls or would fall below 0. Players may not borrow or lend money, however they can choose to not poach staff-hours from another player that lands on their element.
+Research an Element:
+if a player lands on an unowned element they will be given the option to being research. If they accept then they will be responsible for R&D of that element in the artemis project. 
+
+Development:
+When has started initial research on all elements in the system they will be given the opportunity to begin further R&D stages. There is 3 stages of research and 1 stage of construction. 
+All research must be complete on an element before the construction can begin. Once an element is owned there is no specified order for R&D.
+
+Assistance:
+If a player lands on an element that is has begun R&D by another player then they will be given the option to steal engineers (the associated staff-hours).
+Elements further in the R&D process will attract more engineers to headhunt from the visiting players.
+If too many engineers are taken from a company and thier staff-hours fall below zero they will fail to complete thier own research projects and the artemis mission will fail.
+
+Mission Failure:
+A project is declared a failure if their owners staff-hours falls or would fall below 0. Players may not borrow or lend money, however they can choose to not poach staff-hours from another player that lands on their element.
 
 _________________________________________________________________________________________________________
