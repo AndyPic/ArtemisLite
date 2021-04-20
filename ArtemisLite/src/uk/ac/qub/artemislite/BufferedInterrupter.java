@@ -33,7 +33,7 @@ public class BufferedInterrupter implements Runnable {
 				 */
 				Thread.sleep(100);
 			}
-			//TODO: fall through fixed, should we be closing bufferedReader at any point?
+
 			bufferedReader.readLine();
 
 		} catch (InterruptedException e) {

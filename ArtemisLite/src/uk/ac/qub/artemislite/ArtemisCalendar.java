@@ -81,31 +81,6 @@ public class ArtemisCalendar extends GregorianCalendar {
 	}
 
 	/**
-	 * Method to increase the day of month for each player that takes a turn within
-	 * 1 round
-	 * 
-	 * TODO: USE IT OR LOSE IT!
-	 * 
-	 * @param players
-	 */
-	public void turnEndDate(List<Player> players) {
-
-		int noPlayers = players.size();
-		int monthSize = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		// TODO:maybe the randomness would be confusing to players as it is hidden and
-		// not explained to the player. Would be much easier to understand 1turn =
-		// 1month.
-		
-		// Increase days per player turn by a factor of days per month / number of
-		// players (with a bit of randomness added, so it isn't always exactly the same)
-		int daysPerTurn = rand.nextInt((monthSize / noPlayers) - (12 / noPlayers)) + (12 / noPlayers);
-
-		// Increase date by no. of days for turn
-		calendar.set(CALENDAR_DAY, (currentDay += daysPerTurn));
-
-	}
-
-	/**
 	 * Method to return the month name from an int value
 	 * 
 	 * @param month

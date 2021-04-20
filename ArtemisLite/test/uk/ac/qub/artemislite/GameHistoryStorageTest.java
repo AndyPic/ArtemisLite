@@ -58,11 +58,11 @@ class GameHistoryStorageTest {
 		GameHistoryStorage.addMoveToHistory(playerNameValid4, boardLandingPosValid4, gameHistoryActionValid4);
 		
 		 GameHistoryStorage.displayMoveHistory();
-		 String expectedResult = "Game Move History...\n"
-		 + "Action number   1. Location: element  3. Player player1 developed portfolio\n"
-		 + "Action number   2. Location: element  8. Player player2 developed this element\n"
-		 + "Action number   3. Location: element  4. Player player3 forfeit resources\n"
-		 + "Action number   4. Location: element  7. Player player4 purchased this element\n";
+		 String expectedResult = "Game Move History..."
+				 +"\n1.  Location: Solid Rocket Boosters            player1 advanced research on this project     Date: January, 2020.\n"
+				 +"\n2.  Location: Mobile Launchers                 player2 advanced research on this project     Date: January, 2020.\n"
+				 +"\n3.  Location: RS-25 Engines                    player3 forfeit staff-hours                   Date: January, 2020.\n" 
+				 +"\n4.  Location: Crawlers                         player4 took on this project                  Date: January, 2020.\n";
 		 assertEquals(expectedResult, outContent.toString());
 	}
 

@@ -430,7 +430,6 @@ public class TurnLauncher {
 
 		totalElements = board.getElements().size();
 
-		// TODO: needs tested
 		if (newPos > (totalElements - 1)) {
 			newPos -= totalElements;
 			completedLap = true;
@@ -774,7 +773,6 @@ public class TurnLauncher {
 		turnOver = false;
 		boolean firstMenuOfTurn = true;
 		while (!turnOver) {
-			// TODO: refactor needed JD
 			int menuNum, userInput;
 			boolean validUserInput;
 			MenuOption userMenuSelection;

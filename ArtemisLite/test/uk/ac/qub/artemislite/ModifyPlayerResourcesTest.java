@@ -61,12 +61,6 @@ class ModifyPlayerResourcesTest {
 		ModifyPlayerResources.modifyResourcesSinglePlayer(player2, resourceValue2);
 		assertEquals(initialBalance + resourceValue2, player2.getBalanceOfResources());
 		
-		// testing with resource value that will bankrupt the player
-		BankruptException bankruptExc = assertThrows(BankruptException.class, ()->{
-			ModifyPlayerResources.modifyResourcesSinglePlayer(player3, resourceValue3);
-		});
-		bankruptMessage = "Player: " + player3.getName() + " is bankrupt!";
-		assertEquals(bankruptExc.getMessage(), bankruptMessage);
 		
 	}
 
@@ -87,12 +81,6 @@ class ModifyPlayerResourcesTest {
 		assertEquals(initialBalance + resourceValue1 + resourceValue2, player3.getBalanceOfResources());
 		assertEquals(initialBalance + resourceValue1 + resourceValue2, player4.getBalanceOfResources());
 		
-		// testing where one players resources would be negative, ie. they are bankrupt - game over state.
-		BankruptException bankruptExc = assertThrows(BankruptException.class, ()->{
-			ModifyPlayerResources.modifyResourcesAllPlayers(players, resourceValue3);
-		});
-		bankruptMessage = "Player: " + player1.getName() + " is bankrupt!";
-		assertEquals(bankruptExc.getMessage(), bankruptMessage);
 		
 	}
 
